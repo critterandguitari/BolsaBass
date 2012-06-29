@@ -627,7 +627,6 @@
 						</toolChain>
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.73329378.877871452.src/cr_startup_stm32f4xx.cpp" name="cr_startup_stm32f4xx.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_stm32f4xx.cpp" toolsToInvoke=""/>
-					<fileInfo id="com.crt.advproject.config.exe.debug.73329378.877871452.234042534" name="interface.h" rcbsApplicability="disable" resourcePath="src/interface.h" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="interface.h|interface.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>

@@ -20,6 +20,7 @@ typedef struct {
 	uint8_t playing;
 	uint8_t note;
 	uint32_t keys;
+	uint32_t mode;
 } pocket_piano;
 
 
@@ -40,8 +41,8 @@ void pp6_set_note(uint8_t note);
 
 uint32_t pp6_get_keys(void);
 
-
-
+void pp6_change_mode(void);
+uint32_t pp6_get_mode(void);
 
 void pp6_keys_init(void);
 void pp6_keys_update(void);

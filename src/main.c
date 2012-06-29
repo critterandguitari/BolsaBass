@@ -78,26 +78,28 @@ int main(void)
 		 * Control Rate
 		 */
 		if (!(sample_clock & 0x3F)){
-			GPIO_ToggleBits(GPIOE, GPIO_Pin_0);
 			sample_clock++;
 			pp6_keys_update();
 			pp6_knobs_update();
 
 			k = pp6_get_keys();
-			kdown = 0;
+
+			// 16 keys
 			for (i = 0; i < 16; i++) {
-				if (!((k >> i) & 1)) {
+				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
 					pp6_set_note(i);
-					kdown = 1;
-					break;
+					pp6_set_note_start();
 				}
 			}
-			if ((k != k_last) && kdown) {
-				pp6_set_note_start();
-				k_last = k;
+			// mode button
+			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
+				pp6_change_mode();
 			}
-			//mode_filter_man_control_process();
-			mode_simple_sin_control_process();
+
+			k_last = k;
+
+			if (pp6_get_mode()) mode_filter_man_control_process();
+			else mode_simple_sin_control_process();
 		}
 
 		/*
@@ -106,8 +108,8 @@ int main(void)
 		if (software_index != hardware_index){
 			if (software_index & 1){   // channel
 
-				//sig = mode_filter_man_sample_process();
-				sig = mode_simple_sin_sample_process();
+				if (pp6_get_mode()) sig = mode_filter_man_sample_process();
+				else sig = mode_simple_sin_sample_process();
 
 				arm_float_to_q15(&sig, &wave, 1);
 

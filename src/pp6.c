@@ -9,7 +9,7 @@
 #ifdef __USE_CMSIS
 #include "stm32f4xx.h"
 #endif
-#include "interface.h"
+#include "pp6.h"
 
 
 pocket_piano pp6;
@@ -34,6 +34,15 @@ uint32_t keys_history[] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
 };
+
+void pp6_change_mode(void){
+	GPIO_ToggleBits(GPIOE, GPIO_Pin_0);
+	pp6.mode ++;
+	pp6.mode &= 1;
+}
+uint32_t pp6_get_mode(void){
+	return pp6.mode;
+}
 
 uint32_t pp6_get_keys(void) {
 		return pp6.keys;
