@@ -67,8 +67,17 @@ int main(void)
 	uint32_t k, k_last, kdown, note, note_last, i;
 	k = note = note_last = 0;
 
+	pp6_set_mode(1);
+
 	mode_filter_man_init();
 	mode_simple_sin_init();
+
+	MODE_LED_RED_OFF;
+	MODE_LED_BLUE_OFF;
+	MODE_LED_GREEN_OFF;
+
+
+
 	while (1)	{
 
 	    /* Update WWDG counter */

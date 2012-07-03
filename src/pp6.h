@@ -11,6 +11,16 @@
 
 #include "arm_math.h"
 
+
+#define MODE_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_9, 0)
+#define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)
+#define MODE_LED_GREEN_ON GPIO_WriteBit(GPIOE, GPIO_Pin_1, 0)
+
+#define MODE_LED_BLUE_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_9, 1)
+#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
+#define MODE_LED_GREEN_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_1, 1)
+
+
 typedef struct {
 	float32_t knob_1;
 	float32_t knob_2;
@@ -23,10 +33,9 @@ typedef struct {
 	uint32_t mode;
 } pocket_piano;
 
-
-float32_t get_knob_1(void);
-float32_t get_knob_2(void);
-float32_t get_knob_3(void);
+float32_t pp6_get_knob_1(void);
+float32_t pp6_get_knob_2(void);
+float32_t pp6_get_knob_3(void);
 
 uint8_t pp6_get_note_start(void);
 void pp6_set_note_start (void );
@@ -43,6 +52,7 @@ uint32_t pp6_get_keys(void);
 
 void pp6_change_mode(void);
 uint32_t pp6_get_mode(void);
+void pp6_set_mode(uint32_t mode);
 
 void pp6_keys_init(void);
 void pp6_keys_update(void);
@@ -51,15 +61,10 @@ void pp6_leds_update(uint8_t bank_led, uint8_t mode_led);
 void pp6_knobs_init(void);
 void pp6_knobs_update(void);
 
-
-
-
-
-
 uint8_t pp6_get_mode_led(void);
 uint8_t pp6_get_bank_led(void);
-uint8_t pp6_set_mode_led(uint8_t mode_led);
-uint8_t pp6_set_bank_led(uint8_t bank_led);
+void pp6_set_mode_led(uint8_t mode_led);
+void pp6_set_bank_led(uint8_t bank_led);
 
 
 #endif /* PP6_H_ */

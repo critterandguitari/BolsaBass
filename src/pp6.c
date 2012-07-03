@@ -35,11 +35,32 @@ uint32_t keys_history[] = {
     0xFFFFFFFF,
 };
 
+
+
+float32_t pp6_get_knob_1(void){
+	return pp6.knob_1;
+}
+float32_t pp6_get_knob_2(void){
+	return pp6.knob_2;
+}
+float32_t pp6_get_knob_3(void){
+	return pp6.knob_3;
+}
+
 void pp6_change_mode(void){
 	GPIO_ToggleBits(GPIOE, GPIO_Pin_0);
-	pp6.mode ++;
-	pp6.mode &= 1;
+	pp6.mode++;
+//	/pp6.mode &= 1;
+
+	if (pp6.mode == 6) pp6.mode = 0;
+
+	pp6_set_mode_led(pp6.mode + 1);
 }
+
+void pp6_set_mode(uint32_t mode){
+	pp6.mode = mode;
+}
+
 uint32_t pp6_get_mode(void){
 	return pp6.mode;
 }
@@ -136,6 +157,7 @@ void pp6_leds_init(void) {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	/* GPIOE Periph clock enable */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
 
 	/* Configure PE0, PE1 in output pushpull mode */
@@ -146,17 +168,23 @@ void pp6_leds_init(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-	//GPIO_ToggleBits(GPIOE, GPIO_Pin_1);
-	//GPIO_ToggleBits(GPIOE, GPIO_Pin_0);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_8 | GPIO_Pin_9;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	// Bank LED PB4, 5, 8
-	/*RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_8;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);*/
+	GPIO_WriteBit(GPIOB, GPIO_Pin_4, 1);
+	GPIO_WriteBit(GPIOB, GPIO_Pin_5, 1);
+	GPIO_WriteBit(GPIOB, GPIO_Pin_8, 1);
+
+}
+
+void pp6_set_mode_led(uint8_t led) {
+	if (led == 1) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
+	if (led == 2) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+	if (led == 3) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+	if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
+	if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+	if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+
 }
 
 void pp6_keys_init(void) {
