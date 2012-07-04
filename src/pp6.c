@@ -35,8 +35,6 @@ uint32_t keys_history[] = {
     0xFFFFFFFF,
 };
 
-
-
 float32_t pp6_get_knob_1(void){
 	return pp6.knob_1;
 }
@@ -48,12 +46,8 @@ float32_t pp6_get_knob_3(void){
 }
 
 void pp6_change_mode(void){
-	GPIO_ToggleBits(GPIOE, GPIO_Pin_0);
 	pp6.mode++;
-//	/pp6.mode &= 1;
-
 	if (pp6.mode == 6) pp6.mode = 0;
-
 	pp6_set_mode_led(pp6.mode + 1);
 }
 

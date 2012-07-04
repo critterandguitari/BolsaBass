@@ -76,8 +76,6 @@ int main(void)
 	MODE_LED_BLUE_OFF;
 	MODE_LED_GREEN_OFF;
 
-
-
 	while (1)	{
 
 	    /* Update WWDG counter */

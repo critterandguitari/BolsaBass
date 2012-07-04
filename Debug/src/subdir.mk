@@ -13,6 +13,8 @@ C_SRCS += \
 ../src/mode_simple_sin.c \
 ../src/oscillator.c \
 ../src/pp6.c \
+../src/sad.c \
+../src/sadsr.c \
 ../src/system_stm32f4xx.c \
 ../src/vcf.c 
 
@@ -26,6 +28,8 @@ OBJS += \
 ./src/mode_simple_sin.o \
 ./src/oscillator.o \
 ./src/pp6.o \
+./src/sad.o \
+./src/sadsr.o \
 ./src/system_stm32f4xx.o \
 ./src/vcf.o 
 
@@ -39,6 +43,8 @@ C_DEPS += \
 ./src/mode_simple_sin.d \
 ./src/oscillator.d \
 ./src/pp6.d \
+./src/sad.d \
+./src/sadsr.d \
 ./src/system_stm32f4xx.d \
 ./src/vcf.d 
 
