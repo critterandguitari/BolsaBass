@@ -36,7 +36,8 @@ src/main.d src/main.o: ../src/main.c \
  /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/inc/arm/arm_math.h \
  /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/core_cm4.h \
  ../src/CS4344.h ../src/pp6.h ../src/miditof.h ../src/mode_filter_man.h \
- ../src/mode_simple_sin.h
+ ../src/mode_simple_sin.h ../src/mode_mono_glider.h \
+ ../src/mode_filter_envelope.h
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/stm32f4xx.h:
 
@@ -119,3 +120,7 @@ src/main.d src/main.o: ../src/main.c \
 ../src/mode_filter_man.h:
 
 ../src/mode_simple_sin.h:
+
+../src/mode_mono_glider.h:
+
+../src/mode_filter_envelope.h:

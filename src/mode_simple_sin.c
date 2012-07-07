@@ -11,44 +11,47 @@
 #include "pp6.h"
 #include "line.h"
 #include "vcf.h"
-#include "sad.h"
-#include "mode_filter_man.h"
+#include "sadsr.h"
+#include "mode_simple_sin.h"
 
 extern float miditof[];
 
-float32_t sig, f;
+static float32_t sig, f;
 
-sin_oscillator sin1;
+static sin_oscillator sin1;
 
-uint32_t note, note_last;
+static uint32_t new_note;
 
-float32_t k1;
+static float32_t amp;
 
-float32_t amp;
+static line framp;
 
-line framp;
-
-sad amp_env;
+static sadsr amp_env;
 
 
 void mode_simple_sin_init(void){
 	f = 50.0;
 	amp = 0;
-	note = note_last = 0;
-	sad_init(&amp_env);
+	sadsr_init(&amp_env);
 }
-
 
 float32_t mode_simple_sin_sample_process (void) {
 
 
-	//sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3() * 4.f) + 1), .9f);
+	sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3() * 4.f) + 1), .9f);
 
-	sin_set(&sin1, f * ((pp6_get_knob_3() * 4.f) + 1), .9f);
-
+	//sin_set(&sin1, f * ((pp6_get_knob_3() * 4.f) + 1), .9f);
 
 	sig = sin_process(&sin1);
 
+	/*if ((sig > 0) && (sig_last < 0) && (new_note)) {
+		new_note = 0;
+		line_set(&framp, f * pp6_get_knob_2()  * 10.f );
+		line_go(&framp, f, pp6_get_knob_1() * 500.f);
+		sadsr_set(&amp_env, .01f, 1.f, .2f);
+		sadsr_go(&amp_env);
+	}
+	sig_last = sig;*/
 /*
 	amp -= .00005f;
 	if (amp < 0) amp = 0.f;
@@ -56,20 +59,22 @@ float32_t mode_simple_sin_sample_process (void) {
 	sig *= amp * amp;
 	*/
 
-	amp = sad_process(&amp_env);
+	amp = sadsr_process(&amp_env);
 
-	sig *= amp * amp;
-
-			return sig;
+	return sig * amp * amp;
 }
 
 void mode_simple_sin_control_process (void) {
 	f = miditof[pp6_get_note()] * .6f;
-	if (pp6_get_note_start()){
-		amp = 1.f;
-		//line_set(&framp, f * (pp6_get_knob_2() * 10.f) );
-		//line_go(&framp, f, (uint32_t) (pp6_get_knob_1() * 5000.f));
-		sad_set(&amp_env, pp6_get_knob_1() * .5f, pp6_get_knob_2());
-		sad_go(&amp_env);
+	if (pp6_get_note_start() ){
+		line_set(&framp, f * pp6_get_knob_2()  * 10.f );
+		line_go(&framp, f, pp6_get_knob_1() * 500.f);
+		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
+		sadsr_go(&amp_env);
+		new_note = 1;
+		//sin_reset(&sin1);
+	}
+	if (pp6_get_note_stop()){
+		sadsr_release(&amp_env);
 	}
 }

@@ -67,9 +67,10 @@ float32_t sawtooth_process(sawtooth_oscillator * saw);
 void squarewave_set(square_oscillator * square, float32_t freq, float32_t amp);
 float32_t squarewave_process(square_oscillator * square);
 
-// cosine oscillator
+// sine oscillator
 void sin_init(sin_oscillator * oscil);
 void sin_set(sin_oscillator * oscil, float32_t freq, float32_t amp);
+void sin_reset(sin_oscillator * oscil);
 float32_t sin_process(sin_oscillator * oscil);
 
 

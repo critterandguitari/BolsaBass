@@ -22,6 +22,8 @@
 #include "miditof.h"
 #include "mode_filter_man.h"
 #include "mode_simple_sin.h"
+#include "mode_mono_glider.h"
+#include "mode_filter_envelope.h"
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -52,8 +54,12 @@ int main(void)
 
 	pp6_leds_init();
 	pp6_knobs_init();
-
 	pp6_keys_init();
+
+
+	MODE_LED_RED_OFF;
+	MODE_LED_BLUE_OFF;
+	MODE_LED_GREEN_OFF;
 
 	// init codec
 	CS4344_init();
@@ -67,14 +73,15 @@ int main(void)
 	uint32_t k, k_last, kdown, note, note_last, i;
 	k = note = note_last = 0;
 
-	pp6_set_mode(1);
+	pp6_set_mode(0);
+	pp6_set_aux(0);
 
 	mode_filter_man_init();
 	mode_simple_sin_init();
+	mode_filter_envelope_init();
 
-	MODE_LED_RED_OFF;
-	MODE_LED_BLUE_OFF;
-	MODE_LED_GREEN_OFF;
+	BANK_LED_RED_ON;
+
 
 	while (1)	{
 
@@ -92,21 +99,39 @@ int main(void)
 			k = pp6_get_keys();
 
 			// 16 keys
+			pp6.num_keys_down = 0;
 			for (i = 0; i < 16; i++) {
+				if ( !((k>>i) & 1) ) {
+					pp6.num_keys_down++;
+				}
 				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
 					pp6_set_note(i);
 					pp6_set_note_start();
+				}
+				if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
+					// release it if playing
+					if (i == pp6_get_note()){
+						pp6_set_note_stop();
+					}
 				}
 			}
 			// mode button
 			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
 				pp6_change_mode();
 			}
+			// aux button
+			if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
+				pp6_change_aux();
+			}
 
 			k_last = k;
 
-			if (pp6_get_mode()) mode_filter_man_control_process();
-			else mode_simple_sin_control_process();
+			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
+			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
+			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
+			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
+			if (pp6_get_mode() == 4)  mode_filter_man_control_process();
+			if (pp6_get_mode() == 5)  mode_filter_man_control_process();
 		}
 
 		/*
@@ -115,8 +140,13 @@ int main(void)
 		if (software_index != hardware_index){
 			if (software_index & 1){   // channel
 
-				if (pp6_get_mode()) sig = mode_filter_man_sample_process();
-				else sig = mode_simple_sin_sample_process();
+
+				if (pp6_get_mode() == 0) sig = mode_simple_sin_sample_process();
+				if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
+				if (pp6_get_mode() == 2) sig = mode_mono_glider_sample_process();
+				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
+				if (pp6_get_mode() == 4) sig = mode_filter_man_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_filter_man_sample_process();
 
 				arm_float_to_q15(&sig, &wave, 1);
 

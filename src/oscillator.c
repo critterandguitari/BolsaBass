@@ -63,6 +63,10 @@ void sin_init(sin_oscillator * oscil){
 	oscil->phase_step = 0;
 }
 
+void sin_reset(sin_oscillator * oscil){
+	oscil->phase = 0;
+}
+
 void sin_set(sin_oscillator * oscil, float32_t freq, float32_t amp){
 	oscil->phase_step = (uint32_t) (freq * (2147483648.0f / SR));
 	oscil->amplitude_target = amp;

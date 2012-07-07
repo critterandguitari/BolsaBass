@@ -53,11 +53,28 @@ void pp6_change_mode(void){
 
 void pp6_set_mode(uint32_t mode){
 	pp6.mode = mode;
+	pp6_set_mode_led(pp6.mode + 1);
 }
 
 uint32_t pp6_get_mode(void){
 	return pp6.mode;
 }
+
+void pp6_change_aux(void){
+	pp6.aux++;
+	if (pp6.aux == 2) pp6.aux = 0;
+	//pp6_set_aux_led(pp6.aux + 1);
+}
+
+void pp6_set_aux(uint32_t aux){
+	pp6.aux = aux;
+	//pp6_set_aux_led(pp6.aux + 1);
+}
+
+uint32_t pp6_get_aux(void){
+	return pp6.aux;
+}
+
 
 uint32_t pp6_get_keys(void) {
 		return pp6.keys;
@@ -66,9 +83,8 @@ uint32_t pp6_get_keys(void) {
 void pp6_set_note(uint8_t note) {
 	pp6.note = note;
 }
-
 void pp6_set_note_start (void ) {
-	pp6.note_end = 0;
+	pp6.note_stop = 0;
 	pp6.playing = 1;
 	pp6.note_start = 1;
 }
@@ -79,8 +95,24 @@ uint8_t pp6_get_note_start(void) {
 	return tmp;
 }
 
+void pp6_set_note_stop(void){
+	pp6.note_start = 0;
+	pp6.note_stop = 1;
+}
+
+uint8_t pp6_get_note_stop(void){
+	uint8_t tmp;
+	tmp = pp6.note_stop;
+	pp6.note_stop = 0;
+	return tmp;
+}
+
 uint8_t pp6_get_note(void) {
 	return pp6.note;
+}
+
+uint8_t pp6_get_num_keys_down(void){
+	return pp6.num_keys_down;
 }
 
 /**

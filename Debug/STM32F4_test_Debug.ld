@@ -3,7 +3,7 @@
  * (C) Code Red Technologies Ltd, 2008-2012
  * Generated linker script file for STM32F407VG
  * Created from generic_c.ld (vRed Suite v4.2 (3 [Build 255] [30/05/2012] ))
- * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Tue Jul 03 09:12:59 EDT 2012
+ * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Fri Jul 06 08:27:17 EDT 2012
  */
 
 
