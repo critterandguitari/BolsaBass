@@ -9,15 +9,20 @@ C_SRCS += \
 ../src/cr_startup_stm32f4xx.c \
 ../src/line.c \
 ../src/main.c \
+../src/midi.c \
+../src/mode_drum.c \
+../src/mode_drum_synth.c \
 ../src/mode_filter_envelope.c \
 ../src/mode_filter_man.c \
 ../src/mode_mono_glider.c \
+../src/mode_nazareth.c \
 ../src/mode_simple_sin.c \
 ../src/oscillator.c \
 ../src/pp6.c \
 ../src/sad.c \
 ../src/sadsr.c \
 ../src/system_stm32f4xx.c \
+../src/uart.c \
 ../src/vcf.c 
 
 OBJS += \
@@ -26,15 +31,20 @@ OBJS += \
 ./src/cr_startup_stm32f4xx.o \
 ./src/line.o \
 ./src/main.o \
+./src/midi.o \
+./src/mode_drum.o \
+./src/mode_drum_synth.o \
 ./src/mode_filter_envelope.o \
 ./src/mode_filter_man.o \
 ./src/mode_mono_glider.o \
+./src/mode_nazareth.o \
 ./src/mode_simple_sin.o \
 ./src/oscillator.o \
 ./src/pp6.o \
 ./src/sad.o \
 ./src/sadsr.o \
 ./src/system_stm32f4xx.o \
+./src/uart.o \
 ./src/vcf.o 
 
 C_DEPS += \
@@ -43,15 +53,20 @@ C_DEPS += \
 ./src/cr_startup_stm32f4xx.d \
 ./src/line.d \
 ./src/main.d \
+./src/midi.d \
+./src/mode_drum.d \
+./src/mode_drum_synth.d \
 ./src/mode_filter_envelope.d \
 ./src/mode_filter_man.d \
 ./src/mode_mono_glider.d \
+./src/mode_nazareth.d \
 ./src/mode_simple_sin.d \
 ./src/oscillator.d \
 ./src/pp6.d \
 ./src/sad.d \
 ./src/sadsr.d \
 ./src/system_stm32f4xx.d \
+./src/uart.d \
 ./src/vcf.d 
 
 

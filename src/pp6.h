@@ -8,9 +8,7 @@
 #ifndef PP6_H_
 #define PP6_H_
 
-
 #include "arm_math.h"
-
 
 #define MODE_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_9, 0)
 #define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)

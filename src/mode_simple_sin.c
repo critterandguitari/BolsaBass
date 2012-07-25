@@ -29,6 +29,8 @@ static line framp;
 static sadsr amp_env;
 
 
+
+
 void mode_simple_sin_init(void){
 	f = 50.0;
 	amp = 0;
@@ -38,7 +40,7 @@ void mode_simple_sin_init(void){
 float32_t mode_simple_sin_sample_process (void) {
 
 
-	sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3() * 4.f) + 1), .9f);
+	sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3()) + 1), .9f);
 
 	//sin_set(&sin1, f * ((pp6_get_knob_3() * 4.f) + 1), .9f);
 

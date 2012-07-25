@@ -20,10 +20,17 @@
 #include "CS4344.h"
 #include "pp6.h"
 #include "miditof.h"
+#include "uart.h"
+#include "midi.h"
+
 #include "mode_filter_man.h"
 #include "mode_simple_sin.h"
 #include "mode_mono_glider.h"
 #include "mode_filter_envelope.h"
+#include "mode_nazareth.h"
+#include "mode_drum.h"
+#include "mode_drum_synth.h"
+
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -38,6 +45,19 @@ extern pocket_piano pp6;
 void Delay(__IO uint32_t nCount);
 
 
+static uint32_t count = 0;
+static uint32_t all_clock = 0;
+static uint32_t machine_gun_period = 100;
+static uint32_t aux_last, aux = 0;
+static uint32_t last_hit;
+
+
+// MIDI buffer
+volatile uint8_t  uart_recv_buf[32];
+volatile uint8_t  uart_recv_buf_write = 0;
+uint8_t  uart_recv_buf_read = 0;
+uint8_t tmp8;
+
 int main(void)
 {
 
@@ -51,6 +71,9 @@ int main(void)
         system_stm32f4xx.c file
      */
 
+	  // enable random number generator
+	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
+	RNG_Cmd(ENABLE);
 
 	pp6_leds_init();
 	pp6_knobs_init();
@@ -71,9 +94,10 @@ int main(void)
 
 	f = 50.0;
 	uint32_t k, k_last, kdown, note, note_last, i;
+	uint8_t ch;
 	k = note = note_last = 0;
 
-	pp6_set_mode(0);
+	pp6_set_mode(4);
 	pp6_set_aux(0);
 
 	mode_filter_man_init();
@@ -82,11 +106,45 @@ int main(void)
 
 	BANK_LED_RED_ON;
 
+	uart_init();
+
+
+
+	// echo
+/*	for (;;){
+
+		while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET); // Wait for Character
+
+		ch = USART_ReceiveData(USART1);
+		BANK_LED_RED_ON;
+		while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
+		USART_SendData (USART1, ch);
+		BANK_LED_RED_OFF;
+
+	}*/
+
+	midi_init();
 
 	while (1)	{
 
 	    /* Update WWDG counter */
 	    //WWDG_SetCounter(127);
+
+		// check for new midi
+	    // buffer midi reception
+	    if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
+	    	uart_recv_buf[uart_recv_buf_write] = USART_ReceiveData(USART1);
+	        uart_recv_buf_write++;
+	        uart_recv_buf_write &= 0x1f;  // 32 bytes
+	    }
+
+        // process MIDI
+        if (uart_recv_buf_read != uart_recv_buf_write){
+            tmp8 = uart_recv_buf[uart_recv_buf_read];
+            uart_recv_buf_read++;
+            uart_recv_buf_read &= 0x1f;
+            recvByte(tmp8);
+        }
 
 		/*
 		 * Control Rate
@@ -106,7 +164,7 @@ int main(void)
 				}
 				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
 					pp6_set_note(i);
-					pp6_set_note_start();
+					//pp6_set_note_start();
 				}
 				if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
 					// release it if playing
@@ -123,15 +181,31 @@ int main(void)
 			if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
 				pp6_change_aux();
 			}
-
 			k_last = k;
+
+
+			// DO MACHINE GUN
+			count++;
+			all_clock++;
+			aux = pp6_get_aux();
+			if (aux != aux_last) {
+				aux_last = aux;
+				machine_gun_period = (all_clock - last_hit) / 4;
+				last_hit = all_clock;
+
+			}
+			if ((count > machine_gun_period) && pp6_get_num_keys_down() ) {
+				//pp6_set_note_start();
+				count = 0;
+			}
+			// end do machine gun
 
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
 			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
 			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
-			if (pp6_get_mode() == 4)  mode_filter_man_control_process();
-			if (pp6_get_mode() == 5)  mode_filter_man_control_process();
+			if (pp6_get_mode() == 4)  mode_nazareth_control_process();
+			if (pp6_get_mode() == 5)  mode_drum_synth_control_process();
 		}
 
 		/*
@@ -145,8 +219,8 @@ int main(void)
 				if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
 				if (pp6_get_mode() == 2) sig = mode_mono_glider_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
-				if (pp6_get_mode() == 4) sig = mode_filter_man_sample_process();
-				if (pp6_get_mode() == 5) sig = mode_filter_man_sample_process();
+				if (pp6_get_mode() == 4) sig = mode_nazareth_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_drum_synth_sample_process();
 
 				arm_float_to_q15(&sig, &wave, 1);
 

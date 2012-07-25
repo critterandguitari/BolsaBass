@@ -43,9 +43,11 @@ float32_t mode_filter_envelope_sample_process (void) {
 	//cutoff = ( sadsr_process(&filter_env) * f * 10.f ) + 200.f;//1000.f;// ;
 	cutoff = sadsr_process(&filter_env) ;//(( sadsr_process(&filter_env) * 6000.f ) + 200.f) / 6000.f;//1000.f;// ;
 
-	//if (pp6_get_aux())
+	if (pp6_get_aux())
 		vcf_filter_set(&filter, ((cutoff * cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.9f );
-	//else
+	else
+		vcf_filter_set(&filter, ((cutoff * f * 40.f)) + f, pp6_get_knob_2() * 3.9f );
+	//
 	//	vcf_filter_set(&filter, ((cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.9f );
 
 
