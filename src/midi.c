@@ -413,7 +413,7 @@ void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int 
 float32_t midi_cc[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) {
-	midi_cc[controller & 0x7] = (float32_t)value / 127.f;
+	midi_cc[(controller - 10) & 0x7] = (float32_t)value / 127.f;
 
 }
 

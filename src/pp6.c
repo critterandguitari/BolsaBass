@@ -62,7 +62,7 @@ uint32_t pp6_get_mode(void){
 
 void pp6_change_aux(void){
 	pp6.aux++;
-	if (pp6.aux == 2) pp6.aux = 0;
+	if (pp6.aux == 6) pp6.aux = 0;
 	//pp6_set_aux_led(pp6.aux + 1);
 }
 

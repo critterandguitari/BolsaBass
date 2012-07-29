@@ -76,6 +76,8 @@ float32_t sin_process(sin_oscillator * oscil);
 
 /////////////////
 float32_t simple_sin(float32_t f);
+float32_t simple_FM(float32_t freq, float32_t harmonicity, float32_t index);
+
 
 //////////////
 float32_t bl_step_table_read(float32_t index);

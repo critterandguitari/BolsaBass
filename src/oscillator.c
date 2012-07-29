@@ -68,6 +68,7 @@ void sin_reset(sin_oscillator * oscil){
 }
 
 void sin_set(sin_oscillator * oscil, float32_t freq, float32_t amp){
+	if (freq < 0) freq *= -1.f;
 	oscil->phase_step = (uint32_t) (freq * (2147483648.0f / SR));
 	oscil->amplitude_target = amp;
 }
@@ -104,15 +105,15 @@ float32_t simple_sin(float32_t freq) {
 
 	phase = ((phase_accum >> 24) & 0xff) + 1;
 
-	//ym1 = sin_table[phase - 1];
-	//y = sin_table[phase];
-	//yp1 = sin_table[phase + 1];
-	//yp2 = sin_table[phase + 2];
+	ym1 = sin_table[phase - 1];
+	y = sin_table[phase];
+	yp1 = sin_table[phase + 1];
+	yp2 = sin_table[phase + 2];
 
-	ym1 = saw_table[phase - 1];
-	y = saw_table[phase];
-	yp1 = saw_table[phase + 1];
-	yp2 = saw_table[phase + 2];
+	//ym1 = saw_table[phase - 1];
+	//y = saw_table[phase];
+	//yp1 = saw_table[phase + 1];
+	//yp2 = saw_table[phase + 2];
 
 	frac =  (float32_t) (phase_accum & 0x00FFFFFF) / 16777216.f;
 
@@ -121,6 +122,51 @@ float32_t simple_sin(float32_t freq) {
 	return y + frac * (yp1 - y);
 	//return cube_interp(frac, ym1, y, yp1, yp2);
 }
+
+// single FM
+float32_t simple_FM(float32_t freq, float32_t harmonicity, float32_t index) {
+
+	static uint32_t modulator_phase_accum;
+	static uint32_t carrier_phase_accum;
+	uint32_t modulator_phase;
+	uint32_t modulator_phase_step;
+	uint32_t carrier_phase;
+	int32_t carrier_phase_step; // this is a signed int because its sometimes negative frequency
+
+	float32_t  y, yp1, frac, modulator, carrier;
+
+	// modulator frequency = f * harmonicity
+	modulator_phase_step = (uint32_t) (freq * (2147483648.0f / SR) * harmonicity);
+
+	modulator_phase = ((modulator_phase_accum >> 24) & 0xff) + 1;
+	y = sin_table[modulator_phase];
+	yp1 = sin_table[modulator_phase + 1];
+	frac =  (float32_t) (modulator_phase_accum & 0x00FFFFFF) / 16777216.f;
+	modulator_phase_accum += modulator_phase_step;
+	modulator = y + frac * (yp1 - y);
+
+	// scale it with index (deviation = mod freq * index)
+	modulator *= harmonicity * freq * index;
+
+	// do the fm
+	freq += modulator;
+
+	// compute carrier freq
+	carrier_phase_step = (int32_t) (freq * (2147483648.0f / SR)) + (int32_t)(modulator * (2147483648.0f / SR));
+
+	// carrier oscillator
+	carrier_phase = ((carrier_phase_accum >> 24) & 0xff) + 1;
+	y = sin_table[carrier_phase];
+	yp1 = sin_table[carrier_phase + 1];
+	frac =  (float32_t) (carrier_phase_accum & 0x00FFFFFF) / 16777216.f;
+	carrier_phase_accum += carrier_phase_step;
+
+	// interpolate
+	carrier = y + frac * (yp1 - y);
+
+	return carrier;
+}
+
 
 
 // step table, floating index

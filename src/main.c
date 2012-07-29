@@ -30,7 +30,7 @@
 #include "mode_nazareth.h"
 #include "mode_drum.h"
 #include "mode_drum_synth.h"
-
+#include "mode_simple_fm.h"
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -103,6 +103,8 @@ int main(void)
 	mode_filter_man_init();
 	mode_simple_sin_init();
 	mode_filter_envelope_init();
+	mode_simple_fm_init();
+
 
 	BANK_LED_RED_ON;
 
@@ -164,7 +166,7 @@ int main(void)
 				}
 				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
 					pp6_set_note(i);
-					//pp6_set_note_start();
+					pp6_set_note_start();
 				}
 				if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
 					// release it if playing
@@ -205,7 +207,7 @@ int main(void)
 			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_nazareth_control_process();
-			if (pp6_get_mode() == 5)  mode_drum_synth_control_process();
+			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
 		}
 
 		/*
@@ -220,7 +222,7 @@ int main(void)
 				if (pp6_get_mode() == 2) sig = mode_mono_glider_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_nazareth_sample_process();
-				if (pp6_get_mode() == 5) sig = mode_drum_synth_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_simple_fm_sample_process();
 
 				arm_float_to_q15(&sig, &wave, 1);
 
