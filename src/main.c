@@ -22,6 +22,7 @@
 #include "miditof.h"
 #include "uart.h"
 #include "midi.h"
+#include "timer.h"
 
 #include "mode_filter_man.h"
 #include "mode_simple_sin.h"
@@ -109,7 +110,7 @@ int main(void)
 	BANK_LED_RED_ON;
 
 	uart_init();
-
+	midi_init();
 
 
 	// echo
@@ -125,9 +126,25 @@ int main(void)
 
 	}*/
 
-	midi_init();
+
+
+
+
+
+	/*while (1){
+		t = TIM_GetCounter(TIM2);
+		TIM_SetCounter(TIM1,0);
+		t_spent = t - t_last;
+		t_last = t;
+	}*/
+
+	uint32_t t, t1, t2;
+	timer_init();
 
 	while (1)	{
+
+
+
 
 	    /* Update WWDG counter */
 	    //WWDG_SetCounter(127);
@@ -201,13 +218,15 @@ int main(void)
 				count = 0;
 			}
 			// end do machine gun
-
+			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
 			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
 			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_nazareth_control_process();
 			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
+			t2 = timer_get_time();
+			t = t2 - t1;
 		}
 
 		/*

@@ -23,6 +23,7 @@ C_SRCS += \
 ../src/sad.c \
 ../src/sadsr.c \
 ../src/system_stm32f4xx.c \
+../src/timer.c \
 ../src/uart.c \
 ../src/vcf.c 
 
@@ -46,6 +47,7 @@ OBJS += \
 ./src/sad.o \
 ./src/sadsr.o \
 ./src/system_stm32f4xx.o \
+./src/timer.o \
 ./src/uart.o \
 ./src/vcf.o 
 
@@ -69,6 +71,7 @@ C_DEPS += \
 ./src/sad.d \
 ./src/sadsr.d \
 ./src/system_stm32f4xx.d \
+./src/timer.d \
 ./src/uart.d \
 ./src/vcf.d 
 

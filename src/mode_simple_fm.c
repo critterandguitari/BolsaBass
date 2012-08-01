@@ -4,7 +4,6 @@
  *  Created on: Jul 27, 2012
  *      Author: owen
  */
-
 #include "arm_math.h"
 #include "oscillator.h"
 #include "pp6.h"
@@ -12,6 +11,7 @@
 #include "vcf.h"
 #include "sadsr.h"
 #include "mode_simple_fm.h"
+#include "timer.h"
 
 extern float miditof[];
 
@@ -36,12 +36,22 @@ void mode_simple_fm_init(void){
 
 float32_t mode_simple_fm_sample_process (void) {
 
-//	sig = simple_FM(f, (pp6_get_knob_1() * 2.f) + .5f, pp6_get_knob_2() * 5.f);
-	//sig = simple_FM(line_process(&framp), (pp6_get_knob_1() * 2.f) + .5f, (float32_t)pp6_get_aux());
-	sig = simple_FM(line_process(&framp), (float32_t)pp6_get_aux(), sadsr_process(&index_env) * 6.f);
+	uint32_t t, t1, t2;
+	float32_t a, b, c;
+
+
+
+	//sig = simple_FM(line_process(&framp), (float32_t)pp6_get_aux() * .25f, sadsr_process(&index_env) * 6.f);
+	sig = simple_FM(f, (float32_t)pp6_get_aux(), sadsr_process(&index_env)  * pp6_get_knob_2() * 6.f);
 
 
 	amp = sadsr_process(&amp_env);
+
+	//a = b = 2;
+	//c = powf(a, b);
+
+
+
 
 	return sig * amp * amp;
 }
@@ -56,7 +66,7 @@ void mode_simple_fm_control_process (void) {
 		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
 		sadsr_go(&amp_env);
 
-		sadsr_set(&index_env, .1f, pp6_get_knob_1() * 2.f, 1.f, .1f);
+		sadsr_set(&index_env, .01f, pp6_get_knob_1() * 2.f, 1.f, .1f);
 		sadsr_go(&index_env);
 
 
