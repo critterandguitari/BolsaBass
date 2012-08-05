@@ -22,6 +22,7 @@ C_SRCS += \
 ../src/pp6.c \
 ../src/sad.c \
 ../src/sadsr.c \
+../src/sequencer.c \
 ../src/system_stm32f4xx.c \
 ../src/timer.c \
 ../src/uart.c \
@@ -46,6 +47,7 @@ OBJS += \
 ./src/pp6.o \
 ./src/sad.o \
 ./src/sadsr.o \
+./src/sequencer.o \
 ./src/system_stm32f4xx.o \
 ./src/timer.o \
 ./src/uart.o \
@@ -70,6 +72,7 @@ C_DEPS += \
 ./src/pp6.d \
 ./src/sad.d \
 ./src/sadsr.d \
+./src/sequencer.d \
 ./src/system_stm32f4xx.d \
 ./src/timer.d \
 ./src/uart.d \

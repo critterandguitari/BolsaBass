@@ -48,6 +48,7 @@ void pp6_set_note_start (void );
 
 uint8_t pp6_get_note_stop(void);
 void pp6_set_note_stop (void );
+void pp6_clear_flags(void);
 
 uint8_t pp6_is_playing (void);
 

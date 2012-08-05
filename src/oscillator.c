@@ -199,7 +199,7 @@ float32_t bl_saw_process(bl_saw * saw){
 	sig = ((((float32_t) saw->phase / 2147483648.0f) + 1.f) * .5f) - .5f;
 	//sig -= .5f;
 
-	// scale it
+	// scale it, numerator controls the band limit
 	transition_table_index = sig * (5000.f / saw->freq); // 4410 is nyquist * .4
 	// clip it
 	if (transition_table_index > .5f) transition_table_index = .5f;
@@ -233,7 +233,7 @@ float32_t bl_square_process(bl_square * square){
 
 	square->phase_1 += square->phase_step;
 	sig = ((((float32_t) square->phase_1 / 2147483648.0f) + 1.f) * .5f) - .5f;
-	// scale it
+	// scale it,  numerator controls the band limit
 	transition_table_index = sig * (5000.f / square->freq); // 4410 is nyquist * .4
 	// clip it
 	if (transition_table_index > .5f) transition_table_index = .5f;
@@ -247,7 +247,7 @@ float32_t bl_square_process(bl_square * square){
 	sig = ((((float32_t) square->phase_2 / 2147483648.0f) + 1.f) * .5f) - .5f;
 	// scale it
 	transition_table_index = sig * (5000.f / square->freq); // 4410 is nyquist * .4
-	// clip it
+	// clip it,  numerator controls the band limit
 	if (transition_table_index > .5f) transition_table_index = .5f;
 	if (transition_table_index < -.5f) transition_table_index = -.5f;
 	// range it for transistion table

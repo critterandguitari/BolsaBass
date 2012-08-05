@@ -28,12 +28,16 @@ static line framp;
 
 static sadsr amp_env;
 
+static bl_saw saw;
+static bl_square square;
+
 
 
 
 void mode_simple_sin_init(void){
 	f = 50.0;
 	amp = 0;
+	bl_square_init(&square);
 	sadsr_init(&amp_env);
 }
 
@@ -41,25 +45,28 @@ float32_t mode_simple_sin_sample_process (void) {
 
 
 	sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3()) + 1), .9f);
+	bl_saw_set(&saw, line_process(&framp) * ((pp6_get_knob_3()) + 1));
+	bl_square_set(&square, line_process(&framp) * ((pp6_get_knob_3()) + 1));
+
 
 	//sin_set(&sin1, f * ((pp6_get_knob_3() * 4.f) + 1), .9f);
 
-	sig = sin_process(&sin1);
+	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
-	/*if ((sig > 0) && (sig_last < 0) && (new_note)) {
-		new_note = 0;
-		line_set(&framp, f * pp6_get_knob_2()  * 10.f );
-		line_go(&framp, f, pp6_get_knob_1() * 500.f);
-		sadsr_set(&amp_env, .01f, 1.f, .2f);
-		sadsr_go(&amp_env);
-	}
-	sig_last = sig;*/
-/*
-	amp -= .00005f;
-	if (amp < 0) amp = 0.f;
+	if (pp6_get_aux() == 0)
+		sig = sin_process(&sin1);
+	else if (pp6_get_aux() == 1)
+		sig = bl_square_process(&square);
+	else if (pp6_get_aux() == 2)
+		sig = bl_saw_process(&saw);
+	else if (pp6_get_aux() == 3)
+		sig = sin_process(&sin1);
+	else if (pp6_get_aux() == 4)
+		sig = bl_square_process(&square);
+	else if (pp6_get_aux() == 5)
+		sig = bl_saw_process(&saw);
 
-	sig *= amp * amp;
-	*/
+
 
 	amp = sadsr_process(&amp_env);
 
@@ -67,10 +74,12 @@ float32_t mode_simple_sin_sample_process (void) {
 }
 
 void mode_simple_sin_control_process (void) {
+
 	f = miditof[pp6_get_note()] * .6f;
+
 	if (pp6_get_note_start() ){
 		line_set(&framp, f * pp6_get_knob_2()  * 10.f );
-		line_go(&framp, f, pp6_get_knob_1() * 500.f);
+		line_go(&framp, f, pp6_get_knob_1() * 5000.f);
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;

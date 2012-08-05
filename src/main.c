@@ -96,7 +96,7 @@ int main(void)
 	f = 50.0;
 	uint32_t k, k_last, kdown, note, note_last, i;
 	uint8_t ch;
-	k = note = note_last = 0;
+	k = note = note_last = 0xFFFFFFFF;
 
 	pp6_set_mode(4);
 	pp6_set_aux(0);
@@ -139,7 +139,22 @@ int main(void)
 	}*/
 
 	uint32_t t, t1, t2;
+	uint32_t sequencer_enable = 0;
 	timer_init();
+
+	uint32_t seq_deltas[255];
+	uint32_t seq_notes[255];
+	uint32_t seq_events[255];
+	uint32_t seq_index = 0;
+	uint32_t seq_time = 0;
+	uint32_t seq_recording = 0;
+	uint32_t seq_playing = 0;
+	uint32_t seq_length = 0;
+	uint32_t seq_last_note_start = 0;
+	uint32_t seq_last_note_start_index = 0;
+#define SEQ_NOTE_STOP 2   // these should be standard midi
+#define SEQ_NOTE_START 1
+
 
 	while (1)	{
 
@@ -151,7 +166,7 @@ int main(void)
 
 		// check for new midi
 	    // buffer midi reception
-	    if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
+	   /* if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
 	    	uart_recv_buf[uart_recv_buf_write] = USART_ReceiveData(USART1);
 	        uart_recv_buf_write++;
 	        uart_recv_buf_write &= 0x1f;  // 32 bytes
@@ -163,7 +178,7 @@ int main(void)
             uart_recv_buf_read++;
             uart_recv_buf_read &= 0x1f;
             recvByte(tmp8);
-        }
+        }*/
 
 		/*
 		 * Control Rate
@@ -174,6 +189,7 @@ int main(void)
 			pp6_knobs_update();
 
 			k = pp6_get_keys();
+
 
 			// 16 keys
 			pp6.num_keys_down = 0;
@@ -192,32 +208,115 @@ int main(void)
 					}
 				}
 			}
-			// mode button
-			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
-				pp6_change_mode();
+
+
+
+
+			// sequencer record mode, // mode and aux button down
+			if ( (!((k>>16) & 1)) && (!((k>>17) & 1)) ){
+				sequencer_enable = 1;
+				seq_playing = 0;
+				if (pp6_get_note_start()){   // and a note gets pressed
+					MODE_LED_RED_ON;
+
+					// start new recording
+					if (!seq_recording){
+						seq_deltas[0] = 0;
+						seq_notes[0] = pp6_get_note();
+						seq_events[0] = SEQ_NOTE_START;
+						seq_time = 0;
+						seq_length = 0;
+						seq_index = 0;
+						seq_recording = 1;
+						seq_index++;
+					}
+					else { // continue current recording
+						seq_deltas[seq_index] = seq_time;
+						seq_notes[seq_index] = pp6_get_note();
+						seq_events[seq_index] = SEQ_NOTE_START;
+						seq_last_note_start = seq_time;
+						seq_last_note_start_index = seq_index;
+						seq_index++;
+					}
+				}
+				if (pp6_get_note_stop()){   // note ends
+					seq_deltas[seq_index] = seq_time;
+					seq_notes[seq_index] = pp6_get_note();
+					seq_events[seq_index] = SEQ_NOTE_STOP ;
+					seq_index++;
+				}
+
 			}
-			// aux button
-			if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
-				pp6_change_aux();
+			else {
+				sequencer_enable = 0;
+				// if a recording just finished
+				if (seq_recording) {
+					seq_deltas[seq_index] = seq_last_note_start;
+					seq_notes[seq_index] = seq_notes[seq_last_note_start_index];
+					seq_events[seq_index] = SEQ_NOTE_STOP; // just make it a note stop
+					seq_events[seq_last_note_start_index] = SEQ_NOTE_STOP; // make last note a stop too
+					seq_length = seq_last_note_start_index;
+					seq_index = 0; // go back to the begining
+					seq_time = 0;
+					seq_recording = 0;
+					seq_playing = 1;
+				}
 			}
+
+			if (seq_playing && seq_length){
+				if (seq_time >= seq_deltas[seq_index]){
+					if (seq_events[seq_index] == SEQ_NOTE_START){
+						pp6_set_note(seq_notes[seq_index]);
+						pp6_set_note_start();
+					}
+					if (seq_events[seq_index] == SEQ_NOTE_STOP){
+						pp6_set_note_stop();
+					}
+					seq_index++;
+					if (seq_index > seq_length){
+						seq_index = 0;
+						seq_time = 0;
+					}
+				}
+			}
+
+
+			// only if sequencer is disabled
+			if (!sequencer_enable) {
+				// mode button
+				if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
+					pp6_change_mode();
+				}
+				// aux button
+				//if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
+				//	pp6_change_aux();
+				//}
+				// aux button on release
+				if ( (((k>>16) & 1)) &&  (!((k_last>>16) & 1)) ){
+					pp6_change_aux();
+				}
+			}
+
+
 			k_last = k;
 
 
 			// DO MACHINE GUN
-			count++;
+		/*	count++;
 			all_clock++;
 			aux = pp6_get_aux();
 			if (aux != aux_last) {
 				aux_last = aux;
 				machine_gun_period = (all_clock - last_hit) / 4;
 				last_hit = all_clock;
-
 			}
 			if ((count > machine_gun_period) && pp6_get_num_keys_down() ) {
 				//pp6_set_note_start();
 				count = 0;
-			}
+			}*/
 			// end do machine gun
+
+
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
 			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
@@ -227,6 +326,10 @@ int main(void)
 			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
 			t2 = timer_get_time();
 			t = t2 - t1;
+
+			pp6_clear_flags();
+			seq_time++;
+
 		}
 
 		/*

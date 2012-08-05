@@ -80,36 +80,37 @@ uint32_t pp6_get_keys(void) {
 		return pp6.keys;
 }
 
+
+// the key being held down
 void pp6_set_note(uint8_t note) {
 	pp6.note = note;
 }
+uint8_t pp6_get_note(void) {
+	return pp6.note;
+}
+
+
+// Events
 void pp6_set_note_start (void ) {
 	pp6.note_stop = 0;
 	pp6.playing = 1;
 	pp6.note_start = 1;
 }
 uint8_t pp6_get_note_start(void) {
-	uint8_t tmp;
-	tmp = pp6.note_start;
-	pp6.note_start = 0;
-	return tmp;
+	return pp6.note_start;
 }
-
 void pp6_set_note_stop(void){
 	pp6.note_start = 0;
 	pp6.note_stop = 1;
 }
-
 uint8_t pp6_get_note_stop(void){
-	uint8_t tmp;
-	tmp = pp6.note_stop;
+	return pp6.note_stop;
+}
+void pp6_clear_flags(void){
 	pp6.note_stop = 0;
-	return tmp;
+	pp6.note_start = 0;
 }
 
-uint8_t pp6_get_note(void) {
-	return pp6.note;
-}
 
 uint8_t pp6_get_num_keys_down(void){
 	return pp6.num_keys_down;
@@ -165,9 +166,16 @@ void pp6_knobs_update(void) {
 	static uint32_t knobs[3];
 
 	knobs[channel] = ADC_GetConversionValue(ADC3);
-	pp6.knob_1 = knobs[0] / 65536.f;
-	pp6.knob_2 = knobs[1] / 65536.f;
-	pp6.knob_3 = knobs[2] / 65536.f;
+
+	/// ahhh so it was 65536 ,, then it started needing 4096 (the expected value) ??
+	//pp6.knob_1 = knobs[0] / 65536.f;
+	//pp6.knob_2 = knobs[1] / 65536.f;
+	//pp6.knob_3 = knobs[2] / 65536.f;
+
+	pp6.knob_1 = knobs[0] / 4096.f;
+	pp6.knob_2 = knobs[1] / 4096.f;
+	pp6.knob_3 = knobs[2] / 4096.f;
+
 
 	channel++;
 	if (channel > 2) channel = 0;
@@ -216,6 +224,8 @@ void pp6_set_mode_led(uint8_t led) {
 void pp6_keys_init(void) {
 
 	GPIO_InitTypeDef  GPIO_InitStructure;
+
+	pp6.keys = 0xFFFFFFFF;
 
 	/* Periph clocks enable */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
