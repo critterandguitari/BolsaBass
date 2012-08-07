@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/CS4344.c \
+../src/audio.c \
 ../src/comb.c \
 ../src/cr_startup_stm32f4xx.c \
 ../src/line.c \
@@ -30,6 +31,7 @@ C_SRCS += \
 
 OBJS += \
 ./src/CS4344.o \
+./src/audio.o \
 ./src/comb.o \
 ./src/cr_startup_stm32f4xx.o \
 ./src/line.o \
@@ -55,6 +57,7 @@ OBJS += \
 
 C_DEPS += \
 ./src/CS4344.d \
+./src/audio.d \
 ./src/comb.d \
 ./src/cr_startup_stm32f4xx.d \
 ./src/line.d \

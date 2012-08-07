@@ -66,13 +66,15 @@ float32_t mode_filter_envelope_sample_process (void) {
 
 void mode_filter_envelope_control_process (void) {
 	f = miditof[pp6_get_note()] * .6f;
-	/*sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
-	sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 2.f) + .01f, 1.f, .1f);*/
+
 
 
 	if (pp6_get_note_start()){
-		sadsr_set(&amp_env, midi_cc[4], midi_cc[5] * 4.f, midi_cc[6] * 4.f, midi_cc[7]);
-		sadsr_set(&filter_env, midi_cc[0], midi_cc[1] * 4.f, midi_cc[2] * 4.f, midi_cc[3]);
+		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
+		sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 2.f) + .01f, 1.f, .1f);
+
+		/*sadsr_set(&amp_env, midi_cc[4], midi_cc[5] * 4.f, midi_cc[6] * 4.f, midi_cc[7]);
+		sadsr_set(&filter_env, midi_cc[0], midi_cc[1] * 4.f, midi_cc[2] * 4.f, midi_cc[3]);*/
 
 		sadsr_go(&amp_env);
 		sadsr_go(&filter_env);

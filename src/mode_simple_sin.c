@@ -12,7 +12,9 @@
 #include "line.h"
 #include "vcf.h"
 #include "sadsr.h"
+#include "audio.h"
 #include "mode_simple_sin.h"
+
 
 extern float miditof[];
 
@@ -31,6 +33,7 @@ static sadsr amp_env;
 static bl_saw saw;
 static bl_square square;
 
+float32_t cents = 0.f;
 
 
 
@@ -43,10 +46,12 @@ void mode_simple_sin_init(void){
 
 float32_t mode_simple_sin_sample_process (void) {
 
+	f = c_to_f(line_process(&framp));
 
-	sin_set(&sin1, line_process(&framp) * ((pp6_get_knob_3()) + 1), .9f);
-	bl_saw_set(&saw, line_process(&framp) * ((pp6_get_knob_3()) + 1));
-	bl_square_set(&square, line_process(&framp) * ((pp6_get_knob_3()) + 1));
+	sin_set(&sin1, f * ((pp6_get_knob_3()) + 1), .9f);
+
+	bl_saw_set(&saw, f * ((pp6_get_knob_3()) + 1));
+	bl_square_set(&square, f * ((pp6_get_knob_3()) + 1));
 
 
 	//sin_set(&sin1, f * ((pp6_get_knob_3() * 4.f) + 1), .9f);
@@ -75,11 +80,19 @@ float32_t mode_simple_sin_sample_process (void) {
 
 void mode_simple_sin_control_process (void) {
 
-	f = miditof[pp6_get_note()] * .6f;
+
+
+	//f = miditof[pp6_get_note()] * .6f;
+	//f = c_to_f(cents);
 
 	if (pp6_get_note_start() ){
-		line_set(&framp, f * pp6_get_knob_2()  * 10.f );
-		line_go(&framp, f, pp6_get_knob_1() * 5000.f);
+		cents = ((float32_t)pp6_get_note() * 100.f);
+		//f = c_to_f(cents);
+
+
+		//line_set(&framp, f * pp6_get_knob_2()  * 10.f );
+		line_set(&framp, cents + (pp6_get_knob_2()  * 4800.f));   // 2400 cents sharp
+		line_go(&framp, cents, pp6_get_knob_1() * 500.f);
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;
