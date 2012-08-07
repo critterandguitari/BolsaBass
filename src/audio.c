@@ -29,6 +29,5 @@ float32_t c_to_f(float32_t c){
 	frac = (uint32_t)c - ((octave * 1200) + (pc * 100));
 
 	return pitch_class[pc] * BASE_FREQ * (float32_t)(1 << octave) * semitone[frac];
-
 }
 
