@@ -98,7 +98,7 @@ int main(void)
 	uint8_t ch;
 	k = note = note_last = 0xFFFFFFFF;
 
-	pp6_set_mode(4);
+	pp6_set_mode(0);
 	pp6_set_aux(0);
 
 	mode_filter_man_init();
@@ -337,7 +337,6 @@ int main(void)
 		 */
 		if (software_index != hardware_index){
 			if (software_index & 1){   // channel
-
 
 				if (pp6_get_mode() == 0) sig = mode_simple_sin_sample_process();
 				if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();

@@ -18,5 +18,6 @@
 #define TWO_PI 6.283185307f
 
 float32_t c_to_f(float32_t c);
+float32_t c_to_f_ratio(float32_t c);
 
 #endif /* AUDIO_H_ */

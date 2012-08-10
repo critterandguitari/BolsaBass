@@ -17,7 +17,7 @@ extern float miditof[];
 
 extern float32_t midi_cc[];
 
-static float32_t sig, f, t;
+static float32_t sig, f;
 
 static sin_oscillator sins[8];
 
@@ -27,15 +27,26 @@ static float32_t amp;
 
 static float32_t harmonic_levels[8] = {1.f, .9f, .8f, .7f, .7f, .5f, .4f, .3f};
 
-static bl_saw saws[8];
+//static bl_saw saws[8];
 
 static sadsr amp_env;
+
+static sadsr h[8];
 
 
 void mode_nazareth_init(void){
 	f = 50.0;
 	amp = 0;
 	sadsr_init(&amp_env);
+
+	sadsr_init(&h[0]);
+	sadsr_init(&h[1]);
+	sadsr_init(&h[2]);
+	sadsr_init(&h[3]);
+	sadsr_init(&h[4]);
+	sadsr_init(&h[5]);
+	sadsr_init(&h[6]);
+	sadsr_init(&h[7]);
 }
 
 float32_t mode_nazareth_sample_process (void) {
@@ -43,11 +54,14 @@ float32_t mode_nazareth_sample_process (void) {
 
 	for (i=0; i<8; i++){
 		sin_set(&sins[i], f * (pp6_get_knob_3() + 1) * (i + 1), .9f);
-		//harmonic_levels[i] = 1.f - ((bl_saw_process(&saws[i]) + 1.f) * .5f) ;
+		harmonic_levels[i] = sadsr_process(&h[i]);
 	}
+
+
 	sig = 0;
 	for (i=0; i<8; i++){
-		sig += sin_process(&sins[i]) * harmonic_levels[i] * .125f;
+		amp = harmonic_levels[i];
+		sig += sin_process(&sins[i]) * amp * amp * .125f;
 	}
 
 	amp = sadsr_process(&amp_env);
@@ -57,10 +71,29 @@ float32_t mode_nazareth_sample_process (void) {
 
 void mode_nazareth_control_process (void) {
 
-	f = miditof[pp6_get_note()] * 6.f;
+	f = miditof[pp6_get_note()] * .6f;
 	if (pp6_get_note_start() ){
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
+
+
+		sadsr_set(&h[0], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[1], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[2], .01f, 2.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[3], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[4], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[5], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[6], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[7], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_go(&h[0]);
+		sadsr_go(&h[1]);
+		sadsr_go(&h[2]);
+		sadsr_go(&h[3]);
+		sadsr_go(&h[4]);
+		sadsr_go(&h[5]);
+		sadsr_go(&h[6]);
+		sadsr_go(&h[7]);
+
 		new_note = 1;
 	}
 	if (pp6_get_note_stop()){
@@ -76,22 +109,22 @@ void mode_nazareth_control_process (void) {
 	//}
 
 
-		harmonic_levels[0] = .7f;
+		/*harmonic_levels[0] = .7f;
 		harmonic_levels[1] = 1.f;
 		harmonic_levels[2] = .3f;
 		harmonic_levels[3] = 1.f;
 		harmonic_levels[4] = .5f;
 		harmonic_levels[5] = .3f;
 		harmonic_levels[6] = .2f;
-		harmonic_levels[7] = 1.f;
+		harmonic_levels[7] = 1.f;*/
 
-		harmonic_levels[0] = midi_cc[0];
+		/*harmonic_levels[0] = midi_cc[0];
 		harmonic_levels[1] = midi_cc[1];
 		harmonic_levels[2] = midi_cc[2];
 		harmonic_levels[3] = midi_cc[3];
 		harmonic_levels[4] = midi_cc[4];
 		harmonic_levels[5] = midi_cc[5];
 		harmonic_levels[6] = midi_cc[6];
-		harmonic_levels[7] = midi_cc[7];
+		harmonic_levels[7] = midi_cc[7];*/
 
 }

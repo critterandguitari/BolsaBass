@@ -39,22 +39,35 @@ void mode_filter_envelope_init(void){
 float32_t mode_filter_envelope_sample_process (void) {
 
 	bl_saw_set(&saw, f * (pp6_get_knob_3() + 1));
-	bl_saw_set(&saw2, f * (pp6_get_knob_3() + 1) * (pp6_get_knob_1() + 1));
+	//bl_saw_set(&saw2, f * (pp6_get_knob_3() + 1) * (pp6_get_knob_1() + 1));
 
 	//cutoff = ( sadsr_process(&filter_env) * f * 10.f ) + 200.f;//1000.f;// ;
+
+
 	cutoff = sadsr_process(&filter_env) ;//(( sadsr_process(&filter_env) * 6000.f ) + 200.f) / 6000.f;//1000.f;// ;
 
-	if (pp6_get_aux())
-		vcf_filter_set(&filter, ((cutoff * cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.9f );
-	else
-		vcf_filter_set(&filter, ((cutoff * f * 40.f)) + f, pp6_get_knob_2() * 3.9f );
+	//
+	//	vcf_filter_set(&filter, ((cutoff * cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.6f );
+	//
+	if (pp6_get_aux() & 0x1){
+		// linear cutoff ramp proportional to osc freq,
+		vcf_filter_set(&filter, ((cutoff * f * 32.f)) + f, pp6_get_knob_2() * 3.6f );
+		//pp6_set_mode_led(0);
+	}
+	else {
+		// log cutoff ramp using cents,  starts 6000 cents above f
+		vcf_filter_set(&filter, (c_to_f_ratio(cutoff * 6000.f)) * f, pp6_get_knob_2() * 3.6f );
+		//pp6_set_mode_led(2);
+	}
+
+
 	//
 	//	vcf_filter_set(&filter, ((cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.9f );
 
 
-	//sig = bl_saw_process(&saw) * .75;
+	sig = bl_saw_process(&saw) * .75;
 
-	sig = (bl_saw_process(&saw) * .3) + (bl_saw_process(&saw2) * .3);
+	//sig = (bl_saw_process(&saw) * .3) + (bl_saw_process(&saw2) * .3);
 
 	amp = sadsr_process(&amp_env);
 	sig *= amp * amp;
@@ -71,7 +84,7 @@ void mode_filter_envelope_control_process (void) {
 
 	if (pp6_get_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
-		sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 2.f) + .01f, 1.f, .1f);
+		sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 4.f) + .01f, 1.f, 0.f);
 
 		/*sadsr_set(&amp_env, midi_cc[4], midi_cc[5] * 4.f, midi_cc[6] * 4.f, midi_cc[7]);
 		sadsr_set(&filter_env, midi_cc[0], midi_cc[1] * 4.f, midi_cc[2] * 4.f, midi_cc[3]);*/
@@ -80,7 +93,7 @@ void mode_filter_envelope_control_process (void) {
 		sadsr_go(&filter_env);
 	}
 	if (pp6_get_note_stop()){
-		//sadsr_release(&amp_env);
-		//sadsr_release(&filter_env);
+		sadsr_release(&amp_env);
+		sadsr_release(&filter_env);
 	}
 }
