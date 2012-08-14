@@ -78,12 +78,12 @@ void mode_nazareth_control_process (void) {
 
 
 		sadsr_set(&h[0], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[1], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[2], .01f, 2.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[3], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[4], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[5], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[6], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[1], .01f, 3.5f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[2], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[3], .01f, 2.5f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[4], .01f, 2.f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[5], .01f, 1.5f * pp6_get_knob_1(), .2f, 0);
+		sadsr_set(&h[6], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[7], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
 		sadsr_go(&h[0]);
 		sadsr_go(&h[1]);

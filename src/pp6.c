@@ -45,6 +45,34 @@ float32_t pp6_get_knob_3(void){
 	return pp6.knob_3;
 }
 
+// mode and aux buttons
+void  pp6_set_mode_button_pressed(void){
+	pp6.mode_button_pressed = 1;
+}
+void pp6_set_mode_button_released(void){
+	pp6.mode_button_released = 1;
+}
+uint8_t pp6_mode_button_pressed(void){
+	return pp6.mode_button_pressed;
+}
+uint8_t pp6_mode_button_released(void){
+	return pp6.mode_button_released;
+}
+
+void  pp6_set_aux_button_pressed(void){
+	pp6.aux_button_pressed = 1;
+}
+void pp6_set_aux_button_released(void){
+	pp6.aux_button_released = 1;
+}
+uint8_t pp6_aux_button_pressed(void){
+	return pp6.aux_button_pressed;
+}
+uint8_t pp6_aux_button_released(void){
+	return pp6.aux_button_released;
+}
+
+// MODE
 void pp6_change_mode(void){
 	pp6.mode++;
 	if (pp6.mode == 6) pp6.mode = 0;
@@ -60,21 +88,53 @@ uint32_t pp6_get_mode(void){
 	return pp6.mode;
 }
 
+// MODE LED
+void pp6_set_mode_led(uint8_t led) {
+	pp6.mode_led = led;
+	if (led == 0) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
+	if (led == 1) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
+	if (led == 2) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+	if (led == 3) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+	if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
+	if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+	if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+}
+
+uint8_t pp6_get_mode_led(void){
+	return pp6.mode_led;
+}
+
+// AUX
 void pp6_change_aux(void){
 	pp6.aux++;
 	if (pp6.aux == 6) pp6.aux = 0;
-	//pp6_set_aux_led(pp6.aux + 1);
+	pp6_set_aux_led(pp6.aux + 1);
 }
 
 void pp6_set_aux(uint32_t aux){
 	pp6.aux = aux;
-	//pp6_set_aux_led(pp6.aux + 1);
+	pp6_set_aux_led(pp6.aux + 1);
 }
 
 uint32_t pp6_get_aux(void){
 	return pp6.aux;
 }
 
+// AUX LED
+void pp6_set_aux_led(uint8_t led) {
+	pp6.aux_led = led;
+	if (led == 0) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
+	if (led == 1) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
+	if (led == 2) {AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
+	if (led == 3) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
+	if (led == 4) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;}
+	if (led == 5) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
+	if (led == 6) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
+}
+
+uint8_t pp6_get_aux_led(void) {
+	return pp6.aux_led;
+}
 
 uint32_t pp6_get_keys(void) {
 		return pp6.keys;
@@ -109,8 +169,11 @@ uint8_t pp6_get_note_stop(void){
 void pp6_clear_flags(void){
 	pp6.note_stop = 0;
 	pp6.note_start = 0;
+	pp6.aux_button_pressed = 0;
+	pp6.aux_button_released = 0;
+	pp6.mode_button_pressed = 0;
+	pp6.mode_button_released = 0;
 }
-
 
 uint8_t pp6_get_num_keys_down(void){
 	return pp6.num_keys_down;
@@ -168,13 +231,13 @@ void pp6_knobs_update(void) {
 	knobs[channel] = ADC_GetConversionValue(ADC3);
 
 	/// ahhh so it was 65536 ,, then it started needing 4096 (the expected value) ??
-	//pp6.knob_1 = knobs[0] / 65536.f;
-	//pp6.knob_2 = knobs[1] / 65536.f;
-	//pp6.knob_3 = knobs[2] / 65536.f;
+	pp6.knob_1 = knobs[0] / 65536.f;
+	pp6.knob_2 = knobs[1] / 65536.f;
+	pp6.knob_3 = knobs[2] / 65536.f;
 
-	pp6.knob_1 = knobs[0] / 4096.f;
+	/*pp6.knob_1 = knobs[0] / 4096.f;
 	pp6.knob_2 = knobs[1] / 4096.f;
-	pp6.knob_3 = knobs[2] / 4096.f;
+	pp6.knob_3 = knobs[2] / 4096.f;*/
 
 
 	channel++;
@@ -211,15 +274,7 @@ void pp6_leds_init(void) {
 
 }
 
-void pp6_set_mode_led(uint8_t led) {
-	if (led == 1) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
-	if (led == 2) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
-	if (led == 3) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
-	if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
-	if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
-	if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
 
-}
 
 void pp6_keys_init(void) {
 

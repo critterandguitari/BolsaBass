@@ -23,6 +23,7 @@
 #include "uart.h"
 #include "midi.h"
 #include "timer.h"
+#include "sequencer.h"
 
 #include "mode_filter_man.h"
 #include "mode_simple_sin.h"
@@ -46,12 +47,9 @@ extern pocket_piano pp6;
 void Delay(__IO uint32_t nCount);
 
 
-static uint32_t count = 0;
-static uint32_t all_clock = 0;
-static uint32_t machine_gun_period = 100;
-static uint32_t aux_last, aux = 0;
-static uint32_t last_hit;
-
+// led flashing
+uint32_t led_counter = 0;
+static void flash_led_record_enable(void);
 
 // MIDI buffer
 volatile uint8_t  uart_recv_buf[32];
@@ -94,8 +92,7 @@ int main(void)
 
 
 	f = 50.0;
-	uint32_t k, k_last, kdown, note, note_last, i;
-	uint8_t ch;
+	uint32_t k, k_last, note, note_last, i;
 	k = note = note_last = 0xFFFFFFFF;
 
 	pp6_set_mode(0);
@@ -107,11 +104,10 @@ int main(void)
 	mode_simple_fm_init();
 
 
-	BANK_LED_RED_ON;
 
 	uart_init();
 	midi_init();
-
+	timer_init();
 
 	// echo
 /*	for (;;){
@@ -138,23 +134,8 @@ int main(void)
 		t_last = t;
 	}*/
 
+	uint32_t aux_button_depress_time = 0;
 	uint32_t t, t1, t2;
-	uint32_t sequencer_enable = 0;
-	timer_init();
-
-	uint32_t seq_deltas[255];
-	uint32_t seq_notes[255];
-	uint32_t seq_events[255];
-	uint32_t seq_index = 0;
-	uint32_t seq_time = 0;
-	uint32_t seq_recording = 0;
-	uint32_t seq_playing = 0;
-	uint32_t seq_length = 0;
-	uint32_t seq_last_note_start = 0;
-	uint32_t seq_last_note_start_index = 0;
-#define SEQ_NOTE_STOP 2   // these should be standard midi
-#define SEQ_NOTE_START 1
-
 
 	while (1)	{
 
@@ -188,10 +169,9 @@ int main(void)
 			pp6_keys_update();
 			pp6_knobs_update();
 
+
+			// scan keys 16 keys
 			k = pp6_get_keys();
-
-
-			// 16 keys
 			pp6.num_keys_down = 0;
 			for (i = 0; i < 16; i++) {
 				if ( !((k>>i) & 1) ) {
@@ -208,16 +188,57 @@ int main(void)
 					}
 				}
 			}
+			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
+				pp6_set_mode_button_pressed();
+			}
+			if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
+				pp6_set_aux_button_pressed();
+			}
+			if ( (((k>>16) & 1)) &&  (!((k_last>>16) & 1)) ){
+				pp6_set_aux_button_released();
+			}
 
 
+			if (pp6_mode_button_pressed()){
+				pp6_change_mode();
+			}
+			if (pp6_aux_button_released()){
+				pp6_change_aux();
+			}
 
+			// if aux button down
+		/*	if ( (!((k>>16) & 1)) && seq_ready_for_recording() ) {
+				aux_button_depress_time++;
+				if (aux_button_depress_time > 500){
+					aux_button_depress_time = 0;
+					seq_set_status(SEQ_RECORD_ENABLE);
+				}
+			}*/
+
+			// if record enable ---- check for keypress, flash leds, if key press, check for aux or mode press (ends with cancel)
+			// if recording --- check for keypress, check for aux or mode press (ends with new sequence playing)
+ 			//
+			//
+			//
+			//
+
+		/*	if (seq_get_status() == SEQ_RECORD_ENABLE){
+				flash_led_record_enable();
+
+				if (pp6_mode_button_pressed() || pp6_aux_button_pressed()){
+					seq_set_status(SEQ_STOPPED);
+				}
+
+			}*/
 
 			// sequencer record mode, // mode and aux button down
-			if ( (!((k>>16) & 1)) && (!((k>>17) & 1)) ){
-				sequencer_enable = 1;
+			//if ( (!((k>>16) & 1)) && (!((k>>17) & 1)) ){
+		/*	if ( sequencer_record_enable ){
+				flash_led_record_enable();
 				seq_playing = 0;
 				if (pp6_get_note_start()){   // and a note gets pressed
 					MODE_LED_RED_ON;
+					AUX_LED_RED_ON;
 
 					// start new recording
 					if (!seq_recording){
@@ -245,10 +266,10 @@ int main(void)
 					seq_events[seq_index] = SEQ_NOTE_STOP ;
 					seq_index++;
 				}
-
-			}
-			else {
-				sequencer_enable = 0;
+*/
+			//}
+			//else {
+		/*		sequencer_enable = 0;
 				// if a recording just finished
 				if (seq_recording) {
 					seq_deltas[seq_index] = seq_last_note_start;
@@ -261,9 +282,10 @@ int main(void)
 					seq_recording = 0;
 					seq_playing = 1;
 				}
-			}
+			}*/
 
-			if (seq_playing && seq_length){
+			// if a sequence got recorded, and it has positive length
+			/*if (seq_playing && seq_length){
 				if (seq_time >= seq_deltas[seq_index]){
 					if (seq_events[seq_index] == SEQ_NOTE_START){
 						pp6_set_note(seq_notes[seq_index]);
@@ -278,44 +300,23 @@ int main(void)
 						seq_time = 0;
 					}
 				}
-			}
+			}*/
 
 
 			// only if sequencer is disabled
-			if (!sequencer_enable) {
+			//if (!sequencer_record_enable) {
 				// mode button
-				if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
-					pp6_change_mode();
-				}
+
 				// aux button
 				//if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
 				//	pp6_change_aux();
 				//}
 				// aux button on release
-				if ( (((k>>16) & 1)) &&  (!((k_last>>16) & 1)) ){
-					pp6_change_aux();
-				}
-			}
 
+			//}
 
+			// store keys for next time
 			k_last = k;
-
-
-			// DO MACHINE GUN
-		/*	count++;
-			all_clock++;
-			aux = pp6_get_aux();
-			if (aux != aux_last) {
-				aux_last = aux;
-				machine_gun_period = (all_clock - last_hit) / 4;
-				last_hit = all_clock;
-			}
-			if ((count > machine_gun_period) && pp6_get_num_keys_down() ) {
-				//pp6_set_note_start();
-				count = 0;
-			}*/
-			// end do machine gun
-
 
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
@@ -328,7 +329,12 @@ int main(void)
 			t = t2 - t1;
 
 			pp6_clear_flags();
-			seq_time++;
+			//seq_time++;
+			led_counter++;
+
+
+
+
 
 		}
 
@@ -361,6 +367,22 @@ int main(void)
 	    }
 	}
 }
+
+
+void flash_led_record_enable() {
+	if (led_counter > 150){
+		led_counter = 0;
+		if (pp6_get_mode_led()){
+			pp6_set_mode_led(0);
+			pp6_set_aux_led(0);
+		}
+		else {
+			pp6_set_mode_led(1);
+			pp6_set_aux_led(1);
+		}
+	}
+}
+
 
 /*
 filter_man_control_process(){

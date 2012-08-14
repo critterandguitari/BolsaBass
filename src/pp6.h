@@ -17,12 +17,12 @@
 #define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
 #define MODE_LED_GREEN_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_1, 1)
 
-#define BANK_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_4, 0)
-#define BANK_LED_RED_ON GPIO_WriteBit(GPIOB, GPIO_Pin_5, 0)
-#define BANK_LED_GREEN_ON GPIO_WriteBit(GPIOB, GPIO_Pin_8, 0)
-#define BANK_LED_BLUE_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_4, 1)
-#define BANK_LED_RED_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_5, 1)
-#define BANK_LED_GREEN_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_8, 1)
+#define AUX_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_4, 0)
+#define AUX_LED_RED_ON GPIO_WriteBit(GPIOB, GPIO_Pin_5, 0)
+#define AUX_LED_GREEN_ON GPIO_WriteBit(GPIOB, GPIO_Pin_8, 0)
+#define AUX_LED_BLUE_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_4, 1)
+#define AUX_LED_RED_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_5, 1)
+#define AUX_LED_GREEN_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_8, 1)
 
 
 typedef struct {
@@ -35,8 +35,14 @@ typedef struct {
 	uint8_t note;
 	uint32_t keys;
 	uint32_t mode;
+	uint8_t mode_button_pressed;
+	uint8_t mode_button_released;
 	uint32_t aux;
+	uint8_t aux_button_pressed;
+	uint8_t aux_button_released;
 	uint8_t num_keys_down;
+	uint8_t mode_led;
+	uint8_t aux_led;
 } pocket_piano;
 
 float32_t pp6_get_knob_1(void);
@@ -75,9 +81,19 @@ void pp6_knobs_init(void);
 void pp6_knobs_update(void);
 
 uint8_t pp6_get_mode_led(void);
-uint8_t pp6_get_bank_led(void);
+uint8_t pp6_get_aux_led(void);
 void pp6_set_mode_led(uint8_t mode_led);
-void pp6_set_bank_led(uint8_t bank_led);
+void pp6_set_aux_led(uint8_t bank_led);
+
+void  pp6_set_mode_button_pressed(void);
+void pp6_set_mode_button_released(void);
+uint8_t pp6_mode_button_pressed(void);
+uint8_t pp6_mode_button_released(void);
+
+void  pp6_set_aux_button_pressed(void);
+void pp6_set_aux_button_released(void);
+uint8_t pp6_aux_button_pressed(void);
+uint8_t pp6_aux_button_released(void);
 
 
 #endif /* PP6_H_ */

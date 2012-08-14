@@ -5,8 +5,9 @@
  *      Author: owen
  */
 
-
+#include "stm32f4xx.h"
 #include "arm_math.h"
+
 #include "oscillator.h"
 #include "pp6.h"
 #include "line.h"
@@ -17,11 +18,13 @@
 extern float miditof[];
 
 
-static float32_t sig, f;
+static float32_t sig, f, filter_cutoff;
 static bl_saw saw, saw2;
 static vcf_filter filter;
 static float32_t amp = 0.f;
 static sadsr amp_env;
+static uint32_t timer;
+static uint32_t octave_shift;
 
 void mode_filter_man_init(void){
 
@@ -35,11 +38,11 @@ void mode_filter_man_init(void){
 float32_t mode_filter_man_sample_process (void) {
 
 	bl_saw_set(&saw, f);
-	//bl_saw_set(&saw2, f * (pp6_get_knob_2() + 1));
+	bl_saw_set(&saw2, f * (pp6_get_knob_2() + 1));
 
-	sig = bl_saw_process(&saw) * .75;
+	//sig = bl_saw_process(&saw) * .75;
 
-	//sig = (bl_saw_process(&saw) * .4) + (bl_saw_process(&saw2) * .4);
+	sig = (bl_saw_process(&saw) * .4) + (bl_saw_process(&saw2) * .4);
 
 	//amp -= .00001f;
 	//if (amp < 0) amp = 0.f;
@@ -55,7 +58,7 @@ float32_t mode_filter_man_sample_process (void) {
 }
 
 void mode_filter_man_control_process (void) {
-	f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+
 	if (pp6_get_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
 		sadsr_go(&amp_env);
@@ -63,6 +66,21 @@ void mode_filter_man_control_process (void) {
 	if (pp6_get_note_stop()){
 		sadsr_release(&amp_env);
 	}
-	vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, pp6_get_knob_2() * 3.5f );
-	//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.9f );
+	//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, pp6_get_knob_2() * 3.5f );
+	vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
+	if (pp6_get_aux() == 5)
+		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+	else
+		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f) * (octave_shift + 1);
+
+
+	timer++;
+	if (timer > (pp6_get_knob_1() * 500)){
+		filter_cutoff = ((float32_t)RNG_GetRandomNumber()  / 2147483648.0f) * 600.f;
+		timer = 0;
+		octave_shift++;
+		octave_shift &= 1;
+
+	}
+
 }
