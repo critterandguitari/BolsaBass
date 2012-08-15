@@ -33,6 +33,7 @@
 #include "mode_drum.h"
 #include "mode_drum_synth.h"
 #include "mode_simple_fm.h"
+#include "mode_octave_mirror.h"
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -102,6 +103,7 @@ int main(void)
 	mode_simple_sin_init();
 	mode_filter_envelope_init();
 	mode_simple_fm_init();
+	mode_octave_mirror_init();
 
 
 
@@ -323,7 +325,7 @@ int main(void)
 			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
 			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
-			if (pp6_get_mode() == 4)  mode_nazareth_control_process();
+			if (pp6_get_mode() == 4)  mode_octave_mirror_control_process();
 			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
 			t2 = timer_get_time();
 			t = t2 - t1;
@@ -348,7 +350,7 @@ int main(void)
 				if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
 				if (pp6_get_mode() == 2) sig = mode_mono_glider_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
-				if (pp6_get_mode() == 4) sig = mode_nazareth_sample_process();
+				if (pp6_get_mode() == 4) sig = mode_octave_mirror_sample_process();
 				if (pp6_get_mode() == 5) sig = mode_simple_fm_sample_process();
 
 				arm_float_to_q15(&sig, &wave, 1);

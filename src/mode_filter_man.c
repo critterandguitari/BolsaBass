@@ -18,7 +18,7 @@
 extern float miditof[];
 
 
-static float32_t sig, f, filter_cutoff;
+static float32_t sig, f, f2, f2_ratio, filter_cutoff;
 static bl_saw saw, saw2;
 static vcf_filter filter;
 static float32_t amp = 0.f;
@@ -38,7 +38,7 @@ void mode_filter_man_init(void){
 float32_t mode_filter_man_sample_process (void) {
 
 	bl_saw_set(&saw, f);
-	bl_saw_set(&saw2, f * (pp6_get_knob_2() + 1));
+	bl_saw_set(&saw2, f2);
 
 	//sig = bl_saw_process(&saw) * .75;
 
@@ -67,15 +67,32 @@ void mode_filter_man_control_process (void) {
 		sadsr_release(&amp_env);
 	}
 	//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, pp6_get_knob_2() * 3.5f );
-	vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
-	if (pp6_get_aux() == 5)
+
+	if (pp6_get_aux() == 0){
 		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
-	else
-		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f) * (octave_shift + 1);
+		f2_ratio = (pp6_get_knob_2() + 1);
+		f2 = f * f2_ratio;
+		vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
+
+	}
+	if (pp6_get_aux() == 1){
+		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+		f2_ratio = (pp6_get_knob_2() + 1);
+		f2 = f * f2_ratio;
+		vcf_filter_set(&filter, (octave_shift * 3000.f) + (3000.f * pp6_get_knob_1()), (pp6_get_aux() / 5.f) * 3.5f );
+
+	}
+	else {
+		f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+
+		//f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_2() + 1.f)  (pp6_get_knob_3() +  1.f) * (octave_shift + 1);
+		f2 =  f * f2_ratio;
+		vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
+	}
 
 
 	timer++;
-	if (timer > (pp6_get_knob_1() * 500)){
+	if (timer > (pp6_get_knob_2() * 500)){
 		filter_cutoff = ((float32_t)RNG_GetRandomNumber()  / 2147483648.0f) * 600.f;
 		timer = 0;
 		octave_shift++;
