@@ -83,6 +83,8 @@ float32_t simple_FM(float32_t freq, float32_t harmonicity, float32_t index);
 float32_t bl_step_table_read(float32_t index);
 float32_t bl_saw_process(bl_saw * saw);
 void bl_saw_set(bl_saw * saw, float32_t freq);
+void bl_saw_reset(bl_saw * saw);
+
 
 float32_t bl_square_process(bl_square * square);
 void bl_square_set(bl_square * square, float32_t freq);

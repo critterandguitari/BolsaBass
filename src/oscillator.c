@@ -189,6 +189,10 @@ void bl_saw_set(bl_saw * saw, float32_t freq) {
 	saw->freq = freq;
 }
 
+void bl_saw_reset(bl_saw * saw){
+	saw->phase = 0;
+}
+
 // from PD patch, transition table is used for the step
 float32_t bl_saw_process(bl_saw * saw){
 

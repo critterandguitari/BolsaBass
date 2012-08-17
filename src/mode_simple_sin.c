@@ -58,9 +58,9 @@ float32_t mode_simple_sin_sample_process (void) {
 
 	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
-	if (pp6_get_aux() == 0)
-		sig = sin_process(&sin1);
-	else if (pp6_get_aux() == 1)
+//	if (pp6_get_aux() == 0)
+		sig = sin_process(&sin1) * .6f;
+/*	else if (pp6_get_aux() == 1)
 		sig = bl_square_process(&square);
 	else if (pp6_get_aux() == 2)
 		sig = bl_saw_process(&saw);
@@ -70,7 +70,7 @@ float32_t mode_simple_sin_sample_process (void) {
 		sig = bl_square_process(&square);
 	else if (pp6_get_aux() == 5)
 		sig = bl_saw_process(&saw);
-
+*/
 
 
 	amp = sadsr_process(&amp_env);
@@ -80,8 +80,9 @@ float32_t mode_simple_sin_sample_process (void) {
 
 void mode_simple_sin_control_process (void) {
 
+	static uint32_t note_dur;
 
-
+	//release = 1.54f;
 	//f = miditof[pp6_get_note()] * .6f;
 	//f = c_to_f(cents);
 
@@ -91,14 +92,18 @@ void mode_simple_sin_control_process (void) {
 
 
 		//line_set(&framp, f * pp6_get_knob_2()  * 10.f );
-		line_set(&framp, cents + (pp6_get_knob_2()  * 4800.f));   // 2400 cents sharp
-		line_go(&framp, cents, pp6_get_knob_1() * 500.f);
-		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
+		line_set(&framp, cents + (pp6_get_knob_2()  * 1200.f));   // 2400 cents sharp
+		line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 500.f);
+		sadsr_set(&amp_env, .01f, .2f, 1.54f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;
 		//sin_reset(&sin1);
+		note_dur = 0;
 	}
 	if (pp6_get_note_stop()){
+		if (note_dur < 100)
+			sadsr_set(&amp_env, .01f, .1f, .15, .6f);
 		sadsr_release(&amp_env);
 	}
+	note_dur++;
 }
