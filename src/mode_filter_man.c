@@ -71,18 +71,18 @@ void mode_filter_man_control_process (void) {
 
 
 	if (pp6_get_note_start()){
-		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
-
-		sadsr_go(&amp_env);
-
-
-		target_f = (float32_t)pp6_get_note() * 100.f;
-
-		line_go(&framp, target_f, (pp6_get_knob_2() + .001f) * 5000.f);
 		note_dur=0;
+		target_f = (float32_t)pp6_get_note() * 100.f;
+		line_go(&framp, target_f, (pp6_get_knob_2() + .001f) * 5000.f);
 
-		bl_saw_reset(&saw);
-		bl_saw_reset(&saw2);
+
+		// only if there is one note down (staccato)
+		if (pp6_get_num_keys_down() == 1){
+			sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
+			sadsr_go(&amp_env);
+			bl_saw_reset(&saw);
+			bl_saw_reset(&saw2);
+		}
 
 	}
 	if (pp6_get_note_stop()){
@@ -99,7 +99,7 @@ void mode_filter_man_control_process (void) {
 
 
 	//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f,  (1.f - pp6_get_knob_1()) * 3.f);
-	vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + f * 2,  (1.f - pp6_get_knob_1()) * 3.f);
+	vcf_filter_set(&filter, (pp6_get_knob_1() * 10000.f) + f * 2,  (1.f - pp6_get_knob_1()) * 3.f);
 
 
 

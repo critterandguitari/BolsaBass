@@ -34,6 +34,8 @@
 #include "mode_drum_synth.h"
 #include "mode_simple_fm.h"
 #include "mode_octave_mirror.h"
+#include "mode_wave_adder.h"
+#include "mode_analog_style.h"
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -104,6 +106,8 @@ int main(void)
 	mode_filter_envelope_init();
 	mode_simple_fm_init();
 	mode_octave_mirror_init();
+	mode_wave_adder_init();
+	mode_analog_style_init();
 
 
 
@@ -321,9 +325,10 @@ int main(void)
 			k_last = k;
 
 			t1 =  timer_get_time();
-			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
-			if (pp6_get_mode() == 1)  mode_filter_man_control_process();
-			if (pp6_get_mode() == 2)  mode_mono_glider_control_process ();
+			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi
+			//if (pp6_get_mode() == 1)  mode_filter_man_control_process();   // analog style
+			if (pp6_get_mode() == 1)  mode_analog_style_control_process();   // analog style
+			if (pp6_get_mode() == 2)  mode_wave_adder_control_process ();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_octave_mirror_control_process();
 			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
@@ -347,8 +352,9 @@ int main(void)
 			if (software_index & 1){   // channel
 
 				if (pp6_get_mode() == 0) sig = mode_simple_sin_sample_process();
-				if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
-				if (pp6_get_mode() == 2) sig = mode_mono_glider_sample_process();
+				//if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
+				if (pp6_get_mode() == 1) sig = mode_analog_style_sample_process();
+				if (pp6_get_mode() == 2) sig = mode_wave_adder_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_octave_mirror_sample_process();
 				if (pp6_get_mode() == 5) sig = mode_simple_fm_sample_process();

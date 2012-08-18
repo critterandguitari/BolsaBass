@@ -41,8 +41,8 @@ float32_t mode_simple_fm_sample_process (void) {
 
 
 
-	//sig = simple_FM(f, (float32_t)pp6_get_aux(), sadsr_process(&index_env)  * pp6_get_knob_2() * (6.f - pp6_get_aux()) );
-	sig = simple_FM(f, (float32_t)pp6_get_aux() * .25f, sadsr_process(&index_env)  * pp6_get_knob_2() * (6.f - pp6_get_aux()) );
+	sig = simple_FM(f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f);
+	//sig = simple_FM(f, 1.f, sadsr_process(&index_env)  * pp6_get_knob_2() * (6.f - pp6_get_aux()) );
 
 
 	amp = sadsr_process(&amp_env);

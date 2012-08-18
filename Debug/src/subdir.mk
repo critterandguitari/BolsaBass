@@ -11,6 +11,7 @@ C_SRCS += \
 ../src/line.c \
 ../src/main.c \
 ../src/midi.c \
+../src/mode_analog_style.c \
 ../src/mode_drum.c \
 ../src/mode_drum_synth.c \
 ../src/mode_filter_envelope.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 ../src/mode_octave_mirror.c \
 ../src/mode_simple_fm.c \
 ../src/mode_simple_sin.c \
+../src/mode_wave_adder.c \
 ../src/oscillator.c \
 ../src/pp6.c \
 ../src/sad.c \
@@ -38,6 +40,7 @@ OBJS += \
 ./src/line.o \
 ./src/main.o \
 ./src/midi.o \
+./src/mode_analog_style.o \
 ./src/mode_drum.o \
 ./src/mode_drum_synth.o \
 ./src/mode_filter_envelope.o \
@@ -47,6 +50,7 @@ OBJS += \
 ./src/mode_octave_mirror.o \
 ./src/mode_simple_fm.o \
 ./src/mode_simple_sin.o \
+./src/mode_wave_adder.o \
 ./src/oscillator.o \
 ./src/pp6.o \
 ./src/sad.o \
@@ -65,6 +69,7 @@ C_DEPS += \
 ./src/line.d \
 ./src/main.d \
 ./src/midi.d \
+./src/mode_analog_style.d \
 ./src/mode_drum.d \
 ./src/mode_drum_synth.d \
 ./src/mode_filter_envelope.d \
@@ -74,6 +79,7 @@ C_DEPS += \
 ./src/mode_octave_mirror.d \
 ./src/mode_simple_fm.d \
 ./src/mode_simple_sin.d \
+./src/mode_wave_adder.d \
 ./src/oscillator.d \
 ./src/pp6.d \
 ./src/sad.d \
