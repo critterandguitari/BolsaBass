@@ -43,7 +43,8 @@ float32_t mode_filter_envelope_sample_process (void) {
 
 	cutoff = sadsr_process(&filter_env) ;
 
-	cutoff_scale = 3000.f +  (pp6_get_knob_1() * 3000.f);  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
+	//cutoff_scale = 4000.f +  (pp6_get_knob_1() * 3000.f);  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
+	cutoff_scale = 7000.f;  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
 
 
 	// log cutoff ramp using cents,  starts 6000 cents above f

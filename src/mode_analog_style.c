@@ -91,7 +91,7 @@ void mode_analog_style_control_process (void) {
 		//if (note_dur < 100)
 		//	sadsr_set(&amp_env, .01f, .1f, .15, .6f);
 
-		sadsr_set(&amp_env, .01f, .1f, (note_dur * 64) / SR, .6f);
+		sadsr_set(&amp_env, .01f, .1f, (note_dur * 128) / SR, .6f);
 		sadsr_release(&amp_env);
 
 	}
