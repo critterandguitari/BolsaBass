@@ -44,7 +44,13 @@ float32_t mode_analog_style_sample_process (void) {
 
 	f = c_to_f(line_process(&framp)) * (pp6_get_knob_3() +  1.f);
 	//vcf_filter_set(&filter, ( c_to_f_ratio(pp6_get_knob_1() * 6000.f) * f) + f * 2,  pp6_get_knob_2() * 3.75f);
-	vcf_filter_set(&filter, ( pp6_get_knob_1() * 16.f * f) + f * 2,  pp6_get_knob_2() * 3.75f);
+
+	// scale filter cutoff so its locked to frequency, for high notes from MIDI this might be too high, so govern
+	filter_cutoff = ( pp6_get_knob_1() * 50.f * f) + f * 2;
+	if (filter_cutoff > NYQUIST) {
+		filter_cutoff = NYQUIST;
+	}
+	vcf_filter_set(&filter, filter_cutoff,  pp6_get_knob_2() * 3.75f);
 
 
 	bl_saw_set(&saw, f);
