@@ -5,6 +5,7 @@
  *      Author: owen
  */
 #include "arm_math.h"
+#include "pp6.h"
 #include "sequencer.h"
 
 #define SEQ_NOTE_STOP 2   // these should be standard midi
@@ -38,4 +39,67 @@ void seq_set_status(uint8_t stat) {
 
 uint8_t seq_get_status(void) {
 	return seq_status;
+}
+
+void seq_log_first_note(uint8_t note){
+	seq_deltas[0] = 0;
+	seq_notes[0] = note;
+	seq_events[0] = SEQ_NOTE_START;
+	seq_time = 0;
+	seq_length = 0;
+	seq_index = 0;
+	seq_index++;
+}
+
+void seq_log_note_start(uint8_t note){
+	seq_deltas[seq_index] = seq_time;
+	seq_notes[seq_index] = note;
+	seq_events[seq_index] = SEQ_NOTE_START;
+	seq_last_note_start = seq_time;
+	seq_last_note_start_index = seq_index;
+	seq_index++;
+}
+
+void seq_log_note_stop(uint8_t note){
+	seq_deltas[seq_index] = seq_time;
+	seq_notes[seq_index] = note;
+	seq_events[seq_index] = SEQ_NOTE_STOP ;
+	seq_index++;
+}
+
+void seq_stop_recording(void) {
+	seq_deltas[seq_index] = seq_time;
+	seq_notes[seq_index] = seq_notes[0];
+	seq_events[seq_index] = SEQ_NOTE_STOP; // just make it a note stop
+	seq_length = seq_index;
+	seq_index = 0; // go back to the begining
+	seq_time = 0;
+	seq_recording = 0;
+	seq_playing = 1;
+	pp6_set_note_stop();  // always stop the note
+
+}
+
+void seq_play_tick (void){
+
+	if (seq_time >= seq_deltas[seq_index]){
+		if (seq_events[seq_index] == SEQ_NOTE_START){
+			pp6_set_note(seq_notes[seq_index]);
+			pp6_set_note_start();
+		}
+		if (seq_events[seq_index] == SEQ_NOTE_STOP){
+			pp6_set_note_stop();
+		}
+		seq_index++;
+		if (seq_index > seq_length){
+			seq_index = 0;
+			seq_time = 0;
+		}
+	}
+
+}
+
+void seq_tick(void){
+	seq_time++;
+
 }

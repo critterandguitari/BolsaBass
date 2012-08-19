@@ -80,10 +80,10 @@ void mode_analog_style_control_process (void) {
 
 
 		// only if there is one note down (staccato)
-		if (pp6_get_num_keys_down() == 1){
+		//if (pp6_get_num_keys_down() == 1){   // this breaks the sequencer....
 			sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
 			sadsr_go(&amp_env);
-		}
+		//}
 
 	}
 	if (pp6_get_note_stop()){

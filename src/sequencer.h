@@ -21,5 +21,14 @@ void seq_set_status(uint8_t stat) ;
 
 uint8_t seq_get_status(void);
 
+void seq_log_first_note(uint8_t note);
+
+void seq_log_note_start(uint8_t note);
+void seq_log_note_stop(uint8_t note);
+
+void seq_stop_recording(void) ;
+
+
+void seq_tick(void);
 
 #endif /* SEQUENCER_H_ */

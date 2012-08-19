@@ -24,6 +24,14 @@
 #define AUX_LED_RED_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_5, 1)
 #define AUX_LED_GREEN_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_8, 1)
 
+#define BLACK 0
+#define RED 1
+#define YELLOW 2
+#define GREEN 3
+#define CYAN 4
+#define BLUE 5
+#define MAGENTA 6
+
 
 typedef struct {
 	float32_t knob_1;

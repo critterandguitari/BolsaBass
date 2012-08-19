@@ -208,9 +208,9 @@ int main(void)
 			if (pp6_mode_button_pressed()){
 				pp6_change_mode();
 			}
-			if (pp6_aux_button_released()){
+			/*if (pp6_aux_button_released()){
 				pp6_change_aux();
-			}
+			}*/
 
 			// if aux button down
 		/*	if ( (!((k>>16) & 1)) && seq_ready_for_recording() ) {
@@ -227,6 +227,82 @@ int main(void)
 			//
 			//
 			//
+
+
+			//
+			seq_tick();
+
+			if (seq_get_status() == SEQ_STOPPED){
+
+				pp6_set_aux_led(BLACK);
+
+				// aux button gets pressed and held
+				if ( (!((k>>16) & 1)) ) {
+					aux_button_depress_time++;
+					if (aux_button_depress_time > 500){
+						aux_button_depress_time = 0;
+						seq_set_status(SEQ_RECORD_ENABLE);
+					}
+				}
+
+				if (pp6_aux_button_pressed()) {
+					seq_set_status(SEQ_PLAYING);
+					aux_button_depress_time = 0;
+				}
+
+
+
+			}
+			else if (seq_get_status() == SEQ_RECORD_ENABLE){
+				pp6_set_aux_led(MAGENTA);
+
+				if (pp6_aux_button_pressed()) {
+					seq_set_status(SEQ_PLAYING);
+				}
+
+				if (pp6_get_note_start()){
+					seq_set_status(SEQ_RECORDING);
+					seq_log_first_note(pp6_get_note());
+				}
+
+			}
+			else if (seq_get_status() == SEQ_RECORDING){
+
+				pp6_set_aux_led(RED);
+
+				if (pp6_get_note_start()){
+					seq_log_note_start(pp6_get_note());
+				}
+				if (pp6_get_note_stop()) {
+					seq_log_note_stop(pp6_get_note());
+				}
+				// stop recording
+				if (pp6_aux_button_pressed()) {
+					seq_stop_recording();
+					seq_set_status(SEQ_PLAYING);
+					aux_button_depress_time = 0;
+				}
+
+			}
+			else if (seq_get_status() == SEQ_PLAYING) {
+				pp6_set_aux_led(GREEN);
+				seq_play_tick();
+				// aux button gets pressed and held
+				if ( (!((k>>16) & 1)) ) {
+					aux_button_depress_time++;
+					if (aux_button_depress_time > 500){
+						aux_button_depress_time = 0;
+						seq_set_status(SEQ_RECORD_ENABLE);
+					}
+				}
+				// aux button swithes to play
+				if (pp6_aux_button_pressed()) {
+					seq_set_status(SEQ_STOPPED);
+					aux_button_depress_time = 0;
+				}
+			}
+
+
 
 		/*	if (seq_get_status() == SEQ_RECORD_ENABLE){
 				flash_led_record_enable();
