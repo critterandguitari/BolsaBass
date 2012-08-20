@@ -52,7 +52,14 @@ typedef struct {
 	uint32_t phase_step;
 } bl_square;
 
-
+typedef struct {
+	uint32_t modulator_phase_accum;
+	uint32_t carrier_phase_accum;
+	uint32_t modulator_phase;
+	uint32_t modulator_phase_step;
+	uint32_t carrier_phase;
+	int32_t carrier_phase_step; // this is a signed int because its sometimes negative frequency
+} FM_oscillator;
 
 
 // 0 - 1 phasor
@@ -77,6 +84,8 @@ float32_t sin_process(sin_oscillator * oscil);
 /////////////////
 float32_t simple_sin(float32_t f);
 float32_t simple_FM(float32_t freq, float32_t harmonicity, float32_t index);
+float32_t FM_oscillator_process (FM_oscillator * fm_osc, float32_t freq, float32_t harmonicity, float32_t index);
+
 
 
 //////////////

@@ -27,8 +27,13 @@ void seq_log_note_start(uint8_t note);
 void seq_log_note_stop(uint8_t note);
 
 void seq_stop_recording(void) ;
+void seq_rewind(void) ;
 
-
+void seq_play_tick (void);
 void seq_tick(void);
+
+uint32_t seq_get_time(void);
+
+uint32_t seq_get_length(void);
 
 #endif /* SEQUENCER_H_ */

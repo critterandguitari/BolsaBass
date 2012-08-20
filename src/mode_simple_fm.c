@@ -25,6 +25,8 @@ static line framp;
 
 static sadsr amp_env, index_env;
 
+static FM_oscillator fm, fm2;
+
 
 
 
@@ -40,9 +42,11 @@ float32_t mode_simple_fm_sample_process (void) {
 	float32_t a, b, c;
 
 
+	//sig = simple_FM(f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f);
+	sig = FM_oscillator_process(&fm, f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
 
-	sig = simple_FM(f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f);
-	//sig = simple_FM(f, 1.f, sadsr_process(&index_env)  * pp6_get_knob_2() * (6.f - pp6_get_aux()) );
+	sig += FM_oscillator_process(&fm2, f * (1.f + (.05f * pp6_get_knob_1())), 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
+
 
 
 	amp = sadsr_process(&amp_env);

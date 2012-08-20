@@ -208,29 +208,12 @@ int main(void)
 			if (pp6_mode_button_pressed()){
 				pp6_change_mode();
 			}
-			/*if (pp6_aux_button_released()){
-				pp6_change_aux();
-			}*/
 
-			// if aux button down
-		/*	if ( (!((k>>16) & 1)) && seq_ready_for_recording() ) {
-				aux_button_depress_time++;
-				if (aux_button_depress_time > 500){
-					aux_button_depress_time = 0;
-					seq_set_status(SEQ_RECORD_ENABLE);
-				}
-			}*/
-
-			// if record enable ---- check for keypress, flash leds, if key press, check for aux or mode press (ends with cancel)
-			// if recording --- check for keypress, check for aux or mode press (ends with new sequence playing)
- 			//
-			//
-			//
-			//
 
 
 			//
 			seq_tick();
+
 
 			if (seq_get_status() == SEQ_STOPPED){
 
@@ -246,25 +229,23 @@ int main(void)
 				}
 
 				if (pp6_aux_button_pressed()) {
-					seq_set_status(SEQ_PLAYING);
+					if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
+					else seq_set_status(SEQ_STOPPED);
+					seq_rewind();
 					aux_button_depress_time = 0;
 				}
-
-
-
 			}
 			else if (seq_get_status() == SEQ_RECORD_ENABLE){
-				pp6_set_aux_led(MAGENTA);
-
+				flash_led_record_enable();
+				//pp6_set_aux_led(MAGENTA);
 				if (pp6_aux_button_pressed()) {
-					seq_set_status(SEQ_PLAYING);
+					if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
+					else seq_set_status(SEQ_STOPPED);
 				}
-
 				if (pp6_get_note_start()){
 					seq_set_status(SEQ_RECORDING);
 					seq_log_first_note(pp6_get_note());
 				}
-
 			}
 			else if (seq_get_status() == SEQ_RECORDING){
 
@@ -282,120 +263,30 @@ int main(void)
 					seq_set_status(SEQ_PLAYING);
 					aux_button_depress_time = 0;
 				}
-
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
-				pp6_set_aux_led(GREEN);
-				seq_play_tick();
+				seq_play_tick();  // run the sequencer
+
+				// flash white on rollover
+				if (seq_get_time() < 75) pp6_set_aux_led(7);
+				else pp6_set_aux_led(GREEN);
+
 				// aux button gets pressed and held
 				if ( (!((k>>16) & 1)) ) {
 					aux_button_depress_time++;
 					if (aux_button_depress_time > 500){
 						aux_button_depress_time = 0;
 						seq_set_status(SEQ_RECORD_ENABLE);
+						pp6_set_note_stop();
 					}
 				}
-				// aux button swithes to play
+				// aux button swithes to stop
 				if (pp6_aux_button_pressed()) {
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
+					pp6_set_note_stop();
 				}
 			}
-
-
-
-		/*	if (seq_get_status() == SEQ_RECORD_ENABLE){
-				flash_led_record_enable();
-
-				if (pp6_mode_button_pressed() || pp6_aux_button_pressed()){
-					seq_set_status(SEQ_STOPPED);
-				}
-
-			}*/
-
-			// sequencer record mode, // mode and aux button down
-			//if ( (!((k>>16) & 1)) && (!((k>>17) & 1)) ){
-		/*	if ( sequencer_record_enable ){
-				flash_led_record_enable();
-				seq_playing = 0;
-				if (pp6_get_note_start()){   // and a note gets pressed
-					MODE_LED_RED_ON;
-					AUX_LED_RED_ON;
-
-					// start new recording
-					if (!seq_recording){
-						seq_deltas[0] = 0;
-						seq_notes[0] = pp6_get_note();
-						seq_events[0] = SEQ_NOTE_START;
-						seq_time = 0;
-						seq_length = 0;
-						seq_index = 0;
-						seq_recording = 1;
-						seq_index++;
-					}
-					else { // continue current recording
-						seq_deltas[seq_index] = seq_time;
-						seq_notes[seq_index] = pp6_get_note();
-						seq_events[seq_index] = SEQ_NOTE_START;
-						seq_last_note_start = seq_time;
-						seq_last_note_start_index = seq_index;
-						seq_index++;
-					}
-				}
-				if (pp6_get_note_stop()){   // note ends
-					seq_deltas[seq_index] = seq_time;
-					seq_notes[seq_index] = pp6_get_note();
-					seq_events[seq_index] = SEQ_NOTE_STOP ;
-					seq_index++;
-				}
-*/
-			//}
-			//else {
-		/*		sequencer_enable = 0;
-				// if a recording just finished
-				if (seq_recording) {
-					seq_deltas[seq_index] = seq_last_note_start;
-					seq_notes[seq_index] = seq_notes[seq_last_note_start_index];
-					seq_events[seq_index] = SEQ_NOTE_STOP; // just make it a note stop
-					seq_events[seq_last_note_start_index] = SEQ_NOTE_STOP; // make last note a stop too
-					seq_length = seq_last_note_start_index;
-					seq_index = 0; // go back to the begining
-					seq_time = 0;
-					seq_recording = 0;
-					seq_playing = 1;
-				}
-			}*/
-
-			// if a sequence got recorded, and it has positive length
-			/*if (seq_playing && seq_length){
-				if (seq_time >= seq_deltas[seq_index]){
-					if (seq_events[seq_index] == SEQ_NOTE_START){
-						pp6_set_note(seq_notes[seq_index]);
-						pp6_set_note_start();
-					}
-					if (seq_events[seq_index] == SEQ_NOTE_STOP){
-						pp6_set_note_stop();
-					}
-					seq_index++;
-					if (seq_index > seq_length){
-						seq_index = 0;
-						seq_time = 0;
-					}
-				}
-			}*/
-
-
-			// only if sequencer is disabled
-			//if (!sequencer_record_enable) {
-				// mode button
-
-				// aux button
-				//if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
-				//	pp6_change_aux();
-				//}
-				// aux button on release
-
-			//}
 
 			// store keys for next time
 			k_last = k;
@@ -414,10 +305,6 @@ int main(void)
 			pp6_clear_flags();
 			//seq_time++;
 			led_counter++;
-
-
-
-
 
 		}
 
@@ -456,16 +343,15 @@ int main(void)
 void flash_led_record_enable() {
 	if (led_counter > 150){
 		led_counter = 0;
-		if (pp6_get_mode_led()){
-			pp6_set_mode_led(0);
+		if (pp6_get_aux_led()){
 			pp6_set_aux_led(0);
 		}
 		else {
-			pp6_set_mode_led(1);
 			pp6_set_aux_led(1);
 		}
 	}
 }
+
 
 
 /*

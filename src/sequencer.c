@@ -74,10 +74,12 @@ void seq_stop_recording(void) {
 	seq_length = seq_index;
 	seq_index = 0; // go back to the begining
 	seq_time = 0;
-	seq_recording = 0;
-	seq_playing = 1;
 	pp6_set_note_stop();  // always stop the note
+}
 
+void seq_rewind(void) {
+	seq_index = 0; // go back to the begining
+	seq_time = 0;
 }
 
 void seq_play_tick (void){
@@ -101,5 +103,14 @@ void seq_play_tick (void){
 
 void seq_tick(void){
 	seq_time++;
-
 }
+
+uint32_t seq_get_time(void){
+	return seq_time;
+}
+
+uint32_t seq_get_length(void) {
+	return seq_length;
+}
+
+
