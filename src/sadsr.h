@@ -20,6 +20,7 @@ typedef struct {
 	float32_t sustain_level;
 	float32_t stop_delta;
 	uint8_t segment;
+	uint8_t zero_flag;
 } sadsr;
 
 void sadsr_init(sadsr * sadsr);
@@ -30,5 +31,8 @@ void sadsr_set(sadsr * sadsr, float32_t a, float32_t d, float32_t r, float32_t s
 
 void sadsr_go(sadsr * sadsr);
 void sadsr_release(sadsr * sadsr);
+
+
+uint8_t sadsr_zero_flag(sadsr * sadsr);
 
 #endif /* SADSR_H_ */

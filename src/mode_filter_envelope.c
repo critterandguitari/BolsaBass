@@ -43,8 +43,8 @@ float32_t mode_filter_envelope_sample_process (void) {
 
 	cutoff = sadsr_process(&filter_env) ;
 
-	//cutoff_scale = 4000.f +  (pp6_get_knob_1() * 3000.f);  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
-	cutoff_scale = 7000.f;  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
+	cutoff_scale = 4000.f +  (pp6_get_knob_1() * 3000.f);  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
+	//cutoff_scale = 7000.f;  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
 
 
 	// log cutoff ramp using cents,  starts 6000 cents above f
@@ -74,6 +74,10 @@ void mode_filter_envelope_control_process (void) {
 	if (pp6_get_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 1.54f, .6f);
 		sadsr_set(&filter_env, .001f, ((pp6_get_knob_1() + .001f) * 4.f) + .01f, 10.f, 0);
+
+		//vcf_filter_init(&filter);
+		//bl_saw_reset(&saw);
+
 		/*sadsr_set(&amp_env, midi_cc[4], midi_cc[5] * 4.f, midi_cc[6] * 4.f, midi_cc[7]);
 		sadsr_set(&filter_env, midi_cc[0], midi_cc[1] * 4.f, midi_cc[2] * 4.f, midi_cc[3]);*/
 

@@ -59,7 +59,7 @@ float32_t mode_simple_sin_sample_process (void) {
 	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
 //	if (pp6_get_aux() == 0)
-		sig = sin_process(&sin1) * .6f;
+		sig = sin_process(&sin1) * .5f;
 /*	else if (pp6_get_aux() == 1)
 		sig = bl_square_process(&square);
 	else if (pp6_get_aux() == 2)
@@ -92,7 +92,7 @@ void mode_simple_sin_control_process (void) {
 
 
 		//line_set(&framp, f * pp6_get_knob_2()  * 10.f );
-		line_set(&framp, cents + (pp6_get_knob_2()  * 1200.f));   // 2400 cents sharp
+		line_set(&framp, cents + (pp6_get_knob_2()  * 2400.f));   // 2400 cents sharp
 		line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 500.f);
 		sadsr_set(&amp_env, .01f, .2f, 1.54f, .6f);
 		sadsr_go(&amp_env);

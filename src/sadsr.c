@@ -13,6 +13,7 @@ void sadsr_init(sadsr * sadsr){
 	sadsr->val = 0;
 	sadsr->attack_delta = .01f;
 	sadsr->decay_delta = .01f;
+	sadsr->zero_flag = 0;
 }
 
 float32_t sadsr_process(sadsr * sadsr){
@@ -23,13 +24,16 @@ float32_t sadsr_process(sadsr * sadsr){
 		if (sadsr->val < 0.f){
 			sadsr->val = 0.f;
 			sadsr->segment = 1;
+			sadsr->zero_flag = 0;   // this is only 1 for a single sample, so it must be checked at audio rate
 		}
 	}
 	else if (sadsr->segment == 1) {
 		sadsr->val = sadsr->val + sadsr->attack_delta;
+		sadsr->zero_flag = 0;  // no longer 0 amplitude !
 		if (sadsr->val > 1.f){
 			sadsr->val = 1.f;
 			sadsr->segment = 2;
+
 		}
 	}
 	else if (sadsr->segment == 2){   // stall here until release
@@ -65,4 +69,8 @@ void sadsr_go(sadsr * sadsr){
 
 void sadsr_release(sadsr * sadsr){
 	sadsr->segment = 3;
+}
+
+uint8_t sadsr_zero_flag(sadsr * sadsr){
+	return sadsr->zero_flag;
 }

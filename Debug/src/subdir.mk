@@ -8,6 +8,7 @@ C_SRCS += \
 ../src/audio.c \
 ../src/comb.c \
 ../src/cr_startup_stm32f4xx.c \
+../src/eq.c \
 ../src/line.c \
 ../src/main.c \
 ../src/midi.c \
@@ -37,6 +38,7 @@ OBJS += \
 ./src/audio.o \
 ./src/comb.o \
 ./src/cr_startup_stm32f4xx.o \
+./src/eq.o \
 ./src/line.o \
 ./src/main.o \
 ./src/midi.o \
@@ -66,6 +68,7 @@ C_DEPS += \
 ./src/audio.d \
 ./src/comb.d \
 ./src/cr_startup_stm32f4xx.d \
+./src/eq.d \
 ./src/line.d \
 ./src/main.d \
 ./src/midi.d \

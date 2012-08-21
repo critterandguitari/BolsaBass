@@ -24,6 +24,8 @@
 #include "midi.h"
 #include "timer.h"
 #include "sequencer.h"
+#include "eq.h"
+#include "audio.h"
 
 #include "mode_filter_man.h"
 #include "mode_simple_sin.h"
@@ -36,6 +38,8 @@
 #include "mode_octave_mirror.h"
 #include "mode_wave_adder.h"
 #include "mode_analog_style.h"
+
+
 
 extern unsigned int software_index;
 extern unsigned int hardware_index;
@@ -59,6 +63,9 @@ volatile uint8_t  uart_recv_buf[32];
 volatile uint8_t  uart_recv_buf_write = 0;
 uint8_t  uart_recv_buf_read = 0;
 uint8_t tmp8;
+
+// for the eq
+EQSTATE eq;
 
 int main(void)
 {
@@ -142,6 +149,9 @@ int main(void)
 
 	uint32_t aux_button_depress_time = 0;
 	uint32_t t, t1, t2;
+
+	// the bass boost is hardcoded in eq.c
+	init_3band_state(&eq, 880, 5000, SR);
 
 	while (1)	{
 
@@ -294,11 +304,11 @@ int main(void)
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi
 			//if (pp6_get_mode() == 1)  mode_filter_man_control_process();   // analog style
-			if (pp6_get_mode() == 1)  mode_analog_style_control_process();   // analog style
-			if (pp6_get_mode() == 2)  mode_wave_adder_control_process ();
+			if (pp6_get_mode() == 1)   mode_wave_adder_control_process ();   // analog style
+			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
-			if (pp6_get_mode() == 4)  mode_octave_mirror_control_process();
-			if (pp6_get_mode() == 5)  mode_simple_fm_control_process();
+			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
+			if (pp6_get_mode() == 5)  mode_nazareth_control_process();
 			t2 = timer_get_time();
 			t = t2 - t1;
 
@@ -314,13 +324,19 @@ int main(void)
 		if (software_index != hardware_index){
 			if (software_index & 1){   // channel
 
+				//pp6_set_aux_led(RED);
+
 				if (pp6_get_mode() == 0) sig = mode_simple_sin_sample_process();
 				//if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
-				if (pp6_get_mode() == 1) sig = mode_analog_style_sample_process();
-				if (pp6_get_mode() == 2) sig = mode_wave_adder_sample_process();
+				if (pp6_get_mode() == 1) sig = mode_wave_adder_sample_process();
+				if (pp6_get_mode() == 2) sig = mode_analog_style_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
-				if (pp6_get_mode() == 4) sig = mode_octave_mirror_sample_process();
-				if (pp6_get_mode() == 5) sig = mode_simple_fm_sample_process();
+				if (pp6_get_mode() == 4) sig = mode_simple_fm_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_nazareth_sample_process();
+
+				//if ( (!((k>>16) & 1)) )
+				// eq it
+					sig = do_3band(&eq, sig);
 
 				arm_float_to_q15(&sig, &wave, 1);
 
@@ -328,6 +344,8 @@ int main(void)
 				play_buf[software_index] = wave;
 				software_index++;
 				software_index &= 0xf;
+
+				//pp6_set_aux_led(0);
 			}
 			else {   // channel 2, do the same thing
 				// put the l

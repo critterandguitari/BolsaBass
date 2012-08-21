@@ -43,9 +43,9 @@ float32_t mode_simple_fm_sample_process (void) {
 
 
 	//sig = simple_FM(f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f);
-	sig = FM_oscillator_process(&fm, f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
+	sig = FM_oscillator_process(&fm, f, 1.f + (.04f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
 
-	sig += FM_oscillator_process(&fm2, f * (1.f + (.05f * pp6_get_knob_1())), 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
+	sig += FM_oscillator_process(&fm2, f * (1.f + (.03f * pp6_get_knob_1())), 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f) * .5f;
 
 
 
