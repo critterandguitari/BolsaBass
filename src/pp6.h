@@ -11,10 +11,12 @@
 #include "arm_math.h"
 
 #define MODE_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_9, 0)
-#define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)
+//#define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)
+#define MODE_LED_RED_ON GPIO_WriteBit(GPIOC, GPIO_Pin_3, 0)   // Only for Rev A of circuit board
 #define MODE_LED_GREEN_ON GPIO_WriteBit(GPIOE, GPIO_Pin_1, 0)
 #define MODE_LED_BLUE_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_9, 1)
-#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
+//#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
+#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOC, GPIO_Pin_3, 1)   // Only for Rev A of circuit board
 #define MODE_LED_GREEN_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_1, 1)
 
 #define AUX_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_4, 0)
@@ -87,6 +89,7 @@ void pp6_leds_init(void);
 void pp6_leds_update(uint8_t bank_led, uint8_t mode_led);
 void pp6_knobs_init(void);
 void pp6_knobs_update(void);
+void pp6_smooth_knobs(void);
 
 uint8_t pp6_get_mode_led(void);
 uint8_t pp6_get_aux_led(void);

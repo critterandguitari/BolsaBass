@@ -93,6 +93,8 @@ int main(void)
 	MODE_LED_BLUE_OFF;
 	MODE_LED_GREEN_OFF;
 
+
+
 	// init codec
 	CS4344_init();
 
@@ -184,6 +186,7 @@ int main(void)
 			sample_clock++;
 			pp6_keys_update();
 			pp6_knobs_update();
+
 
 
 			// scan keys 16 keys
@@ -300,6 +303,10 @@ int main(void)
 
 			// store keys for next time
 			k_last = k;
+
+
+			// smooth the knobs here in case they are playing back
+			pp6_smooth_knobs();
 
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi

@@ -252,11 +252,35 @@ void pp6_knobs_update(void) {
 	ADC_SoftwareStartConv(ADC3);
 }
 
+void pp6_smooth_knobs(void){
+
+
+	static float32_t knob1 = 0;
+	static float32_t knob2 = 0;
+	static float32_t knob3 = 0;
+	float32_t kFilteringFactor = .05f;
+
+	knob1 = (pp6.knob_1 * kFilteringFactor) + (knob1 * (1.0 - kFilteringFactor));
+	pp6.knob_1 = knob1;
+
+	knob2 = (pp6.knob_2 * kFilteringFactor) + (knob2 * (1.0 - kFilteringFactor));
+	pp6.knob_2 = knob2;
+
+	knob3 = (pp6.knob_3 * kFilteringFactor) + (knob3 * (1.0 - kFilteringFactor));
+	pp6.knob_3 = knob3;
+}
+
+
+
+
+
 void pp6_leds_init(void) {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	/* GPIOE Periph clock enable */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+
 
 
 	/* Configure PE0, PE1 in output pushpull mode */
@@ -269,6 +293,9 @@ void pp6_leds_init(void) {
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_8 | GPIO_Pin_9;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	GPIO_WriteBit(GPIOB, GPIO_Pin_4, 1);
 	GPIO_WriteBit(GPIOB, GPIO_Pin_5, 1);
