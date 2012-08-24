@@ -36,9 +36,10 @@
 
 
 typedef struct {
-	float32_t knob_1;
+	/*float32_t knob_1;
 	float32_t knob_2;
-	float32_t knob_3;
+	float32_t knob_3;*/
+	float32_t knob[3];
 	uint8_t note_start;
 	uint8_t note_stop;
 	uint8_t playing;
@@ -58,6 +59,8 @@ typedef struct {
 float32_t pp6_get_knob_1(void);
 float32_t pp6_get_knob_2(void);
 float32_t pp6_get_knob_3(void);
+float32_t * pp6_get_knob_array(void);
+void pp6_set_knob_array(float32_t * knobs);
 
 uint8_t pp6_get_note_start(void);
 void pp6_set_note_start (void );

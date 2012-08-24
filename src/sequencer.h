@@ -36,4 +36,7 @@ uint32_t seq_get_time(void);
 
 uint32_t seq_get_length(void);
 
+void seq_log_knobs(float32_t * knob);
+float32_t * seq_play_knobs(void) ;
+
 #endif /* SEQUENCER_H_ */

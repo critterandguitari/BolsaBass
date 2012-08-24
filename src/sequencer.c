@@ -25,6 +25,8 @@ uint32_t seq_last_note_start = 0;
 uint32_t seq_last_note_start_index = 0;
 uint8_t seq_status = SEQ_STOPPED;
 
+float32_t knob_log [4096][3];
+
 
 uint8_t seq_ready_for_recording(void){
 	if ((seq_status == SEQ_STOPPED) || (seq_status == SEQ_PLAYING))
@@ -82,6 +84,8 @@ void seq_rewind(void) {
 	seq_time = 0;
 }
 
+
+// TODO don't call pp6 functions from here !!!
 void seq_play_tick (void){
 
 	if (seq_time >= seq_deltas[seq_index]){
@@ -113,4 +117,23 @@ uint32_t seq_get_length(void) {
 	return seq_length;
 }
 
+
+/// todo :  these should only be called every 16 ticks  (don't store multiples as you are doing below)
+void seq_log_knobs(float32_t * knob){
+	uint32_t knob_log_time;
+
+	knob_log_time = (seq_time >> 4) & 0xFFF;
+
+	knob_log[knob_log_time][0] = knob[0];
+	knob_log[knob_log_time][1] = knob[1];
+	knob_log[knob_log_time][2] = knob[2];
+}
+
+float32_t * seq_play_knobs(void) {
+	uint32_t knob_log_time;
+
+	knob_log_time = (seq_time >> 4) & 0xFFF;
+
+	return &knob_log[knob_log_time][0];
+}
 

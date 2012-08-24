@@ -93,15 +93,11 @@ int main(void)
 	MODE_LED_BLUE_OFF;
 	MODE_LED_GREEN_OFF;
 
-
-
 	// init codec
 	CS4344_init();
 
 	float32_t sig, f;
 	q15_t  wave;
-
-
 
 	f = 50.0;
 	uint32_t k, k_last, note, note_last, i;
@@ -158,8 +154,6 @@ int main(void)
 	while (1)	{
 
 
-
-
 	    /* Update WWDG counter */
 	    //WWDG_SetCounter(127);
 
@@ -186,8 +180,6 @@ int main(void)
 			sample_clock++;
 			pp6_keys_update();
 			pp6_knobs_update();
-
-
 
 			// scan keys 16 keys
 			k = pp6_get_keys();
@@ -222,11 +214,8 @@ int main(void)
 				pp6_change_mode();
 			}
 
-
-
 			//
 			seq_tick();
-
 
 			if (seq_get_status() == SEQ_STOPPED){
 
@@ -264,6 +253,8 @@ int main(void)
 
 				pp6_set_aux_led(RED);
 
+				seq_log_knobs(pp6_get_knob_array());
+
 				if (pp6_get_note_start()){
 					seq_log_note_start(pp6_get_note());
 				}
@@ -279,6 +270,7 @@ int main(void)
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
 				seq_play_tick();  // run the sequencer
+				pp6_set_knob_array(seq_play_knobs());
 
 				// flash white on rollover
 				if (seq_get_time() < 75) pp6_set_aux_led(7);
@@ -304,14 +296,12 @@ int main(void)
 			// store keys for next time
 			k_last = k;
 
-
 			// smooth the knobs here in case they are playing back
 			pp6_smooth_knobs();
 
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi
-			//if (pp6_get_mode() == 1)  mode_filter_man_control_process();   // analog style
-			if (pp6_get_mode() == 1)   mode_wave_adder_control_process ();   // analog style
+			if (pp6_get_mode() == 1)   mode_wave_adder_control_process ();   //
 			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
@@ -334,12 +324,11 @@ int main(void)
 				//pp6_set_aux_led(RED);
 
 				if (pp6_get_mode() == 0) sig = mode_simple_sin_sample_process();
-				//if (pp6_get_mode() == 1) sig = mode_filter_man_sample_process();
 				if (pp6_get_mode() == 1) sig = mode_wave_adder_sample_process();
 				if (pp6_get_mode() == 2) sig = mode_analog_style_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_simple_fm_sample_process();
-				if (pp6_get_mode() == 5) sig = mode_nazareth_sample_process();
+				if (pp6_get_mode() == 5) sig = 0;//mode_nazareth_sample_process();
 
 				//if ( (!((k>>16) & 1)) )
 				// eq it

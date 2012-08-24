@@ -36,13 +36,23 @@ uint32_t keys_history[] = {
 };
 
 float32_t pp6_get_knob_1(void){
-	return pp6.knob_1;
+	return pp6.knob[0];
 }
 float32_t pp6_get_knob_2(void){
-	return pp6.knob_2;
+	return pp6.knob[1];
 }
 float32_t pp6_get_knob_3(void){
-	return pp6.knob_3;
+	return pp6.knob[2];
+}
+
+float32_t * pp6_get_knob_array(void){
+	return pp6.knob;
+}
+
+void pp6_set_knob_array(float32_t * knobs){
+	pp6.knob[0] = knobs[0];
+	pp6.knob[1] = knobs[1];
+	pp6.knob[2] = knobs[2];
 }
 
 // mode and aux buttons
@@ -233,13 +243,13 @@ void pp6_knobs_update(void) {
 	knobs[channel] = ADC_GetConversionValue(ADC3);
 
 	/// ahhh so it was 65536 ,, then it started needing 4096 (the expected value) ??
-	pp6.knob_1 = knobs[0] / 65536.f;
-	pp6.knob_2 = knobs[1] / 65536.f;
-	pp6.knob_3 = knobs[2] / 65536.f;
+	pp6.knob[0] = knobs[0] / 65536.f;
+	pp6.knob[1] = knobs[1] / 65536.f;
+	pp6.knob[2] = knobs[2] / 65536.f;
 
-	/*pp6.knob_1 = knobs[0] / 4096.f;
-	pp6.knob_2 = knobs[1] / 4096.f;
-	pp6.knob_3 = knobs[2] / 4096.f;*/
+	/*pp6.knob[0] = knobs[0] / 4096.f;
+	pp6.knob[1] = knobs[1] / 4096.f;
+	pp6.knob[2] = knobs[2] / 4096.f;*/
 
 
 	channel++;
@@ -260,14 +270,14 @@ void pp6_smooth_knobs(void){
 	static float32_t knob3 = 0;
 	float32_t kFilteringFactor = .05f;
 
-	knob1 = (pp6.knob_1 * kFilteringFactor) + (knob1 * (1.0 - kFilteringFactor));
-	pp6.knob_1 = knob1;
+	knob1 = (pp6.knob[0] * kFilteringFactor) + (knob1 * (1.0 - kFilteringFactor));
+	pp6.knob[0] = knob1;
 
-	knob2 = (pp6.knob_2 * kFilteringFactor) + (knob2 * (1.0 - kFilteringFactor));
-	pp6.knob_2 = knob2;
+	knob2 = (pp6.knob[1] * kFilteringFactor) + (knob2 * (1.0 - kFilteringFactor));
+	pp6.knob[1] = knob2;
 
-	knob3 = (pp6.knob_3 * kFilteringFactor) + (knob3 * (1.0 - kFilteringFactor));
-	pp6.knob_3 = knob3;
+	knob3 = (pp6.knob[2] * kFilteringFactor) + (knob3 * (1.0 - kFilteringFactor));
+	pp6.knob[2] = knob3;
 }
 
 
