@@ -12,6 +12,8 @@
 #include "pp6.h"
 
 
+#define ABS(a)	   (((a) < 0) ? -(a) : (a))
+
 pocket_piano pp6;
 
 /* Private macro -------------------------------------------------------------*/
@@ -34,6 +36,12 @@ uint32_t keys_history[] = {
     0xFFFFFFFF,
     0xFFFFFFFF,
 };
+
+void pp6_init(void) {
+	pp6.knob_touched[0] = 0;
+	pp6.knob_touched[1] = 0;
+	pp6.knob_touched[2] = 0;
+}
 
 float32_t pp6_get_knob_1(void){
 	return pp6.knob[0];
@@ -114,21 +122,6 @@ uint8_t pp6_get_mode_led(void){
 	return pp6.mode_led;
 }
 
-// AUX
-void pp6_change_aux(void){
-	pp6.aux++;
-	if (pp6.aux == 6) pp6.aux = 0;
-	pp6_set_aux_led(pp6.aux + 1);
-}
-
-void pp6_set_aux(uint32_t aux){
-	pp6.aux = aux;
-	pp6_set_aux_led(pp6.aux + 1);
-}
-
-uint32_t pp6_get_aux(void){
-	return pp6.aux;
-}
 
 // AUX LED
 void pp6_set_aux_led(uint8_t led) {
@@ -185,6 +178,9 @@ void pp6_clear_flags(void){
 	pp6.aux_button_released = 0;
 	pp6.mode_button_pressed = 0;
 	pp6.mode_button_released = 0;
+	pp6.knob_touched[0] = 0;
+	pp6.knob_touched[1] = 0;
+	pp6.knob_touched[2] = 0;
 }
 
 uint8_t pp6_get_num_keys_down(void){
@@ -260,6 +256,34 @@ void pp6_knobs_update(void) {
 	if (channel == 2) ADC_RegularChannelConfig(ADC3, ADC_Channel_10, 1, ADC_SampleTime_15Cycles);
 
 	ADC_SoftwareStartConv(ADC3);
+}
+
+
+// this should be called every half second or so
+void pp6_check_knobs_touched (void) {
+	static float32_t knobs_last[3] = {0, 0, 0};
+
+	if (ABS(pp6.knob[0] - knobs_last[0]) > .1f) {
+		pp6.knob_touched[0] = 1;
+		knobs_last[0] = pp6.knob[0];
+	}
+
+	if (ABS(pp6.knob[1] - knobs_last[1]) > .1f) {
+		pp6.knob_touched[1] = 1;
+		knobs_last[1] = pp6.knob[1];
+	}
+
+	if (ABS(pp6.knob[2] - knobs_last[2]) > .1f) {
+		pp6.knob_touched[2] = 1;
+		knobs_last[2] = pp6.knob[2];
+	}
+}
+
+uint8_t pp6_any_knobs_touched(void) {
+	if (pp6.knob_touched[0] || pp6.knob_touched[1] || pp6.knob_touched[2])
+		return 1;
+	else
+		return 0;
 }
 
 void pp6_smooth_knobs(void){

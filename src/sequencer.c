@@ -24,6 +24,7 @@ uint32_t seq_length = 0;
 uint32_t seq_last_note_start = 0;
 uint32_t seq_last_note_start_index = 0;
 uint8_t seq_status = SEQ_STOPPED;
+uint8_t seq_playback_knobs_enabled = 1;
 
 float32_t knob_log [4096][3];
 
@@ -76,6 +77,7 @@ void seq_stop_recording(void) {
 	seq_length = seq_index;
 	seq_index = 0; // go back to the begining
 	seq_time = 0;
+	seq_playback_knobs_enabled = 1;  // enable playback of knobs
 	pp6_set_note_stop();  // always stop the note
 }
 
@@ -137,3 +139,14 @@ float32_t * seq_play_knobs(void) {
 	return &knob_log[knob_log_time][0];
 }
 
+uint8_t seq_knob_playback_enabled(void){
+	return seq_playback_knobs_enabled;
+}
+
+void seq_disable_knob_playback(void){
+	seq_playback_knobs_enabled = 0;
+}
+
+void seq_enable_knob_playback(void){
+	seq_playback_knobs_enabled = 1;
+}

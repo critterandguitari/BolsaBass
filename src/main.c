@@ -93,6 +93,8 @@ int main(void)
 	MODE_LED_BLUE_OFF;
 	MODE_LED_GREEN_OFF;
 
+	pp6_set_aux_led(BLACK);
+
 	// init codec
 	CS4344_init();
 
@@ -104,7 +106,6 @@ int main(void)
 	k = note = note_last = 0xFFFFFFFF;
 
 	pp6_set_mode(0);
-	pp6_set_aux(0);
 
 	mode_filter_man_init();
 	mode_simple_sin_init();
@@ -147,6 +148,7 @@ int main(void)
 
 	uint32_t aux_button_depress_time = 0;
 	uint32_t t, t1, t2;
+	uint32_t count = 0;
 
 	// the bass boost is hardcoded in eq.c
 	init_3band_state(&eq, 880, 5000, SR);
@@ -181,6 +183,13 @@ int main(void)
 			pp6_keys_update();
 			pp6_knobs_update();
 
+			// every 128 times, check if knobs got moved
+			count++;
+			count &= 0x7f;
+			if (!count) {
+				pp6_check_knobs_touched();   // this sets the knobs touched flags
+			}
+
 			// scan keys 16 keys
 			k = pp6_get_keys();
 			pp6.num_keys_down = 0;
@@ -214,7 +223,7 @@ int main(void)
 				pp6_change_mode();
 			}
 
-			//
+			// SEQUENCER
 			seq_tick();
 
 			if (seq_get_status() == SEQ_STOPPED){
@@ -231,7 +240,10 @@ int main(void)
 				}
 
 				if (pp6_aux_button_pressed()) {
-					if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
+					if (seq_get_length()) {  // only play if positive length
+						seq_enable_knob_playback();
+						seq_set_status(SEQ_PLAYING);
+					}
 					else seq_set_status(SEQ_STOPPED);
 					seq_rewind();
 					aux_button_depress_time = 0;
@@ -239,10 +251,10 @@ int main(void)
 			}
 			else if (seq_get_status() == SEQ_RECORD_ENABLE){
 				flash_led_record_enable();
-				//pp6_set_aux_led(MAGENTA);
 				if (pp6_aux_button_pressed()) {
-					if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
-					else seq_set_status(SEQ_STOPPED);
+				//	if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
+				//	else
+						seq_set_status(SEQ_STOPPED);
 				}
 				if (pp6_get_note_start()){
 					seq_set_status(SEQ_RECORDING);
@@ -270,7 +282,14 @@ int main(void)
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
 				seq_play_tick();  // run the sequencer
-				pp6_set_knob_array(seq_play_knobs());
+
+				if (pp6_any_knobs_touched()) {
+					seq_disable_knob_playback();
+				}
+
+				if (seq_knob_playback_enabled()) {
+					pp6_set_knob_array(seq_play_knobs());
+				}
 
 				// flash white on rollover
 				if (seq_get_time() < 75) pp6_set_aux_led(7);
@@ -292,6 +311,9 @@ int main(void)
 					pp6_set_note_stop();
 				}
 			}
+
+			// END SEQUENCER
+
 
 			// store keys for next time
 			k_last = k;

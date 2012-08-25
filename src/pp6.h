@@ -39,22 +39,24 @@ typedef struct {
 	/*float32_t knob_1;
 	float32_t knob_2;
 	float32_t knob_3;*/
-	float32_t knob[3];
-	uint8_t note_start;
-	uint8_t note_stop;
+	uint8_t knob_touched[3]; 	// flag to see if knob is touched
+	float32_t knob[3];   		// stores knob values 0-1
+	uint8_t note_start;   		// flag to start note
+	uint8_t note_stop;   		// flag to stop note
 	uint8_t playing;
 	uint8_t note;
 	uint32_t keys;
 	uint32_t mode;
-	uint8_t mode_button_pressed;
+	uint8_t mode_button_pressed;	// mode button event flags
 	uint8_t mode_button_released;
-	uint32_t aux;
-	uint8_t aux_button_pressed;
+	uint8_t aux_button_pressed;		// aux button event flags
 	uint8_t aux_button_released;
 	uint8_t num_keys_down;
 	uint8_t mode_led;
 	uint8_t aux_led;
 } pocket_piano;
+
+void pp6_init(void);
 
 float32_t pp6_get_knob_1(void);
 float32_t pp6_get_knob_2(void);
@@ -81,11 +83,6 @@ void pp6_change_mode(void);
 uint32_t pp6_get_mode(void);
 void pp6_set_mode(uint32_t mode);
 
-void pp6_change_aux(void);
-uint32_t pp6_get_aux(void);
-void pp6_set_aux(uint32_t aux);
-
-
 void pp6_keys_init(void);
 void pp6_keys_update(void);
 void pp6_leds_init(void);
@@ -93,6 +90,9 @@ void pp6_leds_update(uint8_t bank_led, uint8_t mode_led);
 void pp6_knobs_init(void);
 void pp6_knobs_update(void);
 void pp6_smooth_knobs(void);
+
+void pp6_check_knobs_touched (void) ;
+uint8_t pp6_any_knobs_touched(void);
 
 uint8_t pp6_get_mode_led(void);
 uint8_t pp6_get_aux_led(void);
