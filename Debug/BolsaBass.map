@@ -114,10 +114,6 @@ Discarded input sections
                 0x00000000        0x4 ./src/main.o
  .rodata.PARAM_CHANNEL_IN
                 0x00000000        0x4 ./src/main.o
- .bss.uart_recv_buf_write
-                0x00000000        0x1 ./src/main.o
- .bss.uart_recv_buf_read
-                0x00000000        0x1 ./src/main.o
  .text          0x00000000        0x0 ./src/midi.o
  .data          0x00000000        0x0 ./src/midi.o
  .bss           0x00000000        0x0 ./src/midi.o
@@ -125,8 +121,6 @@ Discarded input sections
                 0x00000000        0x4 ./src/midi.o
  .rodata.PARAM_CHANNEL_IN
                 0x00000000        0x4 ./src/midi.o
- .text.recvByte
-                0x00000000      0x4d0 ./src/midi.o
  .text.sendNoteOff
                 0x00000000       0x6c ./src/midi.o
  .text.sendNoteOn
@@ -163,39 +157,6 @@ Discarded input sections
                 0x00000000       0x68 ./src/midi.o
  .text.getParam
                 0x00000000       0x50 ./src/midi.o
- .text.handleNoteOff
-                0x00000000       0x34 ./src/midi.o
- .text.handleNoteOn
-                0x00000000       0x30 ./src/midi.o
- .text.handleSync
-                0x00000000        0xc ./src/midi.o
- .text.handleStart
-                0x00000000        0xc ./src/midi.o
- .text.handleVelocityChange
-                0x00000000       0x18 ./src/midi.o
- .bss.midi_cc   0x00000000       0x20 ./src/midi.o
- .text.handleControlChange
-                0x00000000       0x48 ./src/midi.o
- .text.handleProgramChange
-                0x00000000       0x14 ./src/midi.o
- .text.handleAfterTouch
-                0x00000000       0x14 ./src/midi.o
- .text.handlePitchChange
-                0x00000000       0x14 ./src/midi.o
- .text.handleSongPosition
-                0x00000000       0x14 ./src/midi.o
- .text.handleSongSelect
-                0x00000000       0x14 ./src/midi.o
- .text.handleTuneRequest
-                0x00000000        0xc ./src/midi.o
- .text.handleContinue
-                0x00000000        0xc ./src/midi.o
- .text.handleStop
-                0x00000000        0xc ./src/midi.o
- .text.handleActiveSense
-                0x00000000        0xc ./src/midi.o
- .text.handleReset
-                0x00000000        0xc ./src/midi.o
  .text          0x00000000        0x0 ./src/mode_analog_style.o
  .data          0x00000000        0x0 ./src/mode_analog_style.o
  .bss           0x00000000        0x0 ./src/mode_analog_style.o
@@ -323,7 +284,6 @@ Discarded input sections
  .text          0x00000000        0x0 ./src/mode_simple_fm.o
  .data          0x00000000        0x0 ./src/mode_simple_fm.o
  .bss           0x00000000        0x0 ./src/mode_simple_fm.o
- .bss.framp     0x00000000       0x14 ./src/mode_simple_fm.o
  .text          0x00000000        0x0 ./src/mode_simple_sin.o
  .data          0x00000000        0x0 ./src/mode_simple_sin.o
  .bss           0x00000000        0x0 ./src/mode_simple_sin.o
@@ -861,8 +821,6 @@ Discarded input sections
                 0x00000000       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_SendData
                 0x00000000       0x28 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .text.USART_ReceiveData
-                0x00000000       0x24 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_SetAddress
                 0x00000000       0x3c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_ReceiverWakeUpCmd
@@ -891,8 +849,6 @@ Discarded input sections
                 0x00000000       0x4c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_ITConfig
                 0x00000000       0xa8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .text.USART_GetFlagStatus
-                0x00000000       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_ClearFlag
                 0x00000000       0x24 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .text.USART_GetITStatus
@@ -1079,7 +1035,7 @@ END GROUP
                 0x20020000                __top_PeriphRam16 = 0x20020000
                 0x10010000                __top_Ram64 = 0x10010000
 
-.text           0x08000000     0x7dec
+.text           0x08000000     0x8614
  FILL mask 0xff
  *(.isr_vector)
  .isr_vector    0x08000000      0x188 ./src/cr_startup_stm32f4xx.o
@@ -1087,19 +1043,19 @@ END GROUP
                 0x08000188                . = ALIGN (0x4)
                 0x08000188                __section_table_start = .
                 0x08000188                __data_section_table = .
-                0x08000188        0x4 LONG 0x8007dec LOADADDR (.data)
+                0x08000188        0x4 LONG 0x8008614 LOADADDR (.data)
                 0x0800018c        0x4 LONG 0x20000000 ADDR (.data)
                 0x08000190        0x4 LONG 0x250 SIZEOF (.data)
-                0x08000194        0x4 LONG 0x8007dec LOADADDR (.data_RAM2)
+                0x08000194        0x4 LONG 0x8008614 LOADADDR (.data_RAM2)
                 0x08000198        0x4 LONG 0x2001c000 ADDR (.data_RAM2)
                 0x0800019c        0x4 LONG 0x0 SIZEOF (.data_RAM2)
-                0x080001a0        0x4 LONG 0x8007dec LOADADDR (.data_RAM3)
+                0x080001a0        0x4 LONG 0x8008614 LOADADDR (.data_RAM3)
                 0x080001a4        0x4 LONG 0x10000000 ADDR (.data_RAM3)
                 0x080001a8        0x4 LONG 0x0 SIZEOF (.data_RAM3)
                 0x080001ac                __data_section_table_end = .
                 0x080001ac                __bss_section_table = .
                 0x080001ac        0x4 LONG 0x20000250 ADDR (.bss)
-                0x080001b0        0x4 LONG 0xd520 SIZEOF (.bss)
+                0x080001b0        0x4 LONG 0xd53c SIZEOF (.bss)
                 0x080001b4        0x4 LONG 0x2001c000 ADDR (.bss_RAM2)
                 0x080001b8        0x4 LONG 0x0 SIZEOF (.bss_RAM2)
                 0x080001bc        0x4 LONG 0x10000000 ADDR (.bss_RAM3)
@@ -1231,470 +1187,535 @@ END GROUP
  .text.line_process
                 0x08000ab4       0x54 ./src/line.o
                 0x08000ab4                line_process
- .text.main     0x08000b08      0x5e0 ./src/main.o
+ .text.main     0x08000b08      0x70c ./src/main.o
                 0x08000b08                main
  .text.flash_led_record_enable
-                0x080010e8       0x40 ./src/main.o
- .text.Delay    0x08001128       0x2c ./src/main.o
-                0x08001128                Delay
+                0x08001214       0x40 ./src/main.o
+ .text.Delay    0x08001254       0x2c ./src/main.o
+                0x08001254                Delay
+ .text.recvByte
+                0x08001280      0x4d0 ./src/midi.o
+                0x08001280                recvByte
  .text.midi_init
-                0x08001154       0x7c ./src/midi.o
-                0x08001154                midi_init
+                0x08001750       0x7c ./src/midi.o
+                0x08001750                midi_init
+ .text.handleNoteOff
+                0x080017cc       0x2c ./src/midi.o
+                0x080017cc                handleNoteOff
+ .text.handleNoteOn
+                0x080017f8       0x28 ./src/midi.o
+                0x080017f8                handleNoteOn
+ .text.handleSync
+                0x08001820        0xc ./src/midi.o
+                0x08001820                handleSync
+ .text.handleStart
+                0x0800182c        0xc ./src/midi.o
+                0x0800182c                handleStart
+ .text.handleVelocityChange
+                0x08001838       0x18 ./src/midi.o
+                0x08001838                handleVelocityChange
+ .text.handleControlChange
+                0x08001850       0x18 ./src/midi.o
+                0x08001850                handleControlChange
+ .text.handleProgramChange
+                0x08001868       0x14 ./src/midi.o
+                0x08001868                handleProgramChange
+ .text.handleAfterTouch
+                0x0800187c       0x14 ./src/midi.o
+                0x0800187c                handleAfterTouch
+ .text.handlePitchChange
+                0x08001890       0x14 ./src/midi.o
+                0x08001890                handlePitchChange
+ .text.handleSongPosition
+                0x080018a4       0x14 ./src/midi.o
+                0x080018a4                handleSongPosition
+ .text.handleSongSelect
+                0x080018b8       0x14 ./src/midi.o
+                0x080018b8                handleSongSelect
+ .text.handleTuneRequest
+                0x080018cc        0xc ./src/midi.o
+                0x080018cc                handleTuneRequest
+ .text.handleContinue
+                0x080018d8        0xc ./src/midi.o
+                0x080018d8                handleContinue
+ .text.handleStop
+                0x080018e4        0xc ./src/midi.o
+                0x080018e4                handleStop
+ .text.handleActiveSense
+                0x080018f0        0xc ./src/midi.o
+                0x080018f0                handleActiveSense
+ .text.handleReset
+                0x080018fc        0xc ./src/midi.o
+                0x080018fc                handleReset
  .text.mode_analog_style_init
-                0x080011d0       0x30 ./src/mode_analog_style.o
-                0x080011d0                mode_analog_style_init
+                0x08001908       0x30 ./src/mode_analog_style.o
+                0x08001908                mode_analog_style_init
  .text.mode_analog_style_sample_process
-                0x08001200      0x1a8 ./src/mode_analog_style.o
-                0x08001200                mode_analog_style_sample_process
+                0x08001938      0x1a8 ./src/mode_analog_style.o
+                0x08001938                mode_analog_style_sample_process
  .text.mode_analog_style_control_process
-                0x080013a8      0x100 ./src/mode_analog_style.o
-                0x080013a8                mode_analog_style_control_process
+                0x08001ae0      0x100 ./src/mode_analog_style.o
+                0x08001ae0                mode_analog_style_control_process
  .text.mode_filter_envelope_init
-                0x080014a8       0x64 ./src/mode_filter_envelope.o
-                0x080014a8                mode_filter_envelope_init
+                0x08001be0       0x64 ./src/mode_filter_envelope.o
+                0x08001be0                mode_filter_envelope_init
  .text.mode_filter_envelope_sample_process
-                0x0800150c      0x198 ./src/mode_filter_envelope.o
-                0x0800150c                mode_filter_envelope_sample_process
+                0x08001c44      0x198 ./src/mode_filter_envelope.o
+                0x08001c44                mode_filter_envelope_sample_process
  .text.mode_filter_envelope_control_process
-                0x080016a4      0x138 ./src/mode_filter_envelope.o
-                0x080016a4                mode_filter_envelope_control_process
+                0x08001ddc      0x138 ./src/mode_filter_envelope.o
+                0x08001ddc                mode_filter_envelope_control_process
  .text.mode_filter_man_init
-                0x080017dc       0x30 ./src/mode_filter_man.o
-                0x080017dc                mode_filter_man_init
+                0x08001f14       0x30 ./src/mode_filter_man.o
+                0x08001f14                mode_filter_man_init
  .text.mode_nazareth_control_process
-                0x0800180c      0x1e8 ./src/mode_nazareth.o
-                0x0800180c                mode_nazareth_control_process
+                0x08001f44      0x1e8 ./src/mode_nazareth.o
+                0x08001f44                mode_nazareth_control_process
  .text.mode_octave_mirror_init
-                0x080019f4       0x30 ./src/mode_octave_mirror.o
-                0x080019f4                mode_octave_mirror_init
+                0x0800212c       0x30 ./src/mode_octave_mirror.o
+                0x0800212c                mode_octave_mirror_init
  .text.mode_simple_fm_init
-                0x08001a24       0x30 ./src/mode_simple_fm.o
-                0x08001a24                mode_simple_fm_init
+                0x0800215c       0x30 ./src/mode_simple_fm.o
+                0x0800215c                mode_simple_fm_init
  .text.mode_simple_fm_sample_process
-                0x08001a54      0x160 ./src/mode_simple_fm.o
-                0x08001a54                mode_simple_fm_sample_process
+                0x0800218c      0x198 ./src/mode_simple_fm.o
+                0x0800218c                mode_simple_fm_sample_process
  .text.mode_simple_fm_control_process
-                0x08001bb4      0x128 ./src/mode_simple_fm.o
-                0x08001bb4                mode_simple_fm_control_process
+                0x08002324      0x12c ./src/mode_simple_fm.o
+                0x08002324                mode_simple_fm_control_process
  .text.mode_simple_sin_init
-                0x08001cdc       0x40 ./src/mode_simple_sin.o
-                0x08001cdc                mode_simple_sin_init
+                0x08002450       0x40 ./src/mode_simple_sin.o
+                0x08002450                mode_simple_sin_init
  .text.mode_simple_sin_sample_process
-                0x08001d1c      0x12c ./src/mode_simple_sin.o
-                0x08001d1c                mode_simple_sin_sample_process
+                0x08002490      0x12c ./src/mode_simple_sin.o
+                0x08002490                mode_simple_sin_sample_process
  .text.mode_simple_sin_control_process
-                0x08001e48      0x158 ./src/mode_simple_sin.o
-                0x08001e48                mode_simple_sin_control_process
+                0x080025bc      0x158 ./src/mode_simple_sin.o
+                0x080025bc                mode_simple_sin_control_process
  .text.mode_wave_adder_init
-                0x08001fa0       0x40 ./src/mode_wave_adder.o
-                0x08001fa0                mode_wave_adder_init
+                0x08002714       0x40 ./src/mode_wave_adder.o
+                0x08002714                mode_wave_adder_init
  .text.mode_wave_adder_sample_process
-                0x08001fe0      0x134 ./src/mode_wave_adder.o
-                0x08001fe0                mode_wave_adder_sample_process
+                0x08002754      0x134 ./src/mode_wave_adder.o
+                0x08002754                mode_wave_adder_sample_process
  .text.mode_wave_adder_control_process
-                0x08002114      0x158 ./src/mode_wave_adder.o
-                0x08002114                mode_wave_adder_control_process
- .text.sin_set  0x0800226c       0x5c ./src/oscillator.o
-                0x0800226c                sin_set
+                0x08002888      0x158 ./src/mode_wave_adder.o
+                0x08002888                mode_wave_adder_control_process
+ .text.sin_set  0x080029e0       0x5c ./src/oscillator.o
+                0x080029e0                sin_set
  .text.sin_process
-                0x080022c8       0x74 ./src/oscillator.o
-                0x080022c8                sin_process
+                0x08002a3c       0x74 ./src/oscillator.o
+                0x08002a3c                sin_process
  .text.FM_oscillator_process
-                0x0800233c      0x1a8 ./src/oscillator.o
-                0x0800233c                FM_oscillator_process
+                0x08002ab0      0x1a8 ./src/oscillator.o
+                0x08002ab0                FM_oscillator_process
  .text.bl_step_table_read
-                0x080024e4       0x7c ./src/oscillator.o
-                0x080024e4                bl_step_table_read
+                0x08002c58       0x7c ./src/oscillator.o
+                0x08002c58                bl_step_table_read
  .text.bl_saw_set
-                0x08002560       0x38 ./src/oscillator.o
-                0x08002560                bl_saw_set
+                0x08002cd4       0x38 ./src/oscillator.o
+                0x08002cd4                bl_saw_set
  .text.bl_saw_process
-                0x08002598       0xfc ./src/oscillator.o
-                0x08002598                bl_saw_process
+                0x08002d0c       0xfc ./src/oscillator.o
+                0x08002d0c                bl_saw_process
  .text.bl_square_set
-                0x08002694       0x38 ./src/oscillator.o
-                0x08002694                bl_square_set
+                0x08002e08       0x38 ./src/oscillator.o
+                0x08002e08                bl_square_set
  .text.bl_square_init
-                0x080026cc       0x24 ./src/oscillator.o
-                0x080026cc                bl_square_init
+                0x08002e40       0x24 ./src/oscillator.o
+                0x08002e40                bl_square_init
  .text.pp6_get_knob_1
-                0x080026f0       0x18 ./src/pp6.o
-                0x080026f0                pp6_get_knob_1
+                0x08002e64       0x18 ./src/pp6.o
+                0x08002e64                pp6_get_knob_1
  .text.pp6_get_knob_2
-                0x08002708       0x18 ./src/pp6.o
-                0x08002708                pp6_get_knob_2
+                0x08002e7c       0x18 ./src/pp6.o
+                0x08002e7c                pp6_get_knob_2
  .text.pp6_get_knob_3
-                0x08002720       0x18 ./src/pp6.o
-                0x08002720                pp6_get_knob_3
+                0x08002e94       0x18 ./src/pp6.o
+                0x08002e94                pp6_get_knob_3
  .text.pp6_get_knob_array
-                0x08002738       0x14 ./src/pp6.o
-                0x08002738                pp6_get_knob_array
+                0x08002eac       0x14 ./src/pp6.o
+                0x08002eac                pp6_get_knob_array
  .text.pp6_set_knob_array
-                0x0800274c       0x44 ./src/pp6.o
-                0x0800274c                pp6_set_knob_array
+                0x08002ec0       0x44 ./src/pp6.o
+                0x08002ec0                pp6_set_knob_array
  .text.pp6_set_mode_button_pressed
-                0x08002790       0x18 ./src/pp6.o
-                0x08002790                pp6_set_mode_button_pressed
+                0x08002f04       0x18 ./src/pp6.o
+                0x08002f04                pp6_set_mode_button_pressed
  .text.pp6_mode_button_pressed
-                0x080027a8       0x18 ./src/pp6.o
-                0x080027a8                pp6_mode_button_pressed
+                0x08002f1c       0x18 ./src/pp6.o
+                0x08002f1c                pp6_mode_button_pressed
  .text.pp6_set_aux_button_pressed
-                0x080027c0       0x18 ./src/pp6.o
-                0x080027c0                pp6_set_aux_button_pressed
+                0x08002f34       0x18 ./src/pp6.o
+                0x08002f34                pp6_set_aux_button_pressed
  .text.pp6_set_aux_button_released
-                0x080027d8       0x18 ./src/pp6.o
-                0x080027d8                pp6_set_aux_button_released
+                0x08002f4c       0x18 ./src/pp6.o
+                0x08002f4c                pp6_set_aux_button_released
  .text.pp6_aux_button_pressed
-                0x080027f0       0x18 ./src/pp6.o
-                0x080027f0                pp6_aux_button_pressed
+                0x08002f64       0x18 ./src/pp6.o
+                0x08002f64                pp6_aux_button_pressed
  .text.pp6_change_mode
-                0x08002808       0x54 ./src/pp6.o
-                0x08002808                pp6_change_mode
+                0x08002f7c       0x54 ./src/pp6.o
+                0x08002f7c                pp6_change_mode
  .text.pp6_set_mode
-                0x0800285c       0x34 ./src/pp6.o
-                0x0800285c                pp6_set_mode
+                0x08002fd0       0x34 ./src/pp6.o
+                0x08002fd0                pp6_set_mode
  .text.pp6_get_mode
-                0x08002890       0x18 ./src/pp6.o
-                0x08002890                pp6_get_mode
+                0x08003004       0x18 ./src/pp6.o
+                0x08003004                pp6_get_mode
  .text.pp6_set_mode_led
-                0x080028a8      0x1f0 ./src/pp6.o
-                0x080028a8                pp6_set_mode_led
+                0x0800301c      0x1f0 ./src/pp6.o
+                0x0800301c                pp6_set_mode_led
  .text.pp6_set_aux_led
-                0x08002a98      0x230 ./src/pp6.o
-                0x08002a98                pp6_set_aux_led
+                0x0800320c      0x230 ./src/pp6.o
+                0x0800320c                pp6_set_aux_led
  .text.pp6_get_aux_led
-                0x08002cc8       0x18 ./src/pp6.o
-                0x08002cc8                pp6_get_aux_led
+                0x0800343c       0x18 ./src/pp6.o
+                0x0800343c                pp6_get_aux_led
  .text.pp6_get_keys
-                0x08002ce0       0x18 ./src/pp6.o
-                0x08002ce0                pp6_get_keys
+                0x08003454       0x18 ./src/pp6.o
+                0x08003454                pp6_get_keys
  .text.pp6_set_note
-                0x08002cf8       0x20 ./src/pp6.o
-                0x08002cf8                pp6_set_note
+                0x0800346c       0x20 ./src/pp6.o
+                0x0800346c                pp6_set_note
  .text.pp6_get_note
-                0x08002d18       0x18 ./src/pp6.o
-                0x08002d18                pp6_get_note
+                0x0800348c       0x18 ./src/pp6.o
+                0x0800348c                pp6_get_note
  .text.pp6_set_note_start
-                0x08002d30       0x34 ./src/pp6.o
-                0x08002d30                pp6_set_note_start
+                0x080034a4       0x34 ./src/pp6.o
+                0x080034a4                pp6_set_note_start
  .text.pp6_get_note_start
-                0x08002d64       0x18 ./src/pp6.o
-                0x08002d64                pp6_get_note_start
+                0x080034d8       0x18 ./src/pp6.o
+                0x080034d8                pp6_get_note_start
  .text.pp6_set_note_stop
-                0x08002d7c       0x28 ./src/pp6.o
-                0x08002d7c                pp6_set_note_stop
+                0x080034f0       0x28 ./src/pp6.o
+                0x080034f0                pp6_set_note_stop
  .text.pp6_get_note_stop
-                0x08002da4       0x18 ./src/pp6.o
-                0x08002da4                pp6_get_note_stop
+                0x08003518       0x18 ./src/pp6.o
+                0x08003518                pp6_get_note_stop
  .text.pp6_clear_flags
-                0x08002dbc       0x88 ./src/pp6.o
-                0x08002dbc                pp6_clear_flags
+                0x08003530       0x88 ./src/pp6.o
+                0x08003530                pp6_clear_flags
  .text.pp6_knobs_init
-                0x08002e44       0xd8 ./src/pp6.o
-                0x08002e44                pp6_knobs_init
+                0x080035b8       0xd8 ./src/pp6.o
+                0x080035b8                pp6_knobs_init
  .text.pp6_knobs_update
-                0x08002f1c      0x158 ./src/pp6.o
-                0x08002f1c                pp6_knobs_update
+                0x08003690      0x158 ./src/pp6.o
+                0x08003690                pp6_knobs_update
  .text.pp6_check_knobs_touched
-                0x08003074      0x23c ./src/pp6.o
-                0x08003074                pp6_check_knobs_touched
+                0x080037e8      0x23c ./src/pp6.o
+                0x080037e8                pp6_check_knobs_touched
  .text.pp6_any_knobs_touched
-                0x080032b0       0x40 ./src/pp6.o
-                0x080032b0                pp6_any_knobs_touched
+                0x08003a24       0x40 ./src/pp6.o
+                0x08003a24                pp6_any_knobs_touched
  .text.pp6_smooth_knobs
-                0x080032f0      0x114 ./src/pp6.o
-                0x080032f0                pp6_smooth_knobs
+                0x08003a64      0x114 ./src/pp6.o
+                0x08003a64                pp6_smooth_knobs
  .text.pp6_leds_init
-                0x08003404       0xc8 ./src/pp6.o
-                0x08003404                pp6_leds_init
+                0x08003b78       0xc8 ./src/pp6.o
+                0x08003b78                pp6_leds_init
  .text.pp6_keys_init
-                0x080034cc       0xb0 ./src/pp6.o
-                0x080034cc                pp6_keys_init
+                0x08003c40       0xb0 ./src/pp6.o
+                0x08003c40                pp6_keys_init
  .text.pp6_keys_update
-                0x0800357c      0x2a0 ./src/pp6.o
-                0x0800357c                pp6_keys_update
+                0x08003cf0      0x2a0 ./src/pp6.o
+                0x08003cf0                pp6_keys_update
  .text.sadsr_init
-                0x0800381c       0x3c ./src/sadsr.o
-                0x0800381c                sadsr_init
+                0x08003f90       0x3c ./src/sadsr.o
+                0x08003f90                sadsr_init
  .text.sadsr_process
-                0x08003858      0x14c ./src/sadsr.o
-                0x08003858                sadsr_process
+                0x08003fcc      0x14c ./src/sadsr.o
+                0x08003fcc                sadsr_process
  .text.sadsr_set
-                0x080039a4       0x70 ./src/sadsr.o
-                0x080039a4                sadsr_set
+                0x08004118       0x70 ./src/sadsr.o
+                0x08004118                sadsr_set
  .text.sadsr_go
-                0x08003a14       0x24 ./src/sadsr.o
-                0x08003a14                sadsr_go
+                0x08004188       0x24 ./src/sadsr.o
+                0x08004188                sadsr_go
  .text.sadsr_release
-                0x08003a38       0x1c ./src/sadsr.o
-                0x08003a38                sadsr_release
+                0x080041ac       0x1c ./src/sadsr.o
+                0x080041ac                sadsr_release
  .text.seq_set_status
-                0x08003a54       0x20 ./src/sequencer.o
-                0x08003a54                seq_set_status
+                0x080041c8       0x20 ./src/sequencer.o
+                0x080041c8                seq_set_status
  .text.seq_get_status
-                0x08003a74       0x18 ./src/sequencer.o
-                0x08003a74                seq_get_status
+                0x080041e8       0x18 ./src/sequencer.o
+                0x080041e8                seq_get_status
  .text.seq_log_first_note
-                0x08003a8c       0x80 ./src/sequencer.o
-                0x08003a8c                seq_log_first_note
+                0x08004200       0x80 ./src/sequencer.o
+                0x08004200                seq_log_first_note
  .text.seq_log_note_start
-                0x08003b0c       0xa8 ./src/sequencer.o
-                0x08003b0c                seq_log_note_start
+                0x08004280       0xa8 ./src/sequencer.o
+                0x08004280                seq_log_note_start
  .text.seq_log_note_stop
-                0x08003bb4       0x80 ./src/sequencer.o
-                0x08003bb4                seq_log_note_stop
+                0x08004328       0x80 ./src/sequencer.o
+                0x08004328                seq_log_note_stop
  .text.seq_stop_recording
-                0x08003c34       0xa4 ./src/sequencer.o
-                0x08003c34                seq_stop_recording
+                0x080043a8       0xa4 ./src/sequencer.o
+                0x080043a8                seq_stop_recording
  .text.seq_rewind
-                0x08003cd8       0x28 ./src/sequencer.o
-                0x08003cd8                seq_rewind
+                0x0800444c       0x28 ./src/sequencer.o
+                0x0800444c                seq_rewind
  .text.seq_play_tick
-                0x08003d00       0xd0 ./src/sequencer.o
-                0x08003d00                seq_play_tick
+                0x08004474       0xd0 ./src/sequencer.o
+                0x08004474                seq_play_tick
  .text.seq_tick
-                0x08003dd0       0x24 ./src/sequencer.o
-                0x08003dd0                seq_tick
+                0x08004544       0x24 ./src/sequencer.o
+                0x08004544                seq_tick
  .text.seq_get_time
-                0x08003df4       0x18 ./src/sequencer.o
-                0x08003df4                seq_get_time
+                0x08004568       0x18 ./src/sequencer.o
+                0x08004568                seq_get_time
  .text.seq_get_length
-                0x08003e0c       0x18 ./src/sequencer.o
-                0x08003e0c                seq_get_length
+                0x08004580       0x18 ./src/sequencer.o
+                0x08004580                seq_get_length
  .text.seq_log_knobs
-                0x08003e24       0x94 ./src/sequencer.o
-                0x08003e24                seq_log_knobs
+                0x08004598       0xa0 ./src/sequencer.o
+                0x08004598                seq_log_knobs
  .text.seq_play_knobs
-                0x08003eb8       0x44 ./src/sequencer.o
-                0x08003eb8                seq_play_knobs
+                0x08004638       0x44 ./src/sequencer.o
+                0x08004638                seq_play_knobs
  .text.seq_knob_playback_enabled
-                0x08003efc       0x18 ./src/sequencer.o
-                0x08003efc                seq_knob_playback_enabled
+                0x0800467c       0x18 ./src/sequencer.o
+                0x0800467c                seq_knob_playback_enabled
  .text.seq_disable_knob_playback
-                0x08003f14       0x18 ./src/sequencer.o
-                0x08003f14                seq_disable_knob_playback
+                0x08004694       0x18 ./src/sequencer.o
+                0x08004694                seq_disable_knob_playback
  .text.seq_enable_knob_playback
-                0x08003f2c       0x18 ./src/sequencer.o
-                0x08003f2c                seq_enable_knob_playback
+                0x080046ac       0x18 ./src/sequencer.o
+                0x080046ac                seq_enable_knob_playback
+ .text.seq_set_auto_stop
+                0x080046c4       0x18 ./src/sequencer.o
+                0x080046c4                seq_set_auto_stop
+ .text.seq_get_auto_stop
+                0x080046dc       0x18 ./src/sequencer.o
+                0x080046dc                seq_get_auto_stop
+ .text.seq_clear_auto_stop
+                0x080046f4       0x18 ./src/sequencer.o
+                0x080046f4                seq_clear_auto_stop
  .text.SystemInit
-                0x08003f44       0xb0 ./src/system_stm32f4xx.o
-                0x08003f44                SystemInit
+                0x0800470c       0xb0 ./src/system_stm32f4xx.o
+                0x0800470c                SystemInit
  .text.SetSysClock
-                0x08003ff4      0x1e0 ./src/system_stm32f4xx.o
+                0x080047bc      0x1e0 ./src/system_stm32f4xx.o
  .text.timer_init
-                0x080041d4       0x4c ./src/timer.o
-                0x080041d4                timer_init
+                0x0800499c       0x4c ./src/timer.o
+                0x0800499c                timer_init
  .text.timer_get_time
-                0x08004220       0x14 ./src/timer.o
-                0x08004220                timer_get_time
+                0x080049e8       0x14 ./src/timer.o
+                0x080049e8                timer_get_time
  .text.uart_init
-                0x08004234       0xc4 ./src/uart.o
-                0x08004234                uart_init
+                0x080049fc       0xc4 ./src/uart.o
+                0x080049fc                uart_init
  .text.vcf_filter_init
-                0x080042f8       0x5c ./src/vcf.o
-                0x080042f8                vcf_filter_init
+                0x08004ac0       0x5c ./src/vcf.o
+                0x08004ac0                vcf_filter_init
  .text.vcf_filter_set
-                0x08004354       0x80 ./src/vcf.o
-                0x08004354                vcf_filter_set
+                0x08004b1c       0x80 ./src/vcf.o
+                0x08004b1c                vcf_filter_set
  .text.vcf_filter_process
-                0x080043d4      0x18c ./src/vcf.o
-                0x080043d4                vcf_filter_process
+                0x08004b9c      0x18c ./src/vcf.o
+                0x08004b9c                vcf_filter_process
  .text.NVIC_Init
-                0x08004560       0xe8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
-                0x08004560                NVIC_Init
+                0x08004d28       0xe8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+                0x08004d28                NVIC_Init
  .text.ADC_Init
-                0x08004648       0xc4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x08004648                ADC_Init
+                0x08004e10       0xc4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x08004e10                ADC_Init
  .text.ADC_CommonInit
-                0x0800470c       0x60 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x0800470c                ADC_CommonInit
- .text.ADC_Cmd  0x0800476c       0x38 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x0800476c                ADC_Cmd
+                0x08004ed4       0x60 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x08004ed4                ADC_CommonInit
+ .text.ADC_Cmd  0x08004f34       0x38 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x08004f34                ADC_Cmd
  .text.ADC_RegularChannelConfig
-                0x080047a4      0x1d0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x080047a4                ADC_RegularChannelConfig
+                0x08004f6c      0x1d0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x08004f6c                ADC_RegularChannelConfig
  .text.ADC_SoftwareStartConv
-                0x08004974       0x20 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x08004974                ADC_SoftwareStartConv
+                0x0800513c       0x20 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x0800513c                ADC_SoftwareStartConv
  .text.ADC_GetConversionValue
-                0x08004994       0x1c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
-                0x08004994                ADC_GetConversionValue
+                0x0800515c       0x1c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x0800515c                ADC_GetConversionValue
  .text.GPIO_Init
-                0x080049b0      0x158 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
-                0x080049b0                GPIO_Init
+                0x08005178      0x158 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x08005178                GPIO_Init
  .text.GPIO_ReadInputDataBit
-                0x08004b08       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
-                0x08004b08                GPIO_ReadInputDataBit
+                0x080052d0       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x080052d0                GPIO_ReadInputDataBit
  .text.GPIO_WriteBit
-                0x08004b48       0x30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
-                0x08004b48                GPIO_WriteBit
+                0x08005310       0x30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x08005310                GPIO_WriteBit
  .text.GPIO_PinAFConfig
-                0x08004b78       0xb0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
-                0x08004b78                GPIO_PinAFConfig
+                0x08005340       0xb0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x08005340                GPIO_PinAFConfig
  .text.RCC_GetClocksFreq
-                0x08004c28      0x1d4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004c28                RCC_GetClocksFreq
+                0x080053f0      0x1d4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x080053f0                RCC_GetClocksFreq
  .text.RCC_AHB1PeriphClockCmd
-                0x08004dfc       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004dfc                RCC_AHB1PeriphClockCmd
+                0x080055c4       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x080055c4                RCC_AHB1PeriphClockCmd
  .text.RCC_AHB2PeriphClockCmd
-                0x08004e58       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004e58                RCC_AHB2PeriphClockCmd
+                0x08005620       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x08005620                RCC_AHB2PeriphClockCmd
  .text.RCC_APB1PeriphClockCmd
-                0x08004eb4       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004eb4                RCC_APB1PeriphClockCmd
+                0x0800567c       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x0800567c                RCC_APB1PeriphClockCmd
  .text.RCC_APB2PeriphClockCmd
-                0x08004f10       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004f10                RCC_APB2PeriphClockCmd
+                0x080056d8       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x080056d8                RCC_APB2PeriphClockCmd
  .text.RCC_APB1PeriphResetCmd
-                0x08004f6c       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004f6c                RCC_APB1PeriphResetCmd
+                0x08005734       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x08005734                RCC_APB1PeriphResetCmd
  .text.RCC_APB2PeriphResetCmd
-                0x08004fc8       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
-                0x08004fc8                RCC_APB2PeriphResetCmd
- .text.RNG_Cmd  0x08005024       0x4c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
-                0x08005024                RNG_Cmd
+                0x08005790       0x5c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x08005790                RCC_APB2PeriphResetCmd
+ .text.RNG_Cmd  0x080057ec       0x4c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+                0x080057ec                RNG_Cmd
  .text.SPI_I2S_DeInit
-                0x08005070       0x88 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x08005070                SPI_I2S_DeInit
+                0x08005838       0x88 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x08005838                SPI_I2S_DeInit
  .text.I2S_Init
-                0x080050f8      0x224 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x080050f8                I2S_Init
- .text.I2S_Cmd  0x0800531c       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x0800531c                I2S_Cmd
+                0x080058c0      0x224 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x080058c0                I2S_Init
+ .text.I2S_Cmd  0x08005ae4       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x08005ae4                I2S_Cmd
  .text.SPI_I2S_SendData
-                0x0800535c       0x1c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x0800535c                SPI_I2S_SendData
+                0x08005b24       0x1c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x08005b24                SPI_I2S_SendData
  .text.SPI_I2S_ITConfig
-                0x08005378       0x70 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x08005378                SPI_I2S_ITConfig
+                0x08005b40       0x70 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x08005b40                SPI_I2S_ITConfig
  .text.SPI_I2S_GetFlagStatus
-                0x080053e8       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
-                0x080053e8                SPI_I2S_GetFlagStatus
+                0x08005bb0       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x08005bb0                SPI_I2S_GetFlagStatus
  .text.TIM_TimeBaseInit
-                0x08005428       0xf8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
-                0x08005428                TIM_TimeBaseInit
+                0x08005bf0       0xf8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x08005bf0                TIM_TimeBaseInit
  .text.TIM_GetCounter
-                0x08005520       0x18 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
-                0x08005520                TIM_GetCounter
- .text.TIM_Cmd  0x08005538       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
-                0x08005538                TIM_Cmd
+                0x08005ce8       0x18 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x08005ce8                TIM_GetCounter
+ .text.TIM_Cmd  0x08005d00       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x08005d00                TIM_Cmd
  .text.USART_Init
-                0x08005578      0x1bc /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
-                0x08005578                USART_Init
+                0x08005d40      0x1bc /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x08005d40                USART_Init
  .text.USART_Cmd
-                0x08005734       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
-                0x08005734                USART_Cmd
+                0x08005efc       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x08005efc                USART_Cmd
+ .text.USART_ReceiveData
+                0x08005f3c       0x24 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x08005f3c                USART_ReceiveData
+ .text.USART_GetFlagStatus
+                0x08005f60       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x08005f60                USART_GetFlagStatus
  .text.WWDG_SetPrescaler
-                0x08005774       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
-                0x08005774                WWDG_SetPrescaler
+                0x08005fa0       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+                0x08005fa0                WWDG_SetPrescaler
  .text.WWDG_SetWindowValue
-                0x080057b4       0x44 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
-                0x080057b4                WWDG_SetWindowValue
+                0x08005fe0       0x44 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+                0x08005fe0                WWDG_SetWindowValue
  .text.arm_float_to_q15
-                0x080057f8      0x2bc /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
-                0x080057f8                arm_float_to_q15
+                0x08006024      0x2bc /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+                0x08006024                arm_float_to_q15
  .text.arm_sin_f32
-                0x08005ab4       0xd8 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
-                0x08005ab4                arm_sin_f32
+                0x080062e0       0xd8 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+                0x080062e0                arm_sin_f32
  .text.__weak_main
-                0x08005b8c        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(__weak__main.o)
-                0x08005b8c                __main
-                0x08005b8c                __weak_main
- .text.sinf     0x08005b90       0x28 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(sinf.o)
-                0x08005b90                sinf
- .text.memset   0x08005bb8        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(memset.o)
-                0x08005bb8                memset
- *fill*         0x08005bbc        0x4 00
+                0x080063b8        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(__weak__main.o)
+                0x080063b8                __main
+                0x080063b8                __weak_main
+ .text.sinf     0x080063bc       0x28 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(sinf.o)
+                0x080063bc                sinf
+ .text.memset   0x080063e4        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(memset.o)
+                0x080063e4                memset
  .text._sincosf
-                0x08005bc0      0x158 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(_sincosf.o)
-                0x08005bc0                _sincosf
- .text.fabsf    0x08005d18       0x14 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(fabsf.o)
-                0x08005d18                fabsf
+                0x080063e8      0x158 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(_sincosf.o)
+                0x080063e8                _sincosf
+ .text.fabsf    0x08006540       0x14 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(fabsf.o)
+                0x08006540                fabsf
  .text.__aeabi_dmul
-                0x08005d2c      0x128 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
-                0x08005d2c                __aeabi_dmul
+                0x08006554      0x128 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
+                0x08006554                __aeabi_dmul
  .text.__aeabi_dsub
-                0x08005e54      0x1d8 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
-                0x08005e54                __aeabi_dsub
+                0x0800667c      0x1d8 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
+                0x0800667c                __aeabi_dsub
  .text.__aeabi_dadd
-                0x0800602c      0x13c /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
-                0x0800602c                __aeabi_dadd
+                0x08006854      0x13c /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
+                0x08006854                __aeabi_dadd
  .text.__aeabi_d2f
-                0x08006168       0x54 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
-                0x08006168                __aeabi_d2f
+                0x08006990       0x54 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(double.o)
+                0x08006990                __aeabi_d2f
  .text.__aeabi_fmul
-                0x080061bc       0xbc /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x080061bc                __aeabi_fmul
+                0x080069e4       0xbc /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x080069e4                __aeabi_fmul
  .text.__aeabi_fdiv
-                0x08006278       0xe8 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006278                __aeabi_fdiv
+                0x08006aa0       0xe8 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006aa0                __aeabi_fdiv
  .text.__aeabi_fsub
-                0x08006360       0xe0 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006360                __aeabi_fsub
+                0x08006b88       0xe0 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006b88                __aeabi_fsub
  .text.__aeabi_fadd
-                0x08006440       0xa4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006440                __aeabi_fadd
+                0x08006c68       0xa4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006c68                __aeabi_fadd
  .text.__aeabi_f2iz
-                0x080064e4       0x34 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x080064e4                __aeabi_f2iz
+                0x08006d0c       0x34 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006d0c                __aeabi_f2iz
  .text.__bhs_ui2f
-                0x08006518       0x26 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006518                __bhs_ui2f
+                0x08006d40       0x26 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006d40                __bhs_ui2f
  .text.__aeabi_i2f
-                0x0800653e       0x10 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x0800653e                __aeabi_i2f
- *fill*         0x0800654e        0x2 00
+                0x08006d66       0x10 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006d66                __aeabi_i2f
+ *fill*         0x08006d76        0x2 00
  .text.__aeabi_f2d
-                0x08006550       0x38 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006550                __aeabi_f2d
+                0x08006d78       0x38 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006d78                __aeabi_f2d
  .text.__aeabi_fcmplt
-                0x08006588       0x3a /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x08006588                __aeabi_fcmplt
+                0x08006db0       0x3a /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006db0                __aeabi_fcmplt
  .text.__aeabi_fcmpge
-                0x080065c2       0x40 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
-                0x080065c2                __aeabi_fcmpge
+                0x08006dea       0x40 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(float.o)
+                0x08006dea                __aeabi_fcmpge
  .text.__aeabi_memset_lowlevel
-                0x08006602       0x24 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(memcpy.o)
-                0x08006602                __aeabi_lowlevel_memset
+                0x08006e2a       0x24 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(memcpy.o)
+                0x08006e2a                __aeabi_lowlevel_memset
  *(.rodata .rodata.*)
- *fill*         0x08006626        0x2 00
+ *fill*         0x08006e4e        0x2 00
  .rodata.transition_table
-                0x08006628      0xfac ./src/oscillator.o
+                0x08006e50      0xfac ./src/oscillator.o
  .rodata.sin_table
-                0x080075d4      0x40c ./src/oscillator.o
+                0x08007dfc      0x40c ./src/oscillator.o
  .rodata.sinTable
-                0x080079e0      0x40c /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
-                0x08007dec                . = ALIGN (0x4)
+                0x08008208      0x40c /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+                0x08008614                . = ALIGN (0x4)
 
-.glue_7         0x08007dec        0x0
+.glue_7         0x08008614        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x08007dec        0x0
+.glue_7t        0x08008614        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x08007dec        0x0
+.vfp11_veneer   0x08008614        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08007dec        0x0
+.v4_bx          0x08008614        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08007dec                __exidx_start = .
+                0x08008614                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x08007dec                __exidx_end = .
-                0x08007dec                _etext = .
+                0x08008614                __exidx_end = .
+                0x08008614                _etext = .
 
-.data_RAM2      0x2001c000        0x0 load address 0x08007dec
+.data_RAM2      0x2001c000        0x0 load address 0x08008614
  FILL mask 0xff
  *(.data.$RAM2*)
  *(.data.$PeriphRam16*)
                 0x2001c000                . = ALIGN (0x4)
 
-.data_RAM3      0x10000000        0x0 load address 0x08007dec
+.data_RAM3      0x10000000        0x0 load address 0x08008614
  FILL mask 0xff
  *(.data.$RAM3*)
  *(.data.$Ram64*)
@@ -1703,7 +1724,7 @@ END GROUP
 .uninit_RESERVED
  *(.bss.$RESERVED*)
 
-.data           0x20000000      0x250 load address 0x08007dec
+.data           0x20000000      0x250 load address 0x08008614
  FILL mask 0xff
                 0x20000000                _data = .
  *(vtable)
@@ -1742,7 +1763,7 @@ END GROUP
  *(.bss.$Ram64*)
                 0x10000000                . = ALIGN (0x4)
 
-.bss            0x20000250     0xd520
+.bss            0x20000250     0xd53c
                 0x20000250                _bss = .
  *(.bss*)
  .bss.software_index
@@ -1754,265 +1775,280 @@ END GROUP
  .bss.led_counter
                 0x20000258        0x4 ./src/main.o
                 0x20000258                led_counter
- .bss.sig       0x2000025c        0x4 ./src/mode_analog_style.o
- .bss.f         0x20000260        0x4 ./src/mode_analog_style.o
+ .bss.aux_led_color
+                0x2000025c        0x1 ./src/main.o
+                0x2000025c                aux_led_color
+ .bss.uart_recv_buf_write
+                0x2000025d        0x1 ./src/main.o
+                0x2000025d                uart_recv_buf_write
+ .bss.uart_recv_buf_read
+                0x2000025e        0x1 ./src/main.o
+                0x2000025e                uart_recv_buf_read
+ *fill*         0x2000025f        0x1 00
+ .bss.sig       0x20000260        0x4 ./src/mode_analog_style.o
+ .bss.f         0x20000264        0x4 ./src/mode_analog_style.o
  .bss.filter_cutoff
-                0x20000264        0x4 ./src/mode_analog_style.o
- .bss.saw       0x20000268        0xc ./src/mode_analog_style.o
- .bss.filter    0x20000274       0x34 ./src/mode_analog_style.o
- .bss.amp       0x200002a8        0x4 ./src/mode_analog_style.o
- .bss.amp_env   0x200002ac       0x1c ./src/mode_analog_style.o
- .bss.framp     0x200002c8       0x14 ./src/mode_analog_style.o
+                0x20000268        0x4 ./src/mode_analog_style.o
+ .bss.saw       0x2000026c        0xc ./src/mode_analog_style.o
+ .bss.filter    0x20000278       0x34 ./src/mode_analog_style.o
+ .bss.amp       0x200002ac        0x4 ./src/mode_analog_style.o
+ .bss.amp_env   0x200002b0       0x1c ./src/mode_analog_style.o
+ .bss.framp     0x200002cc       0x14 ./src/mode_analog_style.o
  .bss.note_dur.6960
-                0x200002dc        0x4 ./src/mode_analog_style.o
- .bss.target_f.6959
                 0x200002e0        0x4 ./src/mode_analog_style.o
- .bss.sig       0x200002e4        0x4 ./src/mode_filter_envelope.o
- .bss.f         0x200002e8        0x4 ./src/mode_filter_envelope.o
- .bss.amp       0x200002ec        0x4 ./src/mode_filter_envelope.o
- .bss.cutoff    0x200002f0        0x4 ./src/mode_filter_envelope.o
+ .bss.target_f.6959
+                0x200002e4        0x4 ./src/mode_analog_style.o
+ .bss.sig       0x200002e8        0x4 ./src/mode_filter_envelope.o
+ .bss.f         0x200002ec        0x4 ./src/mode_filter_envelope.o
+ .bss.amp       0x200002f0        0x4 ./src/mode_filter_envelope.o
+ .bss.cutoff    0x200002f4        0x4 ./src/mode_filter_envelope.o
  .bss.cutoff_scale
-                0x200002f4        0x4 ./src/mode_filter_envelope.o
- .bss.saw       0x200002f8        0xc ./src/mode_filter_envelope.o
- .bss.filter    0x20000304       0x34 ./src/mode_filter_envelope.o
- .bss.amp_env   0x20000338       0x1c ./src/mode_filter_envelope.o
+                0x200002f8        0x4 ./src/mode_filter_envelope.o
+ .bss.saw       0x200002fc        0xc ./src/mode_filter_envelope.o
+ .bss.filter    0x20000308       0x34 ./src/mode_filter_envelope.o
+ .bss.amp_env   0x2000033c       0x1c ./src/mode_filter_envelope.o
  .bss.filter_env
-                0x20000354       0x1c ./src/mode_filter_envelope.o
+                0x20000358       0x1c ./src/mode_filter_envelope.o
  .bss.note_dur.4161
-                0x20000370        0x4 ./src/mode_filter_envelope.o
- .bss.f         0x20000374        0x4 ./src/mode_filter_man.o
- .bss.filter    0x20000378       0x34 ./src/mode_filter_man.o
- .bss.amp_env   0x200003ac       0x1c ./src/mode_filter_man.o
- .bss.f         0x200003c8        0x4 ./src/mode_nazareth.o
- .bss.new_note  0x200003cc        0x4 ./src/mode_nazareth.o
- .bss.amp_env   0x200003d0       0x1c ./src/mode_nazareth.o
- .bss.h         0x200003ec       0xe0 ./src/mode_nazareth.o
- .bss.f         0x200004cc        0x4 ./src/mode_octave_mirror.o
- .bss.filter    0x200004d0       0x34 ./src/mode_octave_mirror.o
- .bss.amp_env   0x20000504       0x1c ./src/mode_octave_mirror.o
- .bss.sig       0x20000520        0x4 ./src/mode_simple_fm.o
- .bss.f         0x20000524        0x4 ./src/mode_simple_fm.o
- .bss.new_note  0x20000528        0x4 ./src/mode_simple_fm.o
- .bss.amp       0x2000052c        0x4 ./src/mode_simple_fm.o
- .bss.amp_env   0x20000530       0x1c ./src/mode_simple_fm.o
+                0x20000374        0x4 ./src/mode_filter_envelope.o
+ .bss.f         0x20000378        0x4 ./src/mode_filter_man.o
+ .bss.filter    0x2000037c       0x34 ./src/mode_filter_man.o
+ .bss.amp_env   0x200003b0       0x1c ./src/mode_filter_man.o
+ .bss.f         0x200003cc        0x4 ./src/mode_nazareth.o
+ .bss.new_note  0x200003d0        0x4 ./src/mode_nazareth.o
+ .bss.amp_env   0x200003d4       0x1c ./src/mode_nazareth.o
+ .bss.h         0x200003f0       0xe0 ./src/mode_nazareth.o
+ .bss.f         0x200004d0        0x4 ./src/mode_octave_mirror.o
+ .bss.filter    0x200004d4       0x34 ./src/mode_octave_mirror.o
+ .bss.amp_env   0x20000508       0x1c ./src/mode_octave_mirror.o
+ .bss.sig       0x20000524        0x4 ./src/mode_simple_fm.o
+ .bss.f         0x20000528        0x4 ./src/mode_simple_fm.o
+ .bss.target_f  0x2000052c        0x4 ./src/mode_simple_fm.o
+ .bss.new_note  0x20000530        0x4 ./src/mode_simple_fm.o
+ .bss.amp       0x20000534        0x4 ./src/mode_simple_fm.o
+ .bss.framp     0x20000538       0x14 ./src/mode_simple_fm.o
+ .bss.amp_env   0x2000054c       0x1c ./src/mode_simple_fm.o
  .bss.index_env
-                0x2000054c       0x1c ./src/mode_simple_fm.o
- .bss.fm        0x20000568       0x18 ./src/mode_simple_fm.o
- .bss.fm2       0x20000580       0x18 ./src/mode_simple_fm.o
- .bss.note_dur.4169
-                0x20000598        0x4 ./src/mode_simple_fm.o
- .bss.sig       0x2000059c        0x4 ./src/mode_simple_sin.o
- .bss.f         0x200005a0        0x4 ./src/mode_simple_sin.o
- .bss.sin1      0x200005a4       0x14 ./src/mode_simple_sin.o
- .bss.new_note  0x200005b8        0x4 ./src/mode_simple_sin.o
- .bss.amp       0x200005bc        0x4 ./src/mode_simple_sin.o
- .bss.framp     0x200005c0       0x14 ./src/mode_simple_sin.o
- .bss.amp_env   0x200005d4       0x1c ./src/mode_simple_sin.o
- .bss.saw       0x200005f0        0xc ./src/mode_simple_sin.o
- .bss.square    0x200005fc       0x10 ./src/mode_simple_sin.o
- .bss.cents     0x2000060c        0x4 ./src/mode_simple_sin.o
-                0x2000060c                cents
+                0x20000568       0x1c ./src/mode_simple_fm.o
+ .bss.fm        0x20000584       0x18 ./src/mode_simple_fm.o
+ .bss.fm2       0x2000059c       0x18 ./src/mode_simple_fm.o
+ .bss.note_dur.4170
+                0x200005b4        0x4 ./src/mode_simple_fm.o
+ .bss.sig       0x200005b8        0x4 ./src/mode_simple_sin.o
+ .bss.f         0x200005bc        0x4 ./src/mode_simple_sin.o
+ .bss.sin1      0x200005c0       0x14 ./src/mode_simple_sin.o
+ .bss.new_note  0x200005d4        0x4 ./src/mode_simple_sin.o
+ .bss.amp       0x200005d8        0x4 ./src/mode_simple_sin.o
+ .bss.framp     0x200005dc       0x14 ./src/mode_simple_sin.o
+ .bss.amp_env   0x200005f0       0x1c ./src/mode_simple_sin.o
+ .bss.saw       0x2000060c        0xc ./src/mode_simple_sin.o
+ .bss.square    0x20000618       0x10 ./src/mode_simple_sin.o
+ .bss.cents     0x20000628        0x4 ./src/mode_simple_sin.o
+                0x20000628                cents
  .bss.note_dur.4161
-                0x20000610        0x4 ./src/mode_simple_sin.o
- .bss.sig       0x20000614        0x4 ./src/mode_wave_adder.o
- .bss.f         0x20000618        0x4 ./src/mode_wave_adder.o
- .bss.sin1      0x2000061c       0x14 ./src/mode_wave_adder.o
- .bss.new_note  0x20000630        0x4 ./src/mode_wave_adder.o
- .bss.amp       0x20000634        0x4 ./src/mode_wave_adder.o
- .bss.framp     0x20000638       0x14 ./src/mode_wave_adder.o
- .bss.amp_env   0x2000064c       0x1c ./src/mode_wave_adder.o
- .bss.saw       0x20000668        0xc ./src/mode_wave_adder.o
- .bss.square    0x20000674       0x10 ./src/mode_wave_adder.o
- .bss.cents     0x20000684        0x4 ./src/mode_wave_adder.o
+                0x2000062c        0x4 ./src/mode_simple_sin.o
+ .bss.sig       0x20000630        0x4 ./src/mode_wave_adder.o
+ .bss.f         0x20000634        0x4 ./src/mode_wave_adder.o
+ .bss.sin1      0x20000638       0x14 ./src/mode_wave_adder.o
+ .bss.new_note  0x2000064c        0x4 ./src/mode_wave_adder.o
+ .bss.amp       0x20000650        0x4 ./src/mode_wave_adder.o
+ .bss.framp     0x20000654       0x14 ./src/mode_wave_adder.o
+ .bss.amp_env   0x20000668       0x1c ./src/mode_wave_adder.o
+ .bss.saw       0x20000684        0xc ./src/mode_wave_adder.o
+ .bss.square    0x20000690       0x10 ./src/mode_wave_adder.o
+ .bss.cents     0x200006a0        0x4 ./src/mode_wave_adder.o
  .bss.note_dur.4161
-                0x20000688        0x4 ./src/mode_wave_adder.o
+                0x200006a4        0x4 ./src/mode_wave_adder.o
  .bss.history_index.6890
-                0x2000068c        0x1 ./src/pp6.o
- *fill*         0x2000068d        0x3 00
- .bss.knob1.6875
-                0x20000690        0x4 ./src/pp6.o
- .bss.knob2.6876
-                0x20000694        0x4 ./src/pp6.o
- .bss.knob3.6877
-                0x20000698        0x4 ./src/pp6.o
- .bss.knobs_last.6868
-                0x2000069c        0xc ./src/pp6.o
- .bss.channel.6863
                 0x200006a8        0x1 ./src/pp6.o
  *fill*         0x200006a9        0x3 00
+ .bss.knob1.6875
+                0x200006ac        0x4 ./src/pp6.o
+ .bss.knob2.6876
+                0x200006b0        0x4 ./src/pp6.o
+ .bss.knob3.6877
+                0x200006b4        0x4 ./src/pp6.o
+ .bss.knobs_last.6868
+                0x200006b8        0xc ./src/pp6.o
+ .bss.channel.6863
+                0x200006c4        0x1 ./src/pp6.o
+ *fill*         0x200006c5        0x3 00
  .bss.knobs.6864
-                0x200006ac        0xc ./src/pp6.o
+                0x200006c8        0xc ./src/pp6.o
  .bss.seq_index
-                0x200006b8        0x4 ./src/sequencer.o
-                0x200006b8                seq_index
- .bss.seq_time  0x200006bc        0x4 ./src/sequencer.o
-                0x200006bc                seq_time
+                0x200006d4        0x4 ./src/sequencer.o
+                0x200006d4                seq_index
+ .bss.seq_time  0x200006d8        0x4 ./src/sequencer.o
+                0x200006d8                seq_time
  .bss.seq_length
-                0x200006c0        0x4 ./src/sequencer.o
-                0x200006c0                seq_length
+                0x200006dc        0x4 ./src/sequencer.o
+                0x200006dc                seq_length
  .bss.seq_last_note_start
-                0x200006c4        0x4 ./src/sequencer.o
-                0x200006c4                seq_last_note_start
+                0x200006e0        0x4 ./src/sequencer.o
+                0x200006e0                seq_last_note_start
  .bss.seq_last_note_start_index
-                0x200006c8        0x4 ./src/sequencer.o
-                0x200006c8                seq_last_note_start_index
+                0x200006e4        0x4 ./src/sequencer.o
+                0x200006e4                seq_last_note_start_index
  .bss.seq_status
-                0x200006cc        0x1 ./src/sequencer.o
-                0x200006cc                seq_status
- *fill*         0x200006cd        0x3 00
- .bss.errno     0x200006d0        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(errno.o)
-                0x200006d0                errno
+                0x200006e8        0x1 ./src/sequencer.o
+                0x200006e8                seq_status
+ .bss.seq_auto_stop
+                0x200006e9        0x1 ./src/sequencer.o
+                0x200006e9                seq_auto_stop
+ *fill*         0x200006ea        0x2 00
+ .bss.errno     0x200006ec        0x4 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib/thumb2/libcr_c.a(errno.o)
+                0x200006ec                errno
  *(COMMON)
- COMMON         0x200006d4      0x400 ./src/CS4344.o
-                0x200006d4                play_buf
- COMMON         0x20000ad4       0x84 ./src/main.o
-                0x20000ad4                recvArg0_
-                0x20000ad8                eq
-                0x20000b18                channelIn_
-                0x20000b1c                uart_recv_buf
-                0x20000b3c                recvEvent_
-                0x20000b40                tmp8
-                0x20000b44                recvMode_
-                0x20000b48                recvByteCount_
-                0x20000b4c                sendFullCommands_
-                0x20000b50                recvBytesNeeded_
-                0x20000b54                lastStatusSent_
- COMMON         0x20000b58       0x24 ./src/pp6.o
-                0x20000b58                pp6
- COMMON         0x20000b7c     0xcbf4 ./src/sequencer.o
-                0x20000b7c                seq_notes
-                0x20000f78                seq_deltas
-                0x20001374                seq_events
-                0x20001770                knob_log
-                0x2000d770                . = ALIGN (0x4)
-                0x2000d770                _ebss = .
-                0x2000d770                PROVIDE (end, .)
-                0x2000d770                PROVIDE (_pvHeapStart, .)
+ COMMON         0x200006f0      0x400 ./src/CS4344.o
+                0x200006f0                play_buf
+ COMMON         0x20000af0       0x84 ./src/main.o
+                0x20000af0                recvArg0_
+                0x20000af4                eq
+                0x20000b34                channelIn_
+                0x20000b38                uart_recv_buf
+                0x20000b58                recvEvent_
+                0x20000b5c                tmp8
+                0x20000b60                recvMode_
+                0x20000b64                recvByteCount_
+                0x20000b68                sendFullCommands_
+                0x20000b6c                recvBytesNeeded_
+                0x20000b70                lastStatusSent_
+ COMMON         0x20000b74       0x24 ./src/pp6.o
+                0x20000b74                pp6
+ COMMON         0x20000b98     0xcbf4 ./src/sequencer.o
+                0x20000b98                seq_notes
+                0x20000f94                seq_deltas
+                0x20001390                seq_events
+                0x2000178c                knob_log
+                0x2000d78c                . = ALIGN (0x4)
+                0x2000d78c                _ebss = .
+                0x2000d78c                PROVIDE (end, .)
+                0x2000d78c                PROVIDE (_pvHeapStart, .)
                 0x2001c000                PROVIDE (_vStackTop, (__top_Ram112 - 0x0))
 OUTPUT(BolsaBass.axf elf32-littlearm)
 
-.debug_abbrev   0x00000000     0x2b9f
+.debug_abbrev   0x00000000     0x2b59
  .debug_abbrev  0x00000000      0x17e ./src/CS4344.o
  .debug_abbrev  0x0000017e       0xc2 ./src/audio.o
  .debug_abbrev  0x00000240       0xd9 ./src/comb.o
  .debug_abbrev  0x00000319      0x167 ./src/cr_startup_stm32f4xx.o
  .debug_abbrev  0x00000480       0xd9 ./src/eq.o
  .debug_abbrev  0x00000559       0xd2 ./src/line.o
- .debug_abbrev  0x0000062b      0x19e ./src/main.o
- .debug_abbrev  0x000007c9      0x162 ./src/midi.o
- .debug_abbrev  0x0000092b       0xec ./src/mode_analog_style.o
- .debug_abbrev  0x00000a17      0x123 ./src/mode_drum.o
- .debug_abbrev  0x00000b3a       0xf4 ./src/mode_drum_synth.o
- .debug_abbrev  0x00000c2e       0xd4 ./src/mode_filter_envelope.o
- .debug_abbrev  0x00000d02       0xec ./src/mode_filter_man.o
- .debug_abbrev  0x00000dee       0xe3 ./src/mode_mono_glider.o
- .debug_abbrev  0x00000ed1       0xe5 ./src/mode_nazareth.o
- .debug_abbrev  0x00000fb6      0x102 ./src/mode_octave_mirror.o
- .debug_abbrev  0x000010b8      0x102 ./src/mode_simple_fm.o
- .debug_abbrev  0x000011ba       0xf6 ./src/mode_simple_sin.o
- .debug_abbrev  0x000012b0       0xd4 ./src/mode_wave_adder.o
- .debug_abbrev  0x00001384      0x14f ./src/oscillator.o
- .debug_abbrev  0x000014d3      0x1d6 ./src/pp6.o
- .debug_abbrev  0x000016a9       0xdd ./src/sad.o
- .debug_abbrev  0x00001786       0xe1 ./src/sadsr.o
- .debug_abbrev  0x00001867      0x108 ./src/sequencer.o
- .debug_abbrev  0x0000196f      0x144 ./src/system_stm32f4xx.o
- .debug_abbrev  0x00001ab3      0x109 ./src/timer.o
- .debug_abbrev  0x00001bbc      0x102 ./src/uart.o
- .debug_abbrev  0x00001cbe       0xc8 ./src/vcf.o
- .debug_abbrev  0x00001d86      0x12a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_abbrev  0x00001eb0      0x18d /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_abbrev  0x0000203d      0x186 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_abbrev  0x000021c3      0x1bb /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_abbrev  0x0000237e      0x13b /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_abbrev  0x000024b9      0x164 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_abbrev  0x0000261d      0x167 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_abbrev  0x00002784      0x152 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_abbrev  0x000028d6      0x122 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_abbrev  0x000029f8       0xb0 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_abbrev  0x00002aa8       0xf7 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_abbrev  0x0000062b      0x1a7 ./src/main.o
+ .debug_abbrev  0x000007d2      0x132 ./src/midi.o
+ .debug_abbrev  0x00000904       0xec ./src/mode_analog_style.o
+ .debug_abbrev  0x000009f0      0x123 ./src/mode_drum.o
+ .debug_abbrev  0x00000b13       0xf4 ./src/mode_drum_synth.o
+ .debug_abbrev  0x00000c07       0xd4 ./src/mode_filter_envelope.o
+ .debug_abbrev  0x00000cdb       0xec ./src/mode_filter_man.o
+ .debug_abbrev  0x00000dc7       0xe3 ./src/mode_mono_glider.o
+ .debug_abbrev  0x00000eaa       0xe5 ./src/mode_nazareth.o
+ .debug_abbrev  0x00000f8f      0x102 ./src/mode_octave_mirror.o
+ .debug_abbrev  0x00001091       0xe3 ./src/mode_simple_fm.o
+ .debug_abbrev  0x00001174       0xf6 ./src/mode_simple_sin.o
+ .debug_abbrev  0x0000126a       0xd4 ./src/mode_wave_adder.o
+ .debug_abbrev  0x0000133e      0x14f ./src/oscillator.o
+ .debug_abbrev  0x0000148d      0x1d6 ./src/pp6.o
+ .debug_abbrev  0x00001663       0xdd ./src/sad.o
+ .debug_abbrev  0x00001740       0xe1 ./src/sadsr.o
+ .debug_abbrev  0x00001821      0x108 ./src/sequencer.o
+ .debug_abbrev  0x00001929      0x144 ./src/system_stm32f4xx.o
+ .debug_abbrev  0x00001a6d      0x109 ./src/timer.o
+ .debug_abbrev  0x00001b76      0x102 ./src/uart.o
+ .debug_abbrev  0x00001c78       0xc8 ./src/vcf.o
+ .debug_abbrev  0x00001d40      0x12a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_abbrev  0x00001e6a      0x18d /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_abbrev  0x00001ff7      0x186 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_abbrev  0x0000217d      0x1bb /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_abbrev  0x00002338      0x13b /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_abbrev  0x00002473      0x164 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_abbrev  0x000025d7      0x167 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_abbrev  0x0000273e      0x152 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_abbrev  0x00002890      0x122 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_abbrev  0x000029b2       0xb0 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_abbrev  0x00002a62       0xf7 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_info     0x00000000     0xd912
+.debug_info     0x00000000     0xda78
  .debug_info    0x00000000      0x7cb ./src/CS4344.o
  .debug_info    0x000007cb      0x196 ./src/audio.o
  .debug_info    0x00000961      0x191 ./src/comb.o
  .debug_info    0x00000af2      0x58f ./src/cr_startup_stm32f4xx.o
  .debug_info    0x00001081      0x246 ./src/eq.o
  .debug_info    0x000012c7      0x1b8 ./src/line.o
- .debug_info    0x0000147f      0x6ce ./src/main.o
- .debug_info    0x00001b4d      0x870 ./src/midi.o
- .debug_info    0x000023bd      0x3ef ./src/mode_analog_style.o
- .debug_info    0x000027ac      0x4c1 ./src/mode_drum.o
- .debug_info    0x00002c6d      0x31d ./src/mode_drum_synth.o
- .debug_info    0x00002f8a      0x320 ./src/mode_filter_envelope.o
- .debug_info    0x000032aa      0x3ef ./src/mode_filter_man.o
- .debug_info    0x00003699      0x2c0 ./src/mode_mono_glider.o
- .debug_info    0x00003959      0x2b1 ./src/mode_nazareth.o
- .debug_info    0x00003c0a      0x371 ./src/mode_octave_mirror.o
- .debug_info    0x00003f7b      0x33f ./src/mode_simple_fm.o
- .debug_info    0x000042ba      0x379 ./src/mode_simple_sin.o
- .debug_info    0x00004633      0x36b ./src/mode_wave_adder.o
- .debug_info    0x0000499e      0x956 ./src/oscillator.o
- .debug_info    0x000052f4      0xaf4 ./src/pp6.o
- .debug_info    0x00005de8      0x1c6 ./src/sad.o
- .debug_info    0x00005fae      0x242 ./src/sadsr.o
- .debug_info    0x000061f0      0x452 ./src/sequencer.o
- .debug_info    0x00006642      0x625 ./src/system_stm32f4xx.o
- .debug_info    0x00006c67      0x3be ./src/timer.o
- .debug_info    0x00007025      0x41e ./src/uart.o
- .debug_info    0x00007443      0x1f4 ./src/vcf.o
- .debug_info    0x00007637      0x59c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_info    0x00007bd3      0xcfd /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_info    0x000088d0      0x641 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_info    0x00008f11      0xd2c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_info    0x00009c3d      0x299 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_info    0x00009ed6      0xbd4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_info    0x0000aaaa     0x1e30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_info    0x0000c8da      0xa57 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_info    0x0000d331      0x25e /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_info    0x0000d58f      0x1dd /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_info    0x0000d76c      0x1a6 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_info    0x0000147f      0x823 ./src/main.o
+ .debug_info    0x00001ca2      0x833 ./src/midi.o
+ .debug_info    0x000024d5      0x3ef ./src/mode_analog_style.o
+ .debug_info    0x000028c4      0x4c1 ./src/mode_drum.o
+ .debug_info    0x00002d85      0x31d ./src/mode_drum_synth.o
+ .debug_info    0x000030a2      0x320 ./src/mode_filter_envelope.o
+ .debug_info    0x000033c2      0x3ef ./src/mode_filter_man.o
+ .debug_info    0x000037b1      0x2c0 ./src/mode_mono_glider.o
+ .debug_info    0x00003a71      0x2b1 ./src/mode_nazareth.o
+ .debug_info    0x00003d22      0x371 ./src/mode_octave_mirror.o
+ .debug_info    0x00004093      0x32b ./src/mode_simple_fm.o
+ .debug_info    0x000043be      0x379 ./src/mode_simple_sin.o
+ .debug_info    0x00004737      0x36b ./src/mode_wave_adder.o
+ .debug_info    0x00004aa2      0x956 ./src/oscillator.o
+ .debug_info    0x000053f8      0xaf4 ./src/pp6.o
+ .debug_info    0x00005eec      0x1c6 ./src/sad.o
+ .debug_info    0x000060b2      0x242 ./src/sadsr.o
+ .debug_info    0x000062f4      0x4b4 ./src/sequencer.o
+ .debug_info    0x000067a8      0x625 ./src/system_stm32f4xx.o
+ .debug_info    0x00006dcd      0x3be ./src/timer.o
+ .debug_info    0x0000718b      0x41e ./src/uart.o
+ .debug_info    0x000075a9      0x1f4 ./src/vcf.o
+ .debug_info    0x0000779d      0x59c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_info    0x00007d39      0xcfd /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_info    0x00008a36      0x641 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_info    0x00009077      0xd2c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_info    0x00009da3      0x299 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_info    0x0000a03c      0xbd4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_info    0x0000ac10     0x1e30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_info    0x0000ca40      0xa57 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_info    0x0000d497      0x25e /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_info    0x0000d6f5      0x1dd /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_info    0x0000d8d2      0x1a6 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_line     0x00000000    0x109e6
+.debug_line     0x00000000    0x10a39
  .debug_line    0x00000000      0x637 ./src/CS4344.o
  .debug_line    0x00000637      0x4ca ./src/audio.o
  .debug_line    0x00000b01      0x4d4 ./src/comb.o
  .debug_line    0x00000fd5      0x6c1 ./src/cr_startup_stm32f4xx.o
  .debug_line    0x00001696      0x4d1 ./src/eq.o
  .debug_line    0x00001b67      0x4ea ./src/line.o
- .debug_line    0x00002051      0x9a2 ./src/main.o
- .debug_line    0x000029f3      0xa32 ./src/midi.o
- .debug_line    0x00003425      0x7b0 ./src/mode_analog_style.o
- .debug_line    0x00003bd5      0x7af ./src/mode_drum.o
- .debug_line    0x00004384      0x79e ./src/mode_drum_synth.o
- .debug_line    0x00004b22      0x54b ./src/mode_filter_envelope.o
- .debug_line    0x0000506d      0x7b8 ./src/mode_filter_man.o
- .debug_line    0x00005825      0x538 ./src/mode_mono_glider.o
- .debug_line    0x00005d5d      0x579 ./src/mode_nazareth.o
- .debug_line    0x000062d6      0x7b3 ./src/mode_octave_mirror.o
- .debug_line    0x00006a89      0x53f ./src/mode_simple_fm.o
- .debug_line    0x00006fc8      0x53e ./src/mode_simple_sin.o
- .debug_line    0x00007506      0x540 ./src/mode_wave_adder.o
- .debug_line    0x00007a46      0x6af ./src/oscillator.o
- .debug_line    0x000080f5      0xb34 ./src/pp6.o
- .debug_line    0x00008c29      0x4f6 ./src/sad.o
- .debug_line    0x0000911f      0x524 ./src/sadsr.o
- .debug_line    0x00009643      0x602 ./src/sequencer.o
- .debug_line    0x00009c45      0x679 ./src/system_stm32f4xx.o
- .debug_line    0x0000a2be      0x623 ./src/timer.o
- .debug_line    0x0000a8e1      0x60a ./src/uart.o
- .debug_line    0x0000aeeb      0x4e5 ./src/vcf.o
- .debug_line    0x0000b3d0      0x64a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_line    0x0000ba1a      0x950 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_line    0x0000c36a      0x73a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_line    0x0000caa4      0x99c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_line    0x0000d440      0x684 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_line    0x0000dac4      0x850 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_line    0x0000e314      0xe75 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_line    0x0000f189      0x88b /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_line    0x0000fa14      0x683 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_line    0x00010097      0x4c8 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_line    0x0001055f      0x487 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_line    0x00002051      0x9b7 ./src/main.o
+ .debug_line    0x00002a08      0xa2e ./src/midi.o
+ .debug_line    0x00003436      0x7b0 ./src/mode_analog_style.o
+ .debug_line    0x00003be6      0x7af ./src/mode_drum.o
+ .debug_line    0x00004395      0x79e ./src/mode_drum_synth.o
+ .debug_line    0x00004b33      0x54b ./src/mode_filter_envelope.o
+ .debug_line    0x0000507e      0x7b8 ./src/mode_filter_man.o
+ .debug_line    0x00005836      0x538 ./src/mode_mono_glider.o
+ .debug_line    0x00005d6e      0x579 ./src/mode_nazareth.o
+ .debug_line    0x000062e7      0x7b3 ./src/mode_octave_mirror.o
+ .debug_line    0x00006a9a      0x543 ./src/mode_simple_fm.o
+ .debug_line    0x00006fdd      0x53e ./src/mode_simple_sin.o
+ .debug_line    0x0000751b      0x540 ./src/mode_wave_adder.o
+ .debug_line    0x00007a5b      0x6af ./src/oscillator.o
+ .debug_line    0x0000810a      0xb34 ./src/pp6.o
+ .debug_line    0x00008c3e      0x4f6 ./src/sad.o
+ .debug_line    0x00009134      0x524 ./src/sadsr.o
+ .debug_line    0x00009658      0x640 ./src/sequencer.o
+ .debug_line    0x00009c98      0x679 ./src/system_stm32f4xx.o
+ .debug_line    0x0000a311      0x623 ./src/timer.o
+ .debug_line    0x0000a934      0x60a ./src/uart.o
+ .debug_line    0x0000af3e      0x4e5 ./src/vcf.o
+ .debug_line    0x0000b423      0x64a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_line    0x0000ba6d      0x950 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_line    0x0000c3bd      0x73a /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_line    0x0000caf7      0x99c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_line    0x0000d493      0x684 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_line    0x0000db17      0x850 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_line    0x0000e367      0xe75 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_line    0x0000f1dc      0x88b /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_line    0x0000fa67      0x683 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_line    0x000100ea      0x4c8 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_line    0x000105b2      0x487 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
 .debug_macinfo  0x00000000   0x820732
  .debug_macinfo
@@ -2094,7 +2130,7 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_macinfo
                 0x0081c425     0x430d /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_loc      0x00000000     0x619e
+.debug_loc      0x00000000     0x6216
  .debug_loc     0x00000000       0x70 ./src/CS4344.o
  .debug_loc     0x00000070       0x70 ./src/audio.o
  .debug_loc     0x000000e0       0x70 ./src/comb.o
@@ -2111,32 +2147,32 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_loc     0x00001026       0x9c ./src/mode_mono_glider.o
  .debug_loc     0x000010c2       0x90 ./src/mode_nazareth.o
  .debug_loc     0x00001152       0xa8 ./src/mode_octave_mirror.o
- .debug_loc     0x000011fa       0xa8 ./src/mode_simple_fm.o
- .debug_loc     0x000012a2       0x90 ./src/mode_simple_sin.o
- .debug_loc     0x00001332       0x90 ./src/mode_wave_adder.o
- .debug_loc     0x000013c2      0x462 ./src/oscillator.o
- .debug_loc     0x00001824      0x6f4 ./src/pp6.o
- .debug_loc     0x00001f18       0xe0 ./src/sad.o
- .debug_loc     0x00001ff8      0x150 ./src/sadsr.o
- .debug_loc     0x00002148      0x334 ./src/sequencer.o
- .debug_loc     0x0000247c       0x9c ./src/system_stm32f4xx.o
- .debug_loc     0x00002518       0x90 ./src/timer.o
- .debug_loc     0x000025a8       0x38 ./src/uart.o
- .debug_loc     0x000025e0       0xa8 ./src/vcf.o
- .debug_loc     0x00002688      0x118 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_loc     0x000027a0      0x838 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_loc     0x00002fd8      0x310 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_loc     0x000032e8      0x97c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_loc     0x00003c64      0x1a8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_loc     0x00003e0c      0x578 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_loc     0x00004384     0x1420 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_loc     0x000057a4      0x658 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_loc     0x00005dfc      0x19c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_loc     0x00005f98      0x178 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_loc     0x00006110       0x8e /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_loc     0x000011fa       0x9c ./src/mode_simple_fm.o
+ .debug_loc     0x00001296       0x90 ./src/mode_simple_sin.o
+ .debug_loc     0x00001326       0x90 ./src/mode_wave_adder.o
+ .debug_loc     0x000013b6      0x462 ./src/oscillator.o
+ .debug_loc     0x00001818      0x6f4 ./src/pp6.o
+ .debug_loc     0x00001f0c       0xe0 ./src/sad.o
+ .debug_loc     0x00001fec      0x150 ./src/sadsr.o
+ .debug_loc     0x0000213c      0x3b8 ./src/sequencer.o
+ .debug_loc     0x000024f4       0x9c ./src/system_stm32f4xx.o
+ .debug_loc     0x00002590       0x90 ./src/timer.o
+ .debug_loc     0x00002620       0x38 ./src/uart.o
+ .debug_loc     0x00002658       0xa8 ./src/vcf.o
+ .debug_loc     0x00002700      0x118 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_loc     0x00002818      0x838 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_loc     0x00003050      0x310 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_loc     0x00003360      0x97c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_loc     0x00003cdc      0x1a8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_loc     0x00003e84      0x578 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_loc     0x000043fc     0x1420 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_loc     0x0000581c      0x658 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_loc     0x00005e74      0x19c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_loc     0x00006010      0x178 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_loc     0x00006188       0x8e /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
 .debug_pubnames
-                0x00000000     0x2e14
+                0x00000000     0x2e70
  .debug_pubnames
                 0x00000000       0x80 ./src/CS4344.o
  .debug_pubnames
@@ -2150,74 +2186,74 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_pubnames
                 0x0000029d       0x53 ./src/line.o
  .debug_pubnames
-                0x000002f0      0x11e ./src/main.o
+                0x000002f0      0x130 ./src/main.o
  .debug_pubnames
-                0x0000040e      0x33f ./src/midi.o
+                0x00000420      0x333 ./src/midi.o
  .debug_pubnames
-                0x0000074d       0x78 ./src/mode_analog_style.o
+                0x00000753       0x78 ./src/mode_analog_style.o
  .debug_pubnames
-                0x000007c5       0x60 ./src/mode_drum.o
+                0x000007cb       0x60 ./src/mode_drum.o
  .debug_pubnames
-                0x00000825       0x72 ./src/mode_drum_synth.o
+                0x0000082b       0x72 ./src/mode_drum_synth.o
  .debug_pubnames
-                0x00000897       0x81 ./src/mode_filter_envelope.o
+                0x0000089d       0x81 ./src/mode_filter_envelope.o
  .debug_pubnames
-                0x00000918       0x72 ./src/mode_filter_man.o
+                0x0000091e       0x72 ./src/mode_filter_man.o
  .debug_pubnames
-                0x0000098a       0xc5 ./src/mode_mono_glider.o
+                0x00000990       0xc5 ./src/mode_mono_glider.o
  .debug_pubnames
-                0x00000a4f       0x6c ./src/mode_nazareth.o
+                0x00000a55       0x6c ./src/mode_nazareth.o
  .debug_pubnames
-                0x00000abb       0x7b ./src/mode_octave_mirror.o
+                0x00000ac1       0x7b ./src/mode_octave_mirror.o
  .debug_pubnames
-                0x00000b36       0x6f ./src/mode_simple_fm.o
+                0x00000b3c       0x6f ./src/mode_simple_fm.o
  .debug_pubnames
-                0x00000ba5       0x7c ./src/mode_simple_sin.o
+                0x00000bab       0x7c ./src/mode_simple_sin.o
  .debug_pubnames
-                0x00000c21       0x72 ./src/mode_wave_adder.o
+                0x00000c27       0x72 ./src/mode_wave_adder.o
  .debug_pubnames
-                0x00000c93      0x177 ./src/oscillator.o
+                0x00000c99      0x177 ./src/oscillator.o
  .debug_pubnames
-                0x00000e0a      0x386 ./src/pp6.o
+                0x00000e10      0x386 ./src/pp6.o
  .debug_pubnames
-                0x00001190       0x46 ./src/sad.o
+                0x00001196       0x46 ./src/sad.o
  .debug_pubnames
-                0x000011d6       0x74 ./src/sadsr.o
+                0x000011dc       0x74 ./src/sadsr.o
  .debug_pubnames
-                0x0000124a      0x284 ./src/sequencer.o
+                0x00001250      0x2da ./src/sequencer.o
  .debug_pubnames
-                0x000014ce       0x61 ./src/system_stm32f4xx.o
+                0x0000152a       0x61 ./src/system_stm32f4xx.o
  .debug_pubnames
-                0x0000152f       0x44 ./src/timer.o
+                0x0000158b       0x44 ./src/timer.o
  .debug_pubnames
-                0x00001573       0x20 ./src/uart.o
+                0x000015cf       0x20 ./src/uart.o
  .debug_pubnames
-                0x00001593       0x50 ./src/vcf.o
+                0x000015ef       0x50 ./src/vcf.o
  .debug_pubnames
-                0x000015e3       0x89 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+                0x0000163f       0x89 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
  .debug_pubnames
-                0x0000166c      0x446 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x000016c8      0x446 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
  .debug_pubnames
-                0x00001ab2      0x12d /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x00001b0e      0x12d /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
  .debug_pubnames
-                0x00001bdf      0x417 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x00001c3b      0x417 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
  .debug_pubnames
-                0x00001ff6       0xac /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+                0x00002052       0xac /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
  .debug_pubnames
-                0x000020a2      0x221 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x000020fe      0x221 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
  .debug_pubnames
-                0x000022c3      0x7c4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x0000231f      0x7c4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
  .debug_pubnames
-                0x00002a87      0x294 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x00002ae3      0x294 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .debug_pubnames
-                0x00002d1b       0xb0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+                0x00002d77       0xb0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
  .debug_pubnames
-                0x00002dcb       0x27 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+                0x00002e27       0x27 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
  .debug_pubnames
-                0x00002df2       0x22 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+                0x00002e4e       0x22 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
 .debug_pubtypes
-                0x00000000     0x12ea
+                0x00000000     0x12ee
  .debug_pubtypes
                 0x00000000      0x116 ./src/CS4344.o
  .debug_pubtypes
@@ -2231,73 +2267,73 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_pubtypes
                 0x000001ec       0x36 ./src/line.o
  .debug_pubtypes
-                0x00000222       0x96 ./src/main.o
+                0x00000222       0xa8 ./src/main.o
  .debug_pubtypes
-                0x000002b8       0x38 ./src/midi.o
+                0x000002ca       0x2a ./src/midi.o
  .debug_pubtypes
-                0x000002f0       0x72 ./src/mode_analog_style.o
+                0x000002f4       0x72 ./src/mode_analog_style.o
  .debug_pubtypes
-                0x00000362       0x85 ./src/mode_drum.o
+                0x00000366       0x85 ./src/mode_drum.o
  .debug_pubtypes
-                0x000003e7       0x69 ./src/mode_drum_synth.o
+                0x000003eb       0x69 ./src/mode_drum_synth.o
  .debug_pubtypes
-                0x00000450       0x69 ./src/mode_filter_envelope.o
+                0x00000454       0x69 ./src/mode_filter_envelope.o
  .debug_pubtypes
-                0x000004b9       0x72 ./src/mode_filter_man.o
+                0x000004bd       0x72 ./src/mode_filter_man.o
  .debug_pubtypes
-                0x0000052b       0x5a ./src/mode_mono_glider.o
+                0x0000052f       0x5a ./src/mode_mono_glider.o
  .debug_pubtypes
-                0x00000585       0x62 ./src/mode_nazareth.o
+                0x00000589       0x62 ./src/mode_nazareth.o
  .debug_pubtypes
-                0x000005e7       0x69 ./src/mode_octave_mirror.o
+                0x000005eb       0x69 ./src/mode_octave_mirror.o
  .debug_pubtypes
-                0x00000650       0x6a ./src/mode_simple_fm.o
+                0x00000654       0x6a ./src/mode_simple_fm.o
  .debug_pubtypes
-                0x000006ba       0x84 ./src/mode_simple_sin.o
+                0x000006be       0x84 ./src/mode_simple_sin.o
  .debug_pubtypes
-                0x0000073e       0x84 ./src/mode_wave_adder.o
+                0x00000742       0x84 ./src/mode_wave_adder.o
  .debug_pubtypes
-                0x000007c2       0xb0 ./src/oscillator.o
+                0x000007c6       0xb0 ./src/oscillator.o
  .debug_pubtypes
-                0x00000872      0x131 ./src/pp6.o
+                0x00000876      0x131 ./src/pp6.o
  .debug_pubtypes
-                0x000009a3       0x34 ./src/sad.o
+                0x000009a7       0x34 ./src/sad.o
  .debug_pubtypes
-                0x000009d7       0x36 ./src/sadsr.o
+                0x000009db       0x36 ./src/sadsr.o
  .debug_pubtypes
-                0x00000a0d       0x39 ./src/sequencer.o
+                0x00000a11       0x39 ./src/sequencer.o
  .debug_pubtypes
-                0x00000a46       0x83 ./src/system_stm32f4xx.o
+                0x00000a4a       0x83 ./src/system_stm32f4xx.o
  .debug_pubtypes
-                0x00000ac9       0x70 ./src/timer.o
+                0x00000acd       0x70 ./src/timer.o
  .debug_pubtypes
-                0x00000b39       0xe8 ./src/uart.o
+                0x00000b3d       0xe8 ./src/uart.o
  .debug_pubtypes
-                0x00000c21       0x2f ./src/vcf.o
+                0x00000c25       0x2f ./src/vcf.o
  .debug_pubtypes
-                0x00000c50       0x8c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+                0x00000c54       0x8c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
  .debug_pubtypes
-                0x00000cdc       0xc9 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x00000ce0       0xc9 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
  .debug_pubtypes
-                0x00000da5       0xce /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x00000da9       0xce /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
  .debug_pubtypes
-                0x00000e73       0xaa /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x00000e77       0xaa /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
  .debug_pubtypes
-                0x00000f1d       0x77 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+                0x00000f21       0x77 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
  .debug_pubtypes
-                0x00000f94       0xbc /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x00000f98       0xbc /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
  .debug_pubtypes
-                0x00001050       0xe4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x00001054       0xe4 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
  .debug_pubtypes
-                0x00001134       0xcd /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x00001138       0xcd /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .debug_pubtypes
-                0x00001201       0x57 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+                0x00001205       0x57 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
  .debug_pubtypes
-                0x00001258       0x59 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+                0x0000125c       0x59 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
  .debug_pubtypes
-                0x000012b1       0x39 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+                0x000012b5       0x39 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_aranges  0x00000000     0x11f8
+.debug_aranges  0x00000000     0x1210
  .debug_aranges
                 0x00000000       0x28 ./src/CS4344.o
  .debug_aranges
@@ -2345,39 +2381,39 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_aranges
                 0x00000710       0x48 ./src/sadsr.o
  .debug_aranges
-                0x00000758       0xa0 ./src/sequencer.o
+                0x00000758       0xb8 ./src/sequencer.o
  .debug_aranges
-                0x000007f8       0x30 ./src/system_stm32f4xx.o
+                0x00000810       0x30 ./src/system_stm32f4xx.o
  .debug_aranges
-                0x00000828       0x30 ./src/timer.o
+                0x00000840       0x30 ./src/timer.o
  .debug_aranges
-                0x00000858       0x20 ./src/uart.o
+                0x00000870       0x20 ./src/uart.o
  .debug_aranges
-                0x00000878       0x30 ./src/vcf.o
+                0x00000890       0x30 ./src/vcf.o
  .debug_aranges
-                0x000008a8       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+                0x000008c0       0x40 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
  .debug_aranges
-                0x000008e8      0x148 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+                0x00000900      0x148 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
  .debug_aranges
-                0x00000a30       0x88 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+                0x00000a48       0x88 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
  .debug_aranges
-                0x00000ab8      0x178 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+                0x00000ad0      0x178 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
  .debug_aranges
-                0x00000c30       0x58 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+                0x00000c48       0x58 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
  .debug_aranges
-                0x00000c88       0xe0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+                0x00000ca0       0xe0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
  .debug_aranges
-                0x00000d68      0x2f8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+                0x00000d80      0x2f8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
  .debug_aranges
-                0x00001060      0x100 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+                0x00001078      0x100 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
  .debug_aranges
-                0x00001160       0x58 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+                0x00001178       0x58 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
  .debug_aranges
-                0x000011b8       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+                0x000011d0       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
  .debug_aranges
-                0x000011d8       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+                0x000011f0       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_ranges   0x00000000     0x10e0
+.debug_ranges   0x00000000     0x10f8
  .debug_ranges  0x00000000       0x18 ./src/CS4344.o
  .debug_ranges  0x00000018       0x18 ./src/audio.o
  .debug_ranges  0x00000030       0x18 ./src/comb.o
@@ -2401,24 +2437,24 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_ranges  0x00000450      0x138 ./src/pp6.o
  .debug_ranges  0x00000588       0x28 ./src/sad.o
  .debug_ranges  0x000005b0       0x38 ./src/sadsr.o
- .debug_ranges  0x000005e8       0x90 ./src/sequencer.o
- .debug_ranges  0x00000678       0x20 ./src/system_stm32f4xx.o
- .debug_ranges  0x00000698       0x20 ./src/timer.o
- .debug_ranges  0x000006b8       0x10 ./src/uart.o
- .debug_ranges  0x000006c8       0x20 ./src/vcf.o
- .debug_ranges  0x000006e8       0x30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_ranges  0x00000718      0x138 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_ranges  0x00000850       0x78 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_ranges  0x000008c8      0x168 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_ranges  0x00000a30       0x48 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_ranges  0x00000a78       0xd0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_ranges  0x00000b48      0x2e8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_ranges  0x00000e30       0xf0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_ranges  0x00000f20       0x48 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_ranges  0x00000f68      0x168 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_ranges  0x000010d0       0x10 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_ranges  0x000005e8       0xa8 ./src/sequencer.o
+ .debug_ranges  0x00000690       0x20 ./src/system_stm32f4xx.o
+ .debug_ranges  0x000006b0       0x20 ./src/timer.o
+ .debug_ranges  0x000006d0       0x10 ./src/uart.o
+ .debug_ranges  0x000006e0       0x20 ./src/vcf.o
+ .debug_ranges  0x00000700       0x30 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_ranges  0x00000730      0x138 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_ranges  0x00000868       0x78 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_ranges  0x000008e0      0x168 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_ranges  0x00000a48       0x48 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_ranges  0x00000a90       0xd0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_ranges  0x00000b60      0x2e8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_ranges  0x00000e48       0xf0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_ranges  0x00000f38       0x48 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_ranges  0x00000f80      0x168 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_ranges  0x000010e8       0x10 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
 
-.debug_str      0x00000000     0x441b
+.debug_str      0x00000000     0x4467
  .debug_str     0x00000000      0x93d ./src/CS4344.o
                                 0x97a (size before relaxing)
  .debug_str     0x0000093d       0x54 ./src/audio.o
@@ -2431,71 +2467,71 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
                                 0x150 (size before relaxing)
  .debug_str     0x00000c46       0x6c ./src/line.o
                                 0x13f (size before relaxing)
- .debug_str     0x00000cb2      0x165 ./src/main.o
-                                0x3c5 (size before relaxing)
- .debug_str     0x00000e17      0x265 ./src/midi.o
-                                0x3ed (size before relaxing)
- .debug_str     0x0000107c      0x136 ./src/mode_analog_style.o
+ .debug_str     0x00000cb2      0x186 ./src/main.o
+                                0x432 (size before relaxing)
+ .debug_str     0x00000e38      0x25d ./src/midi.o
+                                0x3db (size before relaxing)
+ .debug_str     0x00001095      0x136 ./src/mode_analog_style.o
                                 0x282 (size before relaxing)
- .debug_str     0x000011b2       0xde ./src/mode_drum.o
+ .debug_str     0x000011cb       0xde ./src/mode_drum.o
                                 0x2bf (size before relaxing)
- .debug_str     0x00001290       0x6d ./src/mode_drum_synth.o
+ .debug_str     0x000012a9       0x6d ./src/mode_drum_synth.o
                                 0x207 (size before relaxing)
- .debug_str     0x000012fd       0x8e ./src/mode_filter_envelope.o
+ .debug_str     0x00001316       0x8e ./src/mode_filter_envelope.o
                                 0x22e (size before relaxing)
- .debug_str     0x0000138b       0x6d ./src/mode_filter_man.o
+ .debug_str     0x000013a4       0x6d ./src/mode_filter_man.o
                                 0x27a (size before relaxing)
- .debug_str     0x000013f8       0x86 ./src/mode_mono_glider.o
+ .debug_str     0x00001411       0x86 ./src/mode_mono_glider.o
                                 0x1e4 (size before relaxing)
- .debug_str     0x0000147e       0x83 ./src/mode_nazareth.o
+ .debug_str     0x00001497       0x83 ./src/mode_nazareth.o
                                 0x207 (size before relaxing)
- .debug_str     0x00001501       0x79 ./src/mode_octave_mirror.o
+ .debug_str     0x0000151a       0x79 ./src/mode_octave_mirror.o
                                 0x246 (size before relaxing)
- .debug_str     0x0000157a       0xf1 ./src/mode_simple_fm.o
-                                0x281 (size before relaxing)
- .debug_str     0x0000166b       0x87 ./src/mode_simple_sin.o
+ .debug_str     0x00001593       0xf1 ./src/mode_simple_fm.o
+                                0x282 (size before relaxing)
+ .debug_str     0x00001684       0x87 ./src/mode_simple_sin.o
                                 0x268 (size before relaxing)
- .debug_str     0x000016f2       0x6d ./src/mode_wave_adder.o
+ .debug_str     0x0000170b       0x6d ./src/mode_wave_adder.o
                                 0x268 (size before relaxing)
- .debug_str     0x0000175f      0x1cb ./src/oscillator.o
+ .debug_str     0x00001778      0x1cb ./src/oscillator.o
                                 0x3b1 (size before relaxing)
- .debug_str     0x0000192a      0x47d ./src/pp6.o
+ .debug_str     0x00001943      0x47d ./src/pp6.o
                                 0x7ee (size before relaxing)
- .debug_str     0x00001da7       0x48 ./src/sad.o
+ .debug_str     0x00001dc0       0x48 ./src/sad.o
                                 0x13f (size before relaxing)
- .debug_str     0x00001def       0x63 ./src/sadsr.o
+ .debug_str     0x00001e08       0x63 ./src/sadsr.o
                                 0x186 (size before relaxing)
- .debug_str     0x00001e52      0x21c ./src/sequencer.o
-                                0x2fa (size before relaxing)
- .debug_str     0x0000206e      0x164 ./src/system_stm32f4xx.o
+ .debug_str     0x00001e6b      0x262 ./src/sequencer.o
+                                0x340 (size before relaxing)
+ .debug_str     0x000020cd      0x164 ./src/system_stm32f4xx.o
                                 0x2fe (size before relaxing)
- .debug_str     0x000021d2      0x13a ./src/timer.o
+ .debug_str     0x00002231      0x13a ./src/timer.o
                                 0x285 (size before relaxing)
- .debug_str     0x0000230c       0xb2 ./src/uart.o
+ .debug_str     0x0000236b       0x9f ./src/uart.o
                                 0x381 (size before relaxing)
- .debug_str     0x000023be       0x49 ./src/vcf.o
+ .debug_str     0x0000240a       0x49 ./src/vcf.o
                                 0x138 (size before relaxing)
- .debug_str     0x00002407      0x171 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_str     0x00002453      0x171 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
                                 0x339 (size before relaxing)
- .debug_str     0x00002578      0x4d6 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_str     0x000025c4      0x4d6 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
                                 0x764 (size before relaxing)
- .debug_str     0x00002a4e      0x171 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_str     0x00002a9a      0x171 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
                                 0x403 (size before relaxing)
- .debug_str     0x00002bbf      0x537 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_str     0x00002c0b      0x537 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
                                 0x7b0 (size before relaxing)
- .debug_str     0x000030f6       0xad /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_str     0x00003142       0xad /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
                                 0x1e4 (size before relaxing)
- .debug_str     0x000031a3      0x2e6 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_str     0x000031ef      0x2e6 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
                                 0x5ea (size before relaxing)
- .debug_str     0x00003489      0xa54 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_str     0x000034d5      0xa54 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
                                 0xd30 (size before relaxing)
- .debug_str     0x00003edd      0x378 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_str     0x00003f29      0x378 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
                                 0x5ef (size before relaxing)
- .debug_str     0x00004255       0xb2 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_str     0x000042a1       0xb2 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
                                 0x1e2 (size before relaxing)
- .debug_str     0x00004307       0xb0 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_str     0x00004353       0xb0 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
                                 0x164 (size before relaxing)
- .debug_str     0x000043b7       0x64 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_str     0x00004403       0x64 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
                                 0x14e (size before relaxing)
 
 .comment        0x00000000       0x2a
@@ -2647,7 +2683,7 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .ARM.attributes
                 0x000009e9       0x21 /usr/local/redsuite_4.2.3_255/redsuite/tools/bin/../lib/gcc/arm-none-eabi/4.5.1/thumb2/libcr_eabihelpers.a(memcpy.o)
 
-.debug_frame    0x00000000     0x34b0
+.debug_frame    0x00000000     0x34f8
  .debug_frame   0x00000000       0x50 ./src/CS4344.o
  .debug_frame   0x00000050       0x48 ./src/audio.o
  .debug_frame   0x00000098       0x48 ./src/comb.o
@@ -2664,26 +2700,26 @@ OUTPUT(BolsaBass.axf elf32-littlearm)
  .debug_frame   0x000009cc       0x6c ./src/mode_mono_glider.o
  .debug_frame   0x00000a38       0x6c ./src/mode_nazareth.o
  .debug_frame   0x00000aa4       0x70 ./src/mode_octave_mirror.o
- .debug_frame   0x00000b14       0x74 ./src/mode_simple_fm.o
- .debug_frame   0x00000b88       0x68 ./src/mode_simple_sin.o
- .debug_frame   0x00000bf0       0x68 ./src/mode_wave_adder.o
- .debug_frame   0x00000c58      0x24c ./src/oscillator.o
- .debug_frame   0x00000ea4      0x3f4 ./src/pp6.o
- .debug_frame   0x00001298       0x80 ./src/sad.o
- .debug_frame   0x00001318       0xb8 ./src/sadsr.o
- .debug_frame   0x000013d0      0x1c8 ./src/sequencer.o
- .debug_frame   0x00001598       0x64 ./src/system_stm32f4xx.o
- .debug_frame   0x000015fc       0x68 ./src/timer.o
- .debug_frame   0x00001664       0x30 ./src/uart.o
- .debug_frame   0x00001694       0x64 ./src/vcf.o
- .debug_frame   0x000016f8       0x9c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
- .debug_frame   0x00001794      0x434 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
- .debug_frame   0x00001bc8      0x19c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
- .debug_frame   0x00001d64      0x4d8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
- .debug_frame   0x0000223c       0xec /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
- .debug_frame   0x00002328      0x2d0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
- .debug_frame   0x000025f8      0xa3c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
- .debug_frame   0x00003034      0x344 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
- .debug_frame   0x00003378       0xe8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
- .debug_frame   0x00003460       0x30 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
- .debug_frame   0x00003490       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)
+ .debug_frame   0x00000b14       0x70 ./src/mode_simple_fm.o
+ .debug_frame   0x00000b84       0x68 ./src/mode_simple_sin.o
+ .debug_frame   0x00000bec       0x68 ./src/mode_wave_adder.o
+ .debug_frame   0x00000c54      0x24c ./src/oscillator.o
+ .debug_frame   0x00000ea0      0x3f4 ./src/pp6.o
+ .debug_frame   0x00001294       0x80 ./src/sad.o
+ .debug_frame   0x00001314       0xb8 ./src/sadsr.o
+ .debug_frame   0x000013cc      0x214 ./src/sequencer.o
+ .debug_frame   0x000015e0       0x64 ./src/system_stm32f4xx.o
+ .debug_frame   0x00001644       0x68 ./src/timer.o
+ .debug_frame   0x000016ac       0x30 ./src/uart.o
+ .debug_frame   0x000016dc       0x64 ./src/vcf.o
+ .debug_frame   0x00001740       0x9c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(misc.o)
+ .debug_frame   0x000017dc      0x434 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_adc.o)
+ .debug_frame   0x00001c10      0x19c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_gpio.o)
+ .debug_frame   0x00001dac      0x4d8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rcc.o)
+ .debug_frame   0x00002284       0xec /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_rng.o)
+ .debug_frame   0x00002370      0x2d0 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_spi.o)
+ .debug_frame   0x00002640      0xa3c /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_tim.o)
+ .debug_frame   0x0000307c      0x344 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_usart.o)
+ .debug_frame   0x000033c0       0xe8 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/Debug/libStdPeriphLib_v100_STM32F4xx.a(stm32f4xx_wwdg.o)
+ .debug_frame   0x000034a8       0x30 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_float_to_q15.o)
+ .debug_frame   0x000034d8       0x20 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/lib/libCMSISv2p10_DSPLIB_CM4.a(arm_sin_f32.o)

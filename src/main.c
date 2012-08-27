@@ -52,11 +52,13 @@ extern pocket_piano pp6;
 
 
 void Delay(__IO uint32_t nCount);
-
-
-// led flashing
-uint32_t led_counter = 0;
 static void flash_led_record_enable(void);
+
+
+
+// led stuff
+uint32_t led_counter = 0;  // for the above flash function
+uint8_t aux_led_color = BLACK;
 
 // MIDI buffer
 volatile uint8_t  uart_recv_buf[32];
@@ -161,7 +163,7 @@ int main(void)
 
 		// check for new midi
 	    // buffer midi reception
-	   /* if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
+	    if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
 	    	uart_recv_buf[uart_recv_buf_write] = USART_ReceiveData(USART1);
 	        uart_recv_buf_write++;
 	        uart_recv_buf_write &= 0x1f;  // 32 bytes
@@ -173,7 +175,7 @@ int main(void)
             uart_recv_buf_read++;
             uart_recv_buf_read &= 0x1f;
             recvByte(tmp8);
-        }*/
+        }
 
 		/*
 		 * Control Rate
@@ -273,11 +275,13 @@ int main(void)
 				if (pp6_get_note_stop()) {
 					seq_log_note_stop(pp6_get_note());
 				}
+
 				// stop recording
-				if (pp6_aux_button_pressed()) {
+				if (pp6_aux_button_pressed() || seq_get_auto_stop() ) {
 					seq_stop_recording();
 					seq_set_status(SEQ_PLAYING);
 					aux_button_depress_time = 0;
+					seq_clear_auto_stop();
 				}
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
@@ -289,11 +293,14 @@ int main(void)
 
 				if (seq_knob_playback_enabled()) {
 					pp6_set_knob_array(seq_play_knobs());
+					aux_led_color = CYAN;
+				} else {
+					aux_led_color = GREEN;
 				}
 
 				// flash white on rollover
 				if (seq_get_time() < 75) pp6_set_aux_led(7);
-				else pp6_set_aux_led(GREEN);
+				else pp6_set_aux_led(aux_led_color);
 
 				// aux button gets pressed and held
 				if ( (!((k>>16) & 1)) ) {

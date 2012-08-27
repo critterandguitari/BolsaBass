@@ -25,8 +25,9 @@ uint32_t seq_last_note_start = 0;
 uint32_t seq_last_note_start_index = 0;
 uint8_t seq_status = SEQ_STOPPED;
 uint8_t seq_playback_knobs_enabled = 1;
+uint8_t seq_auto_stop = 0;
 
-float32_t knob_log [4096][3];
+float32_t knob_log [4096][3];   // 4096 logs of the pot at SR / 32 / 16
 
 
 uint8_t seq_ready_for_recording(void){
@@ -120,7 +121,6 @@ uint32_t seq_get_length(void) {
 }
 
 
-/// todo :  these should only be called every 16 ticks  (don't store multiples as you are doing below)
 void seq_log_knobs(float32_t * knob){
 	uint32_t knob_log_time;
 
@@ -129,6 +129,8 @@ void seq_log_knobs(float32_t * knob){
 	knob_log[knob_log_time][0] = knob[0];
 	knob_log[knob_log_time][1] = knob[1];
 	knob_log[knob_log_time][2] = knob[2];
+
+	if (knob_log_time == 0xFFF) seq_set_auto_stop();    // auto stop after 4096 logs
 }
 
 float32_t * seq_play_knobs(void) {
@@ -150,3 +152,16 @@ void seq_disable_knob_playback(void){
 void seq_enable_knob_playback(void){
 	seq_playback_knobs_enabled = 1;
 }
+
+void seq_set_auto_stop(void){
+	seq_auto_stop = 1;
+}
+
+uint8_t seq_get_auto_stop(void){
+	return seq_auto_stop;
+}
+
+void seq_clear_auto_stop(void) {
+	seq_auto_stop = 0;
+}
+

@@ -388,13 +388,11 @@ unsigned int getParam(unsigned int param)
 
 //  MIDI Callbacks
 void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
-	pp6_set_mode_led(1);
 	if (pp6_get_note() == (note - 48))
 		pp6_set_note_stop();
 }
 
 void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
-	 pp6_set_mode_led(2);
 	 pp6_set_note(note - 48);
 	 pp6_set_note_start();
 }
@@ -410,10 +408,10 @@ void handleStart(void) {
 
 void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) {}
 
-float32_t midi_cc[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+//float32_t midi_cc[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) {
-	midi_cc[(controller - 10) & 0x7] = (float32_t)value / 127.f;
+	//midi_cc[(controller - 10) & 0x7] = (float32_t)value / 127.f;
 
 }
 

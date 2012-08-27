@@ -15,7 +15,7 @@
 
 extern float miditof[];
 
-static float32_t sig, f;
+static float32_t sig, f, target_f;
 
 static uint32_t new_note;
 
@@ -30,6 +30,7 @@ static FM_oscillator fm, fm2;
 
 
 
+
 void mode_simple_fm_init(void){
 	amp = 0;
 	sadsr_init(&amp_env);
@@ -40,6 +41,8 @@ float32_t mode_simple_fm_sample_process (void) {
 
 	uint32_t t, t1, t2;
 	float32_t a, b, c;
+
+	f = c_to_f(line_process(&framp)) * (pp6_get_knob_3() +  1.f);
 
 
 	//sig = simple_FM(f, 1.f + (.05f * pp6_get_knob_1()),  pp6_get_knob_2() * 1.5f);
@@ -63,11 +66,12 @@ float32_t mode_simple_fm_sample_process (void) {
 void mode_simple_fm_control_process (void) {
 	static uint32_t note_dur = 0;
 
-	f = miditof[pp6_get_note()] * ((pp6_get_knob_3()) + 1.f);
+	//f = miditof[pp6_get_note()] * ((pp6_get_knob_3()) + 1.f);
 
 	if (pp6_get_note_start() ){
-	//	line_set(&framp, f * 2.f );
-//		line_go(&framp, f, 10.f);
+
+		target_f = (float32_t)pp6_get_note() * 100.f;
+		line_go(&framp, target_f, 20.f);
 
 		sadsr_set(&amp_env, .01f, .1f, 1.f, .6f);
 		sadsr_go(&amp_env);
