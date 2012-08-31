@@ -1,9 +1,9 @@
 /*
  * GENERATED FILE - DO NOT EDIT
  * (C) Code Red Technologies Ltd, 2008-2012
- * Generated linker script file for STM32F407VG
+ * Generated linker script file for STM32F407VE
  * Created from generic_c.ld (vRed Suite v4.2 (3 [Build 255] [30/05/2012] ))
- * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Fri Aug 24 12:57:19 EDT 2012
+ * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Thu Aug 30 12:16:16 EDT 2012
  */
 
 
@@ -14,6 +14,13 @@ ENTRY(ResetISR)
 
 SECTIONS
 {
+	
+	.text_Flash2 : ALIGN(4)
+	{
+	   FILL(0xff)
+		*(.text_Flash2*)
+		*(.text_MFlash1024*)
+	} > MFlash1024
 
 	/* MAIN TEXT SECTION */	
 	.text : ALIGN(4)
@@ -34,6 +41,9 @@ SECTIONS
 		LONG(LOADADDR(.data_RAM3));
 		LONG(    ADDR(.data_RAM3)) ;
 		LONG(  SIZEOF(.data_RAM3));
+		LONG(LOADADDR(.data_RAM4));
+		LONG(    ADDR(.data_RAM4)) ;
+		LONG(  SIZEOF(.data_RAM4));
 		__data_section_table_end = .;
 		__bss_section_table = .;
 		LONG(    ADDR(.bss));
@@ -42,6 +52,8 @@ SECTIONS
 		LONG(  SIZEOF(.bss_RAM2));
 		LONG(    ADDR(.bss_RAM3));
 		LONG(  SIZEOF(.bss_RAM3));
+		LONG(    ADDR(.bss_RAM4));
+		LONG(  SIZEOF(.bss_RAM4));
 		__bss_section_table_end = .;
 		__section_table_end = . ;
 		/* End of Global Section Table */
@@ -53,7 +65,7 @@ SECTIONS
 		*(.rodata .rodata.*)
 		. = ALIGN(4);
 		
-	} > MFlash1024
+	} > MFlash512
 
 	/*
 	 * for exception handling/unwind - some Newlib functions (in common
@@ -62,13 +74,13 @@ SECTIONS
 	.ARM.extab : ALIGN(4)
 	{
 		*(.ARM.extab* .gnu.linkonce.armextab.*)
-	} > MFlash1024
+	} > MFlash512
 	__exidx_start = .;
 	
 	.ARM.exidx : ALIGN(4)
 	{
 		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
-	} > MFlash1024
+	} > MFlash512
 	__exidx_end = .;
 	
 	_etext = .;
@@ -80,7 +92,7 @@ SECTIONS
 		*(.data.$RAM2*)
 		*(.data.$PeriphRam16*)
 	   . = ALIGN(4) ;
-	} > PeriphRam16 AT>MFlash1024
+	} > PeriphRam16 AT>MFlash512
 	
 	.data_RAM3 : ALIGN(4)
 	{
@@ -88,7 +100,15 @@ SECTIONS
 		*(.data.$RAM3*)
 		*(.data.$Ram64*)
 	   . = ALIGN(4) ;
-	} > Ram64 AT>MFlash1024
+	} > Ram64 AT>MFlash512
+	
+	.data_RAM4 : ALIGN(4)
+	{
+	   FILL(0xff)
+		*(.data.$RAM4*)
+		*(.data.$Ram128*)
+	   . = ALIGN(4) ;
+	} > Ram128 AT>MFlash512
 	
 	/* MAIN DATA SECTION */
 
@@ -105,7 +125,7 @@ SECTIONS
 		*(.data*)
 		. = ALIGN(4) ;
 		_edata = .;
-	} > Ram112 AT>MFlash1024
+	} > Ram112 AT>MFlash512
 
 	
 	.bss_RAM2 : ALIGN(4)
@@ -121,6 +141,13 @@ SECTIONS
 		*(.bss.$Ram64*)
 	   . = ALIGN(4) ;
 	} > Ram64
+	
+	.bss_RAM4 : ALIGN(4)
+	{
+		*(.bss.$RAM4*)
+		*(.bss.$Ram128*)
+	   . = ALIGN(4) ;
+	} > Ram128
 
 	/* MAIN BSS SECTION */
 	.bss : ALIGN(4)

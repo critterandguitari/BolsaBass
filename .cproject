@@ -2001,8 +2001,8 @@
 	<storageModule moduleId="com.crt.config">
 		<projectStorage>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;TargetConfig&gt;
-&lt;Properties property_0="" property_1="" property_3="STM" property_4="STM32F407VG" property_count="5" version="1"/&gt;
-&lt;infoList vendor="STM"&gt;&lt;info chip="STM32F407VG" match_id="0x0" name="STM32F407VG" stub="crt_emu_cm3_stm32f2"&gt;&lt;chip&gt;&lt;name&gt;STM32F407VG&lt;/name&gt;
+&lt;Properties property_0="" property_3="STM" property_4="STM32F407VE" property_count="5" version="1"/&gt;
+&lt;infoList vendor="STM"&gt;&lt;info chip="STM32F407VE" match_id="0x0" name="STM32F407VE" stub="crt_emu_cm3_stm32f2"&gt;&lt;chip&gt;&lt;name&gt;STM32F407VE&lt;/name&gt;
 &lt;family&gt;STM32F4xx&lt;/family&gt;
 &lt;vendor&gt;STM (ST Microelectronics)&lt;/vendor&gt;
 &lt;reset board="None" core="Real" sys="Real"/&gt;
@@ -2010,13 +2010,15 @@
 &lt;memory can_program="true" id="Flash" is_ro="true" type="Flash"/&gt;
 &lt;memory id="RAM" type="RAM"/&gt;
 &lt;memory id="Periph" is_volatile="true" type="Peripheral"/&gt;
-&lt;memoryInstance derived_from="Flash" id="MFlash1024" location="0x8000000" size="0x100000"/&gt;
+&lt;memoryInstance derived_from="Flash" id="MFlash512" location="0x8000000" size="0x80000"/&gt;
 &lt;memoryInstance derived_from="RAM" id="Ram112" location="0x20000000" size="0x1c000"/&gt;
 &lt;memoryInstance derived_from="RAM" id="PeriphRam16" location="0x2001c000" size="0x4000"/&gt;
 &lt;memoryInstance derived_from="RAM" id="Ram64" location="0x10000000" size="0x10000"/&gt;
+&lt;memoryInstance derived_from="Flash" id="MFlash1024" location="0x8000000" size="0x100000"/&gt;
+&lt;memoryInstance derived_from="RAM" id="Ram128" location="0x20000000" size="0x20000"/&gt;
 &lt;prog_flash blocksz="0x4000" location="0x8000000" size="0x10000"/&gt;
 &lt;prog_flash blocksz="0x10000" location="0x8010000" size="0x10000"/&gt;
-&lt;prog_flash blocksz="0x20000" location="0x8020000" size="0xe0000"/&gt;
+&lt;prog_flash blocksz="0x20000" location="0x8020000" size="0x60000"/&gt;
 &lt;peripheralInstance derived_from="V7M_MPU" id="MPU" location="0xe000ed90"/&gt;
 &lt;peripheralInstance derived_from="V7M_DCR" id="DCR" location="0xe000edf0"/&gt;
 &lt;peripheralInstance derived_from="V7M_ITM" id="ITM" location="0xe0000000"/&gt;

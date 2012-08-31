@@ -41,6 +41,7 @@ void pp6_init(void) {
 	pp6.knob_touched[0] = 0;
 	pp6.knob_touched[1] = 0;
 	pp6.knob_touched[2] = 0;
+	pp6.physical_notes_on = 0;
 }
 
 float32_t pp6_get_knob_1(void){
@@ -185,6 +186,17 @@ void pp6_clear_flags(void){
 
 uint8_t pp6_get_num_keys_down(void){
 	return pp6.num_keys_down;
+}
+
+void pp6_inc_physical_notes_on(void){
+	pp6.physical_notes_on++;
+}
+void pp6_dec_physical_notes_on(void){
+	if (pp6.physical_notes_on) pp6.physical_notes_on--;   // check it is positive in case it turns on while a key is pressed or during midi note
+}
+
+uint8_t pp6_get_physical_notes_on(void){
+	return pp6.physical_notes_on;
 }
 
 /**

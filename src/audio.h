@@ -11,6 +11,9 @@
 //#define BASE_FREQ 32.70f   // C1
 #define BASE_FREQ 65.40f   // C1
 
+//#define BASE_FREQ 220.f   // A
+
+
 #define SR 22520.0f
 #define NYQUIST 11260.0f
 //#define SR 11025.0f

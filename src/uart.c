@@ -40,3 +40,8 @@ void uart_init(void){
 	/* Enable USART */
 	USART_Cmd (USART1, ENABLE);
 }
+
+void put_char (uint8_t data) {
+	while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
+	USART_SendData (USART1, data);
+}

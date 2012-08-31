@@ -96,7 +96,7 @@ void mode_wave_adder_control_process (void) {
 
 		//line_set(&framp, f * pp6_get_knob_2()  * 10.f );
 		line_set(&framp, cents + (pp6_get_knob_2()  * 2400.f));   // 2400 cents sharp
-		line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 500.f);
+		line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 1500.f);
 		sadsr_set(&amp_env, .01f, .2f, 1.54f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;

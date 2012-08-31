@@ -8,6 +8,7 @@
 #include "stm32f4xx.h"
 #include "pp6.h"
 #include "midi.h"
+#include "uart.h"
 
 
 void recvByte(int byte) {
@@ -388,12 +389,12 @@ unsigned int getParam(unsigned int param)
 
 //  MIDI Callbacks
 void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
-	if (pp6_get_note() == (note - 48))
+	if (pp6_get_note() == (note - 36))
 		pp6_set_note_stop();
 }
 
 void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
-	 pp6_set_note(note - 48);
+	 pp6_set_note(note - 36);
 	 pp6_set_note_start();
 }
 

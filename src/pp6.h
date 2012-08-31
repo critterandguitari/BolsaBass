@@ -54,6 +54,7 @@ typedef struct {
 	uint8_t num_keys_down;
 	uint8_t mode_led;
 	uint8_t aux_led;
+	uint8_t physical_notes_on;
 } pocket_piano;
 
 void pp6_init(void);
@@ -109,5 +110,8 @@ void pp6_set_aux_button_released(void);
 uint8_t pp6_aux_button_pressed(void);
 uint8_t pp6_aux_button_released(void);
 
+void pp6_inc_physical_notes_on(void);
+void pp6_dec_physical_notes_on(void);
+uint8_t pp6_get_physical_notes_on(void);
 
 #endif /* PP6_H_ */

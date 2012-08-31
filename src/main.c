@@ -124,15 +124,16 @@ int main(void)
 	timer_init();
 
 	// echo
-/*	for (;;){
+	uint8_t ch;
+	/*while (1){
 
 		while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET); // Wait for Character
 
 		ch = USART_ReceiveData(USART1);
-		BANK_LED_RED_ON;
+		AUX_LED_RED_ON;
 		while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
 		USART_SendData (USART1, ch);
-		BANK_LED_RED_OFF;
+		AUX_LED_RED_OFF;
 
 	}*/
 
@@ -202,12 +203,16 @@ int main(void)
 				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
 					pp6_set_note(i);
 					pp6_set_note_start();
+					pp6_inc_physical_notes_on();
+					//sendNoteOn(1, i + 36, 127);
 				}
 				if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
 					// release it if playing
 					if (i == pp6_get_note()){
 						pp6_set_note_stop();
 					}
+					//sendNoteOff(1, i + 36, 0);
+					pp6_dec_physical_notes_on();
 				}
 			}
 			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){

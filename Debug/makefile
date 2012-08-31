@@ -41,7 +41,7 @@ clean:
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "BolsaBass.axf";  arm-none-eabi-objcopy -O binary "BolsaBass.axf" "BolsaBass.bin" ; checksum -p STM32F407VG -d "BolsaBass.bin";
+	-arm-none-eabi-size "BolsaBass.axf";  arm-none-eabi-objcopy -O binary "BolsaBass.axf" "BolsaBass.bin" ; checksum -p STM32F407VE -d "BolsaBass.bin";
 	-@echo ' '
 
 .PHONY: all clean dependents

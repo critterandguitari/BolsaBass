@@ -93,11 +93,16 @@ void seq_play_tick (void){
 
 	if (seq_time >= seq_deltas[seq_index]){
 		if (seq_events[seq_index] == SEQ_NOTE_START){
-			pp6_set_note(seq_notes[seq_index]);
-			pp6_set_note_start();
+			// a physical note down will mute sequence
+			if (!pp6_get_physical_notes_on()){
+				pp6_set_note(seq_notes[seq_index]);
+				pp6_set_note_start();
+			}
 		}
 		if (seq_events[seq_index] == SEQ_NOTE_STOP){
-			pp6_set_note_stop();
+			if (!pp6_get_physical_notes_on()){
+				pp6_set_note_stop();
+			}
 		}
 		seq_index++;
 		if (seq_index > seq_length){
