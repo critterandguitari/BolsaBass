@@ -11,12 +11,12 @@
 #include "arm_math.h"
 
 #define MODE_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_9, 0)
-//#define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)
-#define MODE_LED_RED_ON GPIO_WriteBit(GPIOC, GPIO_Pin_3, 0)   // Only for Rev A of circuit board
+#define MODE_LED_RED_ON GPIO_WriteBit(GPIOE, GPIO_Pin_0, 0)
+//#define MODE_LED_RED_ON GPIO_WriteBit(GPIOC, GPIO_Pin_3, 0)   // Only for Rev A of circuit board
 #define MODE_LED_GREEN_ON GPIO_WriteBit(GPIOE, GPIO_Pin_1, 0)
 #define MODE_LED_BLUE_OFF GPIO_WriteBit(GPIOB, GPIO_Pin_9, 1)
-//#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
-#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOC, GPIO_Pin_3, 1)   // Only for Rev A of circuit board
+#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_0, 1)
+//#define MODE_LED_RED_OFF GPIO_WriteBit(GPIOC, GPIO_Pin_3, 1)   // Only for Rev A of circuit board
 #define MODE_LED_GREEN_OFF GPIO_WriteBit(GPIOE, GPIO_Pin_1, 1)
 
 #define AUX_LED_BLUE_ON GPIO_WriteBit(GPIOB, GPIO_Pin_4, 0)

@@ -40,7 +40,7 @@ float32_t mode_filter_envelope_sample_process (void) {
 
 	bl_saw_set(&saw, f * (pp6_get_knob_3() + 1));
 
-
+	// raw cut off
 	cutoff = sadsr_process(&filter_env) ;
 
 	cutoff_scale = 4000.f +  (pp6_get_knob_1() * 3000.f);  // for shorter envelopes (also controlled by knob 1), start cutoff sweep lower
@@ -48,7 +48,11 @@ float32_t mode_filter_envelope_sample_process (void) {
 
 
 	// log cutoff ramp using cents,  starts 6000 cents above f
-	vcf_filter_set(&filter, ((c_to_f_ratio(cutoff * cutoff_scale)) * f) + f * 2, pp6_get_knob_2() * 3.f );
+	cutoff = ((c_to_f_ratio(cutoff * cutoff_scale)) * f) + f * 2;
+	if (cutoff > NYQUIST) {
+		cutoff = NYQUIST;
+	}
+	vcf_filter_set(&filter, cutoff, pp6_get_knob_2() * 3.f );
 
 
 	sig = bl_saw_process(&saw) * .75;

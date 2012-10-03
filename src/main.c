@@ -335,7 +335,7 @@ int main(void)
 
 			t1 =  timer_get_time();
 			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi
-			if (pp6_get_mode() == 1)   mode_wave_adder_control_process ();   //
+			if (pp6_get_mode() == 1)  mode_wave_adder_control_process ();   //
 			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();

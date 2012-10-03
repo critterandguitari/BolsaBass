@@ -15,6 +15,13 @@ void vcf_filter_init(vcf_filter * vcf) {
 }
 
 void vcf_filter_set(vcf_filter * vcf, float32_t cutoff, float32_t resonance) {
+	// smooth cutoff
+	static float32_t co = 0;
+	float32_t kFilteringFactor = .05f;   // the smoothing factor 1 is no smoothing
+	co = (cutoff * kFilteringFactor) + (co * (1.0 - kFilteringFactor));
+	cutoff = co;
+
+
 	vcf->res = resonance;
 	vcf->fc = cutoff / (SR / 2.f);
 	// calculate coeffs
