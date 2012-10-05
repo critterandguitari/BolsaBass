@@ -2,8 +2,8 @@
  * GENERATED FILE - DO NOT EDIT
  * (C) Code Red Technologies Ltd, 2008-2012
  * Generated linker script file for STM32F407VE
- * Created from generic_c.ld (vRed Suite v4.2 (3 [Build 255] [30/05/2012] ))
- * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Sun Sep 09 15:45:12 EDT 2012
+ * Created from generic_c.ld (vRed Suite v4.3 (0 [Build 1025] [2012-09-19] ))
+ * By Red Suite v4.3.0 [Build 1025] [2012-09-19]  on Thu Oct 04 12:55:49 EDT 2012
  */
 
 
@@ -69,17 +69,18 @@ SECTIONS
 
 	/*
 	 * for exception handling/unwind - some Newlib functions (in common
-	 * with C++ and STDC++) use this.
+	 * with C++ and STDC++) use this. 
+	 * Use KEEP so not discarded with --gc-sections
 	 */
 	.ARM.extab : ALIGN(4)
 	{
-		*(.ARM.extab* .gnu.linkonce.armextab.*)
+		KEEP(*(.ARM.extab* .gnu.linkonce.armextab.*))
 	} > MFlash512
 	__exidx_start = .;
 	
 	.ARM.exidx : ALIGN(4)
 	{
-		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
+		KEEP(*(.ARM.exidx* .gnu.linkonce.armexidx.*))
 	} > MFlash512
 	__exidx_end = .;
 	
@@ -115,6 +116,8 @@ SECTIONS
 	.uninit_RESERVED : ALIGN(4)
 	{
 		KEEP(*(.bss.$RESERVED*))
+		. = ALIGN(4) ;
+		_end_uninit_RESERVED = .;
 	} > Ram112
 
 	.data : ALIGN(4)

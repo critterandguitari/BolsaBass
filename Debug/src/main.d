@@ -40,8 +40,9 @@ src/main.d src/main.o: ../src/main.c \
  ../src/audio.h ../src/mode_filter_man.h ../src/mode_simple_sin.h \
  ../src/mode_mono_glider.h ../src/mode_filter_envelope.h \
  ../src/mode_nazareth.h ../src/mode_drum.h ../src/mode_drum_synth.h \
- ../src/mode_simple_fm.h ../src/mode_octave_mirror.h \
- ../src/mode_wave_adder.h ../src/mode_analog_style.h
+ ../src/mode_simple_fm.h ../src/mode_fm_ramp.h \
+ ../src/mode_octave_mirror.h ../src/mode_wave_adder.h \
+ ../src/mode_analog_style.h
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/stm32f4xx.h:
 
@@ -148,6 +149,8 @@ src/main.d src/main.o: ../src/main.c \
 ../src/mode_drum_synth.h:
 
 ../src/mode_simple_fm.h:
+
+../src/mode_fm_ramp.h:
 
 ../src/mode_octave_mirror.h:
 

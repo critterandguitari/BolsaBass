@@ -17,6 +17,7 @@ C_SRCS += \
 ../src/mode_drum_synth.c \
 ../src/mode_filter_envelope.c \
 ../src/mode_filter_man.c \
+../src/mode_fm_ramp.c \
 ../src/mode_mono_glider.c \
 ../src/mode_nazareth.c \
 ../src/mode_octave_mirror.c \
@@ -47,6 +48,7 @@ OBJS += \
 ./src/mode_drum_synth.o \
 ./src/mode_filter_envelope.o \
 ./src/mode_filter_man.o \
+./src/mode_fm_ramp.o \
 ./src/mode_mono_glider.o \
 ./src/mode_nazareth.o \
 ./src/mode_octave_mirror.o \
@@ -77,6 +79,7 @@ C_DEPS += \
 ./src/mode_drum_synth.d \
 ./src/mode_filter_envelope.d \
 ./src/mode_filter_man.d \
+./src/mode_fm_ramp.d \
 ./src/mode_mono_glider.d \
 ./src/mode_nazareth.d \
 ./src/mode_octave_mirror.d \

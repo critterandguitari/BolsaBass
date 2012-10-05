@@ -35,6 +35,7 @@
 #include "mode_drum.h"
 #include "mode_drum_synth.h"
 #include "mode_simple_fm.h"
+#include "mode_fm_ramp.h"
 #include "mode_octave_mirror.h"
 #include "mode_wave_adder.h"
 #include "mode_analog_style.h"
@@ -116,8 +117,7 @@ int main(void)
 	mode_octave_mirror_init();
 	mode_wave_adder_init();
 	mode_analog_style_init();
-
-
+	mode_fm_ramp_init();
 
 	uart_init();
 	midi_init();
@@ -136,11 +136,6 @@ int main(void)
 		AUX_LED_RED_OFF;
 
 	}*/
-
-
-
-
-
 
 	/*while (1){
 		t = TIM_GetCounter(TIM2);
@@ -339,7 +334,7 @@ int main(void)
 			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
-			if (pp6_get_mode() == 5)  mode_nazareth_control_process();
+			if (pp6_get_mode() == 5)  mode_fm_ramp_control_process();
 			t2 = timer_get_time();
 			t = t2 - t1;
 
@@ -362,7 +357,7 @@ int main(void)
 				if (pp6_get_mode() == 2) sig = mode_analog_style_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_simple_fm_sample_process();
-				if (pp6_get_mode() == 5) sig = 0;//mode_nazareth_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_fm_ramp_sample_process();//mode_nazareth_sample_process();
 
 				//if ( (!((k>>16) & 1)) )
 				// eq it

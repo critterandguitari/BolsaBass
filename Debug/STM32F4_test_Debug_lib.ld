@@ -2,8 +2,8 @@
  * GENERATED FILE - DO NOT EDIT
  * (C) Code Red Technologies Ltd, 2008-2012
  * Generated linker script file for STM32F407VE
- * Created from LibIncTemplate.ld (vRed Suite v4.2 (3 [Build 255] [30/05/2012] ))
- * By Red Suite v4.2.3 [Build 255] [30/05/2012]  on Sun Sep 09 15:45:12 EDT 2012
+ * Created from LibIncTemplate.ld (vRed Suite v4.3 (0 [Build 1025] [2012-09-19] ))
+ * By Red Suite v4.3.0 [Build 1025] [2012-09-19]  on Thu Oct 04 12:55:49 EDT 2012
  */
 
 
