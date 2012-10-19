@@ -38,11 +38,16 @@ static bl_square square;
 static float32_t cents = 0.f;
 
 
+static vcf_filter filter;
+
 
 void mode_bass_delay_init(void){
 	f = 50.0;
 	amp = 0;
+	comb_init();
 	sadsr_init(&amp_env);
+	vcf_filter_init(&filter);
+	vcf_filter_set(&filter, 1000.f,  2.f);
 }
 
 float32_t mode_bass_delay_sample_process (void) {
@@ -65,6 +70,9 @@ float32_t mode_bass_delay_sample_process (void) {
 
 	sig = comb_process(sig * amp * amp);
 
+	vcf_filter_set(&filter, 2000.f,  2.f);
+
+	sig = vcf_filter_process(&filter, sig);
 
 	return sig;
 }

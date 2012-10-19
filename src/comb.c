@@ -17,8 +17,14 @@ static uint32_t delay_read_index = 0;
 static uint32_t delay_write_index = 0;
 
 
+
+
+
+
 void comb_init(void) {
 	uint32_t i;
+
+
 
 	for (i=0; i<4096; i++) delay_buffer[i] = 0.f;
 
@@ -52,14 +58,9 @@ float32_t comb_process(float32_t in){
 
 	  delay_out = delay_out + delay_time_frac * (delay_out_p1 - delay_out);
 
-	//  delay_out = 0.f;
-	//  delay_fb = 0.f;
-
-	  //delay_in = (delay_out * delay_fb) + in;
-
-	  //delay_in = (delay_out) + in;
 
 	  	 delay_in = in + delay_out * delay_fb;
+
 
 	    delay_buffer[delay_write_index] = delay_in;
 	    delay_write_index++;
