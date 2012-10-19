@@ -47,7 +47,6 @@ void mode_bass_delay_init(void){
 	comb_init();
 	sadsr_init(&amp_env);
 	vcf_filter_init(&filter);
-	vcf_filter_set(&filter, 1000.f,  2.f);
 }
 
 float32_t mode_bass_delay_sample_process (void) {
@@ -59,9 +58,9 @@ float32_t mode_bass_delay_sample_process (void) {
 	comb_set_dtime((pp6_get_knob_1() * .1f) + (2 / f));
 
 
-	comb_set_fb((pp6_get_knob_2() * .2f) + .8f);
+	comb_set_fb((pp6_get_knob_2() * (pp6_get_knob_1() + .1f) ) + (1 - (pp6_get_knob_1() + .1f)) );
 
-	sin_set(&sin1, f * 4, .25f);
+	sin_set(&sin1, f, .25f);
 
 	sig = sin_process(&sin1);
 

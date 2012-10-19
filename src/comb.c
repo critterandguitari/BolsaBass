@@ -6,6 +6,7 @@
  */
 
 #include "comb.h"
+//#include "vcf.h"
 
 
 static float32_t delay_buffer[MAX_DELAY];
@@ -16,6 +17,7 @@ static float32_t delay_fb = .9f;
 static uint32_t delay_read_index = 0;
 static uint32_t delay_write_index = 0;
 
+//static vcf_filter filter;
 
 
 
@@ -24,6 +26,7 @@ static uint32_t delay_write_index = 0;
 void comb_init(void) {
 	uint32_t i;
 
+	//vcf_filter_init(&filter);
 
 
 	for (i=0; i<4096; i++) delay_buffer[i] = 0.f;
@@ -61,6 +64,9 @@ float32_t comb_process(float32_t in){
 
 	  	 delay_in = in + delay_out * delay_fb;
 
+	 	//vcf_filter_set(&filter, 2000.f,  2.f);
+
+	 	//delay_in = vcf_filter_process(&filter, delay_in);
 
 	    delay_buffer[delay_write_index] = delay_in;
 	    delay_write_index++;
