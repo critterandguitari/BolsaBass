@@ -47,7 +47,7 @@ float32_t mode_fm_ramp_sample_process (void) {
 
 	index = sadsr_process(&index_env);
 
-	sig = FM_oscillator_process(&fm, f, 1.04f,  index * 3.f);
+	sig = FM_oscillator_process(&fm, f, 1.0f,  index * 3.f) * .5;
 
 	amp = sadsr_process(&amp_env);
 
@@ -72,8 +72,8 @@ float32_t mode_fm_ramp_sample_process (void) {
 
 
 
-	a = pp6_get_knob_1() * 100.f;
-	sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
+	//a = pp6_get_knob_1() * 100.f;
+	//sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
 
 
 	return sig * amp * amp * .5f;

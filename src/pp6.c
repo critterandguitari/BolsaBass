@@ -304,7 +304,7 @@ void pp6_smooth_knobs(void){
 	static float32_t knob1 = 0;
 	static float32_t knob2 = 0;
 	static float32_t knob3 = 0;
-	float32_t kFilteringFactor = .05f;
+	float32_t kFilteringFactor = .05f; // the smoothing factor 1 is no smoothing
 
 	knob1 = (pp6.knob[0] * kFilteringFactor) + (knob1 * (1.0 - kFilteringFactor));
 	pp6.knob[0] = knob1;

@@ -39,6 +39,8 @@
 #include "mode_octave_mirror.h"
 #include "mode_wave_adder.h"
 #include "mode_analog_style.h"
+#include "mode_plurden.h"
+#include "mode_bass_delay.h"
 
 
 
@@ -118,6 +120,12 @@ int main(void)
 	mode_wave_adder_init();
 	mode_analog_style_init();
 	mode_fm_ramp_init();
+	mode_nazareth_init();
+	mode_plurden_init();
+	mode_drum_synth_init();
+	mode_drum_init();
+	mode_bass_delay_init();
+
 
 	uart_init();
 	midi_init();
@@ -334,7 +342,8 @@ int main(void)
 			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
-			if (pp6_get_mode() == 5)  mode_fm_ramp_control_process();
+			if (pp6_get_mode() == 5)  mode_bass_delay_control_process();
+			//if (pp6_get_mode() == 5)  mode_drum_control_process();
 			t2 = timer_get_time();
 			t = t2 - t1;
 
@@ -357,7 +366,7 @@ int main(void)
 				if (pp6_get_mode() == 2) sig = mode_analog_style_sample_process();
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_simple_fm_sample_process();
-				if (pp6_get_mode() == 5) sig = mode_fm_ramp_sample_process();//mode_nazareth_sample_process();
+				if (pp6_get_mode() == 5) sig = mode_bass_delay_sample_process();
 
 				//if ( (!((k>>16) & 1)) )
 				// eq it

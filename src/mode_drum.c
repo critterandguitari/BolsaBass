@@ -52,10 +52,8 @@ float32_t mode_drum_sample_process (void) {
 
 
 	cutoff = sadsr_process(&filter_env) ;//(( sadsr_process(&filter_env) * 6000.f ) + 200.f) / 6000.f;//1000.f;// ;
-	if (pp6_get_aux())
 		vcf_filter_set(&filter, ((cutoff * cutoff) * 6000.f) + 200.f, pp6_get_knob_2() * 3.9f );
-	else
-		vcf_filter_set(&filter, ((cutoff * f * 40.f)) + f, pp6_get_knob_2() * 3.9f );
+
 
 	//bl_saw_set(&saw, f);
 	sig = ((float32_t) RNG_GetRandomNumber() / 2147483648.f) * .6f;// / 2147483648.0f;;
@@ -78,7 +76,11 @@ void mode_drum_control_process (void) {
 	static uint32_t aux_last, aux = 0;
 	static uint32_t last_hit;
 
-	f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+	//f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
+	f = c_to_f(((float32_t)pp6_get_note() * 100.f)) * (pp6_get_knob_3() +  1.f);
+
+
+
 	sadsr_set(&amp_env, .01f, .2f, .2f, 0.f);
 	sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 2.f) + .01f, 1.f, .1f);
 	if (pp6_get_note_start()){

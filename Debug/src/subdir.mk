@@ -13,6 +13,7 @@ C_SRCS += \
 ../src/main.c \
 ../src/midi.c \
 ../src/mode_analog_style.c \
+../src/mode_bass_delay.c \
 ../src/mode_drum.c \
 ../src/mode_drum_synth.c \
 ../src/mode_filter_envelope.c \
@@ -21,6 +22,7 @@ C_SRCS += \
 ../src/mode_mono_glider.c \
 ../src/mode_nazareth.c \
 ../src/mode_octave_mirror.c \
+../src/mode_plurden.c \
 ../src/mode_simple_fm.c \
 ../src/mode_simple_sin.c \
 ../src/mode_wave_adder.c \
@@ -44,6 +46,7 @@ OBJS += \
 ./src/main.o \
 ./src/midi.o \
 ./src/mode_analog_style.o \
+./src/mode_bass_delay.o \
 ./src/mode_drum.o \
 ./src/mode_drum_synth.o \
 ./src/mode_filter_envelope.o \
@@ -52,6 +55,7 @@ OBJS += \
 ./src/mode_mono_glider.o \
 ./src/mode_nazareth.o \
 ./src/mode_octave_mirror.o \
+./src/mode_plurden.o \
 ./src/mode_simple_fm.o \
 ./src/mode_simple_sin.o \
 ./src/mode_wave_adder.o \
@@ -75,6 +79,7 @@ C_DEPS += \
 ./src/main.d \
 ./src/midi.d \
 ./src/mode_analog_style.d \
+./src/mode_bass_delay.d \
 ./src/mode_drum.d \
 ./src/mode_drum_synth.d \
 ./src/mode_filter_envelope.d \
@@ -83,6 +88,7 @@ C_DEPS += \
 ./src/mode_mono_glider.d \
 ./src/mode_nazareth.d \
 ./src/mode_octave_mirror.d \
+./src/mode_plurden.d \
 ./src/mode_simple_fm.d \
 ./src/mode_simple_sin.d \
 ./src/mode_wave_adder.d \

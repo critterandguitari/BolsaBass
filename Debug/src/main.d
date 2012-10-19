@@ -42,7 +42,8 @@ src/main.d src/main.o: ../src/main.c \
  ../src/mode_nazareth.h ../src/mode_drum.h ../src/mode_drum_synth.h \
  ../src/mode_simple_fm.h ../src/mode_fm_ramp.h \
  ../src/mode_octave_mirror.h ../src/mode_wave_adder.h \
- ../src/mode_analog_style.h
+ ../src/mode_analog_style.h ../src/mode_plurden.h \
+ ../src/mode_bass_delay.h
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/stm32f4xx.h:
 
@@ -157,3 +158,7 @@ src/main.d src/main.o: ../src/main.c \
 ../src/mode_wave_adder.h:
 
 ../src/mode_analog_style.h:
+
+../src/mode_plurden.h:
+
+../src/mode_bass_delay.h:

@@ -20,12 +20,14 @@ extern float32_t midi_cc[];
 static float32_t sig, f;
 
 static sin_oscillator sins[8];
+static sin_oscillator amp_sins[8];
+static sin_oscillator sin_for_lfo;
 
 static uint32_t new_note, i;
 
 static float32_t amp;
 
-static float32_t harmonic_levels[8] = {1.f, .9f, .8f, .7f, .7f, .5f, .4f, .3f};
+static float32_t harmonic_levels[8] = {0,0,0,0, 0,0,0,0};
 
 //static bl_saw saws[8];
 
@@ -51,11 +53,39 @@ void mode_nazareth_init(void){
 
 float32_t mode_nazareth_sample_process (void) {
 
+	/*harmonic_levels[0] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI) + 1) * .5f;
+	harmonic_levels[1] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 2) + 1) * .5f;
+	harmonic_levels[2] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 4) + 1) * .5f;
+	harmonic_levels[3] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 8) + 1) * .5f;
+	harmonic_levels[4] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 16) + 1) * .5f;
+	harmonic_levels[5] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 32) + 1) * .5f;
+	harmonic_levels[6] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 64) + 1) * .5f;
+	harmonic_levels[7] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 128) + 1) * .5f;*/
+
+	//LFO Stuff
+	float32_t lfo;
+	sin_set(&sin_for_lfo, 10.f * pp6_get_knob_2() + 1.5f, 0.5f);
+	lfo = sin_process(&sin_for_lfo);
+
+	harmonic_levels[0] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI) + 1) * .5f;
+	harmonic_levels[1] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 2) + 1) * .5f;
+	harmonic_levels[2] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 4) + 1) * .5f;
+	harmonic_levels[3] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 8) + 1) * .5f;
+	harmonic_levels[4] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 16) + 1) * .5f;
+	harmonic_levels[5] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 32) + 1) * .5f;
+	harmonic_levels[6] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 64) + 1) * .5f;
+	harmonic_levels[7] = (arm_sin_f32(pp6_get_knob_1() * TWO_PI * 128) + 1) * .5f;
+
+	//f = f + (lfo*10.f); this sounds funny here
 
 	for (i=0; i<8; i++){
+		f = f + lfo; //LFO stuff
 		sin_set(&sins[i], f * (pp6_get_knob_3() + 1) * (i + 1), .9f);
-		harmonic_levels[i] = sadsr_process(&h[i]);
+
+		//harmonic_levels[i] = (sin_process(&amp_sins[i]) + 1 ) * .5f;
+		//harmonic_levels[i] = sadsr_process(&h[i]);
 	}
+
 
 
 	sig = 0;
@@ -63,7 +93,6 @@ float32_t mode_nazareth_sample_process (void) {
 		amp = harmonic_levels[i];
 		sig += sin_process(&sins[i]) * amp * amp * .125f;
 	}
-
 	amp = sadsr_process(&amp_env);
 
 	return sig * amp * amp;
@@ -71,28 +100,38 @@ float32_t mode_nazareth_sample_process (void) {
 
 void mode_nazareth_control_process (void) {
 
+	sin_set(&amp_sins[0], .0625f, 1);
+	sin_set(&amp_sins[1], .0125f, 1);
+	sin_set(&amp_sins[2], .025f, 1);
+	sin_set(&amp_sins[3], .05f, 1);
+	sin_set(&amp_sins[4], .1f, 1);
+	sin_set(&amp_sins[5], .2f, 1);
+	sin_set(&amp_sins[6], .4f, 1);
+	sin_set(&amp_sins[7], .8f, 1);
+
+
 	f = miditof[pp6_get_note()] * .6f;
 	if (pp6_get_note_start() ){
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
 
 
-		sadsr_set(&h[0], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
+		/*sadsr_set(&h[0], .01f, 4.f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[1], .01f, 3.5f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[2], .01f, 3.f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[3], .01f, 2.5f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[4], .01f, 2.f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[5], .01f, 1.5f * pp6_get_knob_1(), .2f, 0);
 		sadsr_set(&h[6], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_set(&h[7], .01f, 1.f * pp6_get_knob_1(), .2f, 0);
-		sadsr_go(&h[0]);
+		sadsr_set(&h[7], .01f, 1.f * pp6_get_knob_1(), .2f, 0);*/
+	/*	sadsr_go(&h[0]);
 		sadsr_go(&h[1]);
 		sadsr_go(&h[2]);
 		sadsr_go(&h[3]);
 		sadsr_go(&h[4]);
 		sadsr_go(&h[5]);
 		sadsr_go(&h[6]);
-		sadsr_go(&h[7]);
+		sadsr_go(&h[7]);*/
 
 		new_note = 1;
 	}
@@ -109,14 +148,9 @@ void mode_nazareth_control_process (void) {
 	//}
 
 
-		/*harmonic_levels[0] = .7f;
-		harmonic_levels[1] = 1.f;
-		harmonic_levels[2] = .3f;
-		harmonic_levels[3] = 1.f;
-		harmonic_levels[4] = .5f;
-		harmonic_levels[5] = .3f;
-		harmonic_levels[6] = .2f;
-		harmonic_levels[7] = 1.f;*/
+
+
+
 
 		/*harmonic_levels[0] = midi_cc[0];
 		harmonic_levels[1] = midi_cc[1];

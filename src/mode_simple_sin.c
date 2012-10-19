@@ -33,8 +33,7 @@ static sadsr amp_env;
 static bl_saw saw;
 static bl_square square;
 
-float32_t cents = 0.f;
-
+static float32_t cents = 0.f;
 
 
 void mode_simple_sin_init(void){
@@ -45,6 +44,8 @@ void mode_simple_sin_init(void){
 }
 
 float32_t mode_simple_sin_sample_process (void) {
+
+	float32_t a;
 
 	f = c_to_f(line_process(&framp));
 
@@ -58,20 +59,13 @@ float32_t mode_simple_sin_sample_process (void) {
 
 	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
-//	if (pp6_get_aux() == 0)
 		sig = sin_process(&sin1) * .5f;
-/*	else if (pp6_get_aux() == 1)
-		sig = bl_square_process(&square);
-	else if (pp6_get_aux() == 2)
-		sig = bl_saw_process(&saw);
-	else if (pp6_get_aux() == 3)
-		sig = sin_process(&sin1);
-	else if (pp6_get_aux() == 4)
-		sig = bl_square_process(&square);
-	else if (pp6_get_aux() == 5)
-		sig = bl_saw_process(&saw);
-*/
 
+
+
+  // distortion ?
+	//a = 75; //this is the cool tone
+	//sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
 
 	amp = sadsr_process(&amp_env);
 

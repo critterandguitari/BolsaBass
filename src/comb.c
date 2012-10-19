@@ -8,12 +8,13 @@
 #include "comb.h"
 
 
+static float32_t delay_buffer[MAX_DELAY];
+static uint32_t delay_time = 3000;
+static float32_t delay_time_frac;
 
-float32_t delay_buffer[4096];
-uint32_t delay_time = 406;
-float32_t delay_fb = .9f;
-uint32_t delay_read_index = 0;
-uint32_t delay_write_index = 0;
+static float32_t delay_fb = .9f;
+static uint32_t delay_read_index = 0;
+static uint32_t delay_write_index = 0;
 
 
 void comb_init(void) {
@@ -23,14 +24,33 @@ void comb_init(void) {
 
 }
 
+void comb_set_fb (float32_t fb) {
+	delay_fb = fb;
+}
+
+void comb_set_dtime (float32_t dtime) {
+
+	delay_time = (uint32_t) (dtime * SR);
+	delay_time_frac = (dtime * SR) - (float32_t)delay_time;
+
+	if (delay_time > (MAX_DELAY - 1)) {
+		delay_time = MAX_DELAY - 1;
+		delay_time_frac = 0;
+	}
+
+}
+
 float32_t comb_process(float32_t in){
 
 
-	  float32_t delay_out, delay_in;
+	  float32_t delay_out, delay_in, delay_out_p1;
 
 
 
 	  delay_out = delay_buffer[(delay_write_index - delay_time) & 0xfff];
+	  delay_out_p1 = delay_buffer[(delay_write_index - (delay_time + 1)) & 0xfff];
+
+	  delay_out = delay_out + delay_time_frac * (delay_out_p1 - delay_out);
 
 	//  delay_out = 0.f;
 	//  delay_fb = 0.f;
@@ -39,7 +59,7 @@ float32_t comb_process(float32_t in){
 
 	  //delay_in = (delay_out) + in;
 
-	  	 delay_in = in + delay_out * .6f;
+	  	 delay_in = in + delay_out * delay_fb;
 
 	    delay_buffer[delay_write_index] = delay_in;
 	    delay_write_index++;
