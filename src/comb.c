@@ -39,8 +39,16 @@ void comb_set_fb (float32_t fb) {
 
 void comb_set_dtime (float32_t dtime) {
 
-	delay_time = (uint32_t) (dtime * SR);
-	delay_time_frac = (dtime * SR) - (float32_t)delay_time;
+	// adjust dtime smoothly
+	static float32_t dt = 0;
+	dtime *= SR;  // convert to samples, then smooth
+	float32_t kFilteringFactor = .05f;   // the smoothing factor 1 is no smoothing
+	dt = (dtime * kFilteringFactor) + (dt * (1.0 - kFilteringFactor));
+	dtime = dt;
+
+
+	delay_time = (uint32_t) dtime;
+	delay_time_frac = dtime - (float32_t)delay_time;
 
 	if (delay_time > (MAX_DELAY - 1)) {
 		delay_time = MAX_DELAY - 1;
@@ -52,21 +60,45 @@ void comb_set_dtime (float32_t dtime) {
 float32_t comb_process(float32_t in){
 
 
-	  float32_t delay_out, delay_in, delay_out_p1;
+	  float32_t delay_out, delay_in, delay_out_p1, a;
 
 
-
+	  // with linear interp
 	  delay_out = delay_buffer[(delay_write_index - delay_time) & 0xfff];
 	  delay_out_p1 = delay_buffer[(delay_write_index - (delay_time + 1)) & 0xfff];
-
+	  // 2 point
 	  delay_out = delay_out + delay_time_frac * (delay_out_p1 - delay_out);
+
+	  //4 point interp
+	  // this works, but doesn't sound much better, so linear is fine
+      // get neighbourgh samples
+    /*  float32_t const y_1= delay_buffer [(delay_write_index - (delay_time - 1)) & 0xfff];
+      float32_t const y0 = delay_buffer [(delay_write_index - delay_time) & 0xfff];
+      float32_t const y1 = delay_buffer [(delay_write_index - (delay_time + 1)) & 0xfff];
+      float32_t const y2 = delay_buffer [(delay_write_index - (delay_time + 2)) & 0xfff];
+
+      // compute interpolation x
+      float32_t const x=delay_time_frac;
+
+      // calculate
+      float32_t const c0 = y0;
+      float32_t const c1 = 0.5f*(y1-y_1);
+      float32_t const c2 = y_1 - 2.5f*y0 + 2.0f*y1 - 0.5f*y2;
+      float32_t const c3 = 0.5f*(y2-y_1) + 1.5f*(y0-y1);
+
+      float32_t const output=((c3*x+c2)*x+c1)*x+c0;
+
+      delay_out = output;*/
+
+
 
 
 	  	 delay_in = in + delay_out * delay_fb;
 
 	 	//vcf_filter_set(&filter, 2000.f,  2.f);
-
 	 	//delay_in = vcf_filter_process(&filter, delay_in);
+
+
 
 	    delay_buffer[delay_write_index] = delay_in;
 	    delay_write_index++;

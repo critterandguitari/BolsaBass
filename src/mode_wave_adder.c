@@ -49,7 +49,7 @@ float32_t mode_wave_adder_sample_process (void) {
 
 	f = c_to_f(line_process(&framp));
 
-	sin_set(&sin1, f * ((pp6_get_knob_3()) + 1) * 2.f, .9f);
+	sin_set(&sin1, f * ((pp6_get_knob_3()) + 1), .3f);
 
 	bl_saw_set(&saw, f * ((pp6_get_knob_3()) + 1));
 	bl_square_set(&square, f * ((pp6_get_knob_3()) + 1));
@@ -61,7 +61,8 @@ float32_t mode_wave_adder_sample_process (void) {
 
 //	if (pp6_get_aux() == 0)
 	//sig = bl_saw_process(&saw) * (1.f - pp6_get_knob_1()) + sin_process(&sin1) * (pp6_get_knob_1());
-	sig = bl_saw_process(&saw) * .6f;
+	sig = bl_saw_process(&saw) * .3f;
+	sig += sin_process(&sin1);
 
 /*	else if (pp6_get_aux() == 1)
 		sig = bl_square_process(&square);
