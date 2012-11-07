@@ -32,11 +32,11 @@ src/midi.d src/midi.o: ../src/midi.c \
  /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/inc/stm32f4xx_usart.h \
  /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/inc/stm32f4xx_wwdg.h \
  /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/inc/misc.h \
- ../src/pp6.h \
+ ../src/sequencer.h \
  /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/inc/arm_math.h \
  /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/inc/arm/arm_math.h \
  /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/core_cm4.h \
- ../src/midi.h ../src/uart.h
+ ../src/pp6.h ../src/midi.h ../src/uart.h
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/stm32f4xx.h:
 
@@ -104,13 +104,15 @@ src/midi.d src/midi.o: ../src/midi.c \
 
 /home/owen/workspace-redsuite/StdPeriphLib_v100_STM32F4xx/inc/misc.h:
 
-../src/pp6.h:
+../src/sequencer.h:
 
 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/inc/arm_math.h:
 
 /home/owen/workspace-redsuite/CMSISv2p10_DSPLIB_CM4/inc/arm/arm_math.h:
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/core_cm4.h:
+
+../src/pp6.h:
 
 ../src/midi.h:
 

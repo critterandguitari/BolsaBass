@@ -14,6 +14,9 @@
 
 #define ABS(a)	   (((a) < 0) ? -(a) : (a))
 
+// from DAC in CS4344.c driver
+extern uint32_t sample_clock;
+
 pocket_piano pp6;
 
 /* Private macro -------------------------------------------------------------*/
@@ -24,7 +27,7 @@ pocket_piano pp6;
 
 
 // keypad values
-uint32_t keys = 0xFFFFFFFF;
+//uint32_t keys = 0xFFFFFFFF;
 
 uint32_t keys_history[] = {
     0xFFFFFFFF,
@@ -38,10 +41,73 @@ uint32_t keys_history[] = {
 };
 
 void pp6_init(void) {
+	pp6_leds_init();
+	pp6_knobs_init();
+	pp6_keys_init();
+
+	pp6_set_aux_led(BLACK);
+
+	pp6_set_mode(0);
+
 	pp6.knob_touched[0] = 0;
 	pp6.knob_touched[1] = 0;
 	pp6.knob_touched[2] = 0;
 	pp6.physical_notes_on = 0;
+	pp6.midi_start_flag = 0;
+	pp6.midi_stop_flag = 0;
+	pp6.keys =  0xFFFFFFFF;
+	pp6.keys_last =  0xFFFFFFFF;
+
+	pp6.midi_clock_period = 0;
+	pp6.midi_clock_present = 0;
+	pp6.midi_in_clock_last = 0;
+}
+
+
+/// MIDI clock stuff
+void pp6_midi_clock_tick(void) {
+	static uint8_t count = 0;// whole note counter
+
+	pp6.midi_clock_flag = 1; // set the flag used elsewhere
+
+	pp6.midi_clock_period = sample_clock - pp6.midi_in_clock_last;
+	pp6.midi_in_clock_last = sample_clock;
+
+	count++;
+	if (count == 96){
+		count = 0;
+		pp6.midi_whole_note_period = sample_clock - pp6.midi_whole_note_period_last;
+		pp6.midi_whole_note_period_last = sample_clock;
+	}
+}
+
+uint8_t pp6_get_midi_clock_tick(void) {
+	return pp6.midi_clock_flag;
+}
+void pp6_clear_midi_clock_tick(void){
+	pp6.midi_clock_flag = 0;
+}
+
+void pp6_check_for_midi_clock(void) {
+    // check for presence of midi clock signal
+    if ((sample_clock - pp6.midi_in_clock_last) > MIDI_CLOCK_TIMEOUT) {
+        pp6.midi_clock_present = 0;
+    }
+    else {
+        pp6.midi_clock_present = 1;
+    }
+}
+
+uint8_t pp6_midi_clock_present(void) {
+	return pp6.midi_clock_present;
+}
+
+uint32_t pp6_get_midi_clock_period(void) {
+	return pp6.midi_clock_period;
+}
+
+uint32_t pp6_get_midi_whole_note_period(void) {
+	return pp6.midi_whole_note_period;
 }
 
 float32_t pp6_get_knob_1(void){
@@ -147,6 +213,53 @@ uint32_t pp6_get_keys(void) {
 }
 
 
+// key scanning and assignment, this must be called after pp6_keys_update()
+void pp6_get_key_events(void) {
+
+	uint32_t k, k_last;
+
+	uint32_t i = 0;
+
+	// scan keys 16 keys
+
+
+	k =  pp6.keys;
+	k_last = pp6.keys_last;
+
+	pp6.num_keys_down = 0;
+	for (i = 0; i < 16; i++) {
+		if ( !((k>>i) & 1) ) {
+			pp6.num_keys_down++;
+		}
+		if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
+			pp6_set_note(i);
+			pp6_set_note_start();
+			pp6_inc_physical_notes_on();
+		}
+		if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
+			// release it if playing
+			if (i == pp6_get_note()){
+				pp6_set_note_stop();
+			}
+			pp6_dec_physical_notes_on();
+		}
+	}
+
+	// check mode and aux button  (we only care about a mode press, but need press and release events for aux button)
+	if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
+		pp6_set_mode_button_pressed();
+	}
+	if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
+		pp6_set_aux_button_pressed();
+	}
+	if ( (((k>>16) & 1)) &&  (!((k_last>>16) & 1)) ){
+		pp6_set_aux_button_released();
+	}
+
+	// store keys for next time
+	pp6.keys_last = pp6.keys;
+}
+
 // the key being held down
 void pp6_set_note(uint8_t note) {
 	pp6.note = note;
@@ -155,6 +268,19 @@ uint8_t pp6_get_note(void) {
 	return pp6.note;
 }
 
+//MIDI Events
+void pp6_set_midi_start(void) {
+	pp6.midi_start_flag = 1;
+}
+uint8_t pp6_get_midi_start(void){
+	return pp6.midi_start_flag;
+}
+void pp6_set_midi_stop(void) {
+	pp6.midi_stop_flag = 1;
+}
+uint8_t pp6_get_midi_stop(void){
+	return pp6.midi_stop_flag;
+}
 
 // Events
 void pp6_set_note_start (void ) {
@@ -182,6 +308,9 @@ void pp6_clear_flags(void){
 	pp6.knob_touched[0] = 0;
 	pp6.knob_touched[1] = 0;
 	pp6.knob_touched[2] = 0;
+	pp6.midi_start_flag = 0;
+	pp6.midi_stop_flag = 0;
+	pp6.midi_clock_flag = 0;
 }
 
 uint8_t pp6_get_num_keys_down(void){

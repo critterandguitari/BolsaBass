@@ -60,7 +60,7 @@ void comb_set_dtime (float32_t dtime) {
 float32_t comb_process(float32_t in){
 
 
-	  float32_t delay_out, delay_in, delay_out_p1, a;
+	  float32_t delay_out, delay_in, delay_out_p1;
 
 
 	  // with linear interp

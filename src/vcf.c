@@ -14,6 +14,7 @@ void vcf_filter_init(vcf_filter * vcf) {
 	vcf->out1 = vcf->out2 = vcf->out3 = vcf->out4 = 0;
 }
 
+// this needs to be called at audio rate (or control rate)  because of the smoothing function
 void vcf_filter_set(vcf_filter * vcf, float32_t cutoff, float32_t resonance) {
 	// smooth cutoff
 	static float32_t co = 0;

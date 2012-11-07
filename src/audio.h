@@ -11,7 +11,7 @@
 #define ABS(a)	   (((a) < 0) ? -(a) : (a))
 
 //#define BASE_FREQ 32.70f   // C1
-#define BASE_FREQ 65.40f   // C1
+#define BASE_FREQ 65.4063913251f   // C1
 
 //#define BASE_FREQ 220.f   // A
 

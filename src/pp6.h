@@ -34,6 +34,8 @@
 #define BLUE 5
 #define MAGENTA 6
 
+#define MIDI_CLOCK_TIMEOUT 20000  // around 1 second of not receiving midi clock
+
 
 typedef struct {
 	/*float32_t knob_1;
@@ -46,6 +48,7 @@ typedef struct {
 	uint8_t playing;
 	uint8_t note;
 	uint32_t keys;
+	uint32_t keys_last;
 	uint32_t mode;
 	uint8_t mode_button_pressed;	// mode button event flags
 	uint8_t mode_button_released;
@@ -55,9 +58,23 @@ typedef struct {
 	uint8_t mode_led;
 	uint8_t aux_led;
 	uint8_t physical_notes_on;
+	uint8_t midi_start_flag;        // midi start command
+	uint8_t midi_stop_flag;    		// midi stop command
+	uint32_t midi_in_clock_last;   // stores the system time of the last received midi clock
+	uint8_t midi_clock_present;  // if a midi clock is currently present
+	uint32_t midi_clock_period;  // time in between midi clock ticks
+	uint32_t midi_whole_note_period;
+	uint32_t midi_whole_note_period_last;
+	uint8_t midi_clock_flag;
+
+
+
 } pocket_piano;
 
 void pp6_init(void);
+
+
+
 
 float32_t pp6_get_knob_1(void);
 float32_t pp6_get_knob_2(void);
@@ -77,15 +94,16 @@ uint8_t pp6_is_playing (void);
 uint8_t pp6_get_note(void);
 void pp6_set_note(uint8_t note);
 
-uint32_t pp6_get_keys(void);
+uint32_t pp6_get_keys(void);   // returns the current key status
 uint8_t pp6_get_num_keys_down(void);
+void pp6_get_key_events(void);  // checks keys for new events
 
 void pp6_change_mode(void);
 uint32_t pp6_get_mode(void);
 void pp6_set_mode(uint32_t mode);
 
 void pp6_keys_init(void);
-void pp6_keys_update(void);
+void pp6_keys_update(void);   // scans and debounces keys
 void pp6_leds_init(void);
 void pp6_leds_update(uint8_t bank_led, uint8_t mode_led);
 void pp6_knobs_init(void);
@@ -113,5 +131,21 @@ uint8_t pp6_aux_button_released(void);
 void pp6_inc_physical_notes_on(void);
 void pp6_dec_physical_notes_on(void);
 uint8_t pp6_get_physical_notes_on(void);
+
+// midi start stop events
+void pp6_set_midi_start(void);
+uint8_t pp6_get_midi_start(void);
+void pp6_set_midi_stop(void);
+uint8_t pp6_get_midi_stop(void);
+
+/// MIDI clock stuff
+void pp6_midi_clock_tick(void);
+void pp6_check_for_midi_clock(void) ;
+uint8_t pp6_midi_clock_present(void);
+uint32_t pp6_get_midi_clock_period(void);
+uint32_t pp6_get_midi_whole_note_period(void);
+uint8_t pp6_get_midi_clock_tick(void);
+void pp6_clear_midi_clock_tick(void);
+
 
 #endif /* PP6_H_ */

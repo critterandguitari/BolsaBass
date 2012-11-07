@@ -6,10 +6,10 @@
  */
 
 #include "stm32f4xx.h"
+#include "sequencer.h"
 #include "pp6.h"
 #include "midi.h"
 #include "uart.h"
-
 
 void recvByte(int byte) {
         int tmp;
@@ -358,7 +358,7 @@ void midi_init(void)
     sendFullCommands_ = 0;
 
     /* Listening to all channels (set to 0)*/
-    channelIn_ = 1;
+    channelIn_ = 2;
 }
 
 // Set (package-specific) parameters for the Midi instance
@@ -399,11 +399,15 @@ void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity
 }
 
 void handleSync(void) {
-
+	pp6_midi_clock_tick();
 }
 
 void handleStart(void) {
+	pp6_set_midi_start();
+}
 
+void handleStop(void) {
+	pp6_set_midi_stop();
 }
 
 
@@ -423,7 +427,6 @@ void handleSongPosition(unsigned int position) {}
 void handleSongSelect(unsigned int song) {}
 void handleTuneRequest(void) {}
 void handleContinue(void) {}
-void handleStop(void) {}
 void handleActiveSense(void) {}
 void handleReset(void) {}
 

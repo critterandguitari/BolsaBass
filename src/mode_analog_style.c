@@ -19,13 +19,11 @@
 extern float miditof[];
 
 
-static float32_t sig, f, f2, f2_ratio, filter_cutoff;
-static bl_saw saw, saw2;
+static float32_t sig, f, filter_cutoff;
+static bl_saw saw;
 static vcf_filter filter;
 static float32_t amp = 0.f;
 static sadsr amp_env;
-static uint32_t timer;
-static uint32_t octave_shift;
 static line framp;
 
 void mode_analog_style_init(void){

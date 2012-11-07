@@ -27,41 +27,30 @@
 #include "eq.h"
 #include "audio.h"
 
-#include "mode_filter_man.h"
+
 #include "mode_simple_sin.h"
-#include "mode_mono_glider.h"
-#include "mode_filter_envelope.h"
-#include "mode_nazareth.h"
-#include "mode_drum.h"
-#include "mode_drum_synth.h"
-#include "mode_simple_fm.h"
-#include "mode_fm_ramp.h"
-#include "mode_octave_mirror.h"
 #include "mode_wave_adder.h"
 #include "mode_analog_style.h"
-#include "mode_plurden.h"
+#include "mode_filter_envelope.h"
+#include "mode_simple_fm.h"
 #include "mode_bass_delay.h"
 
 
-
+// from the DAC driver CS4344.c
 extern unsigned int software_index;
 extern unsigned int hardware_index;
 extern short play_buf[];
 extern uint32_t sample_clock;
 
+// for keeping track of time
+static uint32_t sample_clock_last = 0;
 
-extern pocket_piano pp6;
-
-
-
-void Delay(__IO uint32_t nCount);
+static void Delay(__IO uint32_t nCount);
 static void flash_led_record_enable(void);
 
-
-
 // led stuff
-uint32_t led_counter = 0;  // for the above flash function
-uint8_t aux_led_color = BLACK;
+static uint32_t led_counter = 0;  // for the above flash function
+static uint8_t aux_led_color = BLACK;
 
 // MIDI buffer
 volatile uint8_t  uart_recv_buf[32];
@@ -69,71 +58,49 @@ volatile uint8_t  uart_recv_buf_write = 0;
 uint8_t  uart_recv_buf_read = 0;
 uint8_t tmp8;
 
+extern pocket_piano pp6;
+
+
 // for the eq
 EQSTATE eq;
 
 int main(void)
 {
 
-//for(;;);
 	Delay(20000);
-
-  /*!< At this stage the microcontroller clock setting is already configured,
-       this is done through SystemInit() function which is called from startup
-       file (startup_stm32f4xx.s) before to branch to application main.
-       To reconfigure the default setting of SystemInit() function, refer to
-        system_stm32f4xx.c file
-     */
-
-	  // enable random number generator
+	 // enable random number generator
 	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
 	RNG_Cmd(ENABLE);
 
-	pp6_leds_init();
-	pp6_knobs_init();
-	pp6_keys_init();
+	// initialize low level stuff
+	uart_init();
+	timer_init();
 
+	// initialize piano
+	pp6_init();
 
-	MODE_LED_RED_OFF;
-	MODE_LED_BLUE_OFF;
-	MODE_LED_GREEN_OFF;
+	// initialize midi library
+	midi_init();
 
-	pp6_set_aux_led(BLACK);
+	// initialize modes
+	mode_simple_sin_init();
+	mode_wave_adder_init();
+	mode_analog_style_init();
+	mode_filter_envelope_init();
+	mode_simple_fm_init();
+	mode_bass_delay_init();
 
-	// init codec
+	// setup codec
 	CS4344_init();
 
 	float32_t sig, f;
 	q15_t  wave;
 
 	f = 50.0;
-	uint32_t k, k_last, note, note_last, i;
-	k = note = note_last = 0xFFFFFFFF;
-
-	pp6_set_mode(0);
-
-	mode_filter_man_init();
-	mode_simple_sin_init();
-	mode_filter_envelope_init();
-	mode_simple_fm_init();
-	mode_octave_mirror_init();
-	mode_wave_adder_init();
-	mode_analog_style_init();
-	mode_fm_ramp_init();
-	mode_nazareth_init();
-	mode_plurden_init();
-	mode_drum_synth_init();
-	mode_drum_init();
-	mode_bass_delay_init();
-
-
-	uart_init();
-	midi_init();
-	timer_init();
 
 	// echo
-	uint8_t ch;
-	/*while (1){
+	/*uint8_t ch;
+	while (1){
 
 		while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET); // Wait for Character
 
@@ -153,12 +120,13 @@ int main(void)
 	}*/
 
 	uint32_t aux_button_depress_time = 0;
-	uint32_t t, t1, t2;
 	uint32_t count = 0;
 
 	// the bass boost is hardcoded in eq.c
 	init_3band_state(&eq, 880, 5000, SR);
 
+
+	// go!
 	while (1)	{
 
 
@@ -173,7 +141,7 @@ int main(void)
 	        uart_recv_buf_write &= 0x1f;  // 32 bytes
 	    }
 
-        // process MIDI
+        // process MIDI, pp6 will be updated from midi.c handlers if there are any relevant midi events
         if (uart_recv_buf_read != uart_recv_buf_write){
             tmp8 = uart_recv_buf[uart_recv_buf_read];
             uart_recv_buf_read++;
@@ -181,11 +149,20 @@ int main(void)
             recvByte(tmp8);
         }
 
+        pp6_check_for_midi_clock();
+
+        if (pp6_midi_clock_present()){
+        	if (pp6_get_midi_clock_tick()){
+        		seq_tick();
+        		pp6_clear_midi_clock_tick();
+        	}
+        }
+
 		/*
 		 * Control Rate
 		 */
-		if (!(sample_clock & 0x3F)){
-			sample_clock++;
+		if ((!(sample_clock & 0x3F)) && (sample_clock != sample_clock_last)){
+			sample_clock_last = sample_clock;
 			pp6_keys_update();
 			pp6_knobs_update();
 
@@ -196,52 +173,23 @@ int main(void)
 				pp6_check_knobs_touched();   // this sets the knobs touched flags
 			}
 
-			// scan keys 16 keys
-			k = pp6_get_keys();
-			pp6.num_keys_down = 0;
-			for (i = 0; i < 16; i++) {
-				if ( !((k>>i) & 1) ) {
-					pp6.num_keys_down++;
-				}
-				if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
-					pp6_set_note(i);
-					pp6_set_note_start();
-					pp6_inc_physical_notes_on();
-					//sendNoteOn(1, i + 36, 127);
-				}
-				if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
-					// release it if playing
-					if (i == pp6_get_note()){
-						pp6_set_note_stop();
-					}
-					//sendNoteOff(1, i + 36, 0);
-					pp6_dec_physical_notes_on();
-				}
-			}
-			if ( (!((k>>17) & 1)) &&  (((k_last>>17) & 1)) ){
-				pp6_set_mode_button_pressed();
-			}
-			if ( (!((k>>16) & 1)) &&  (((k_last>>16) & 1)) ){
-				pp6_set_aux_button_pressed();
-			}
-			if ( (((k>>16) & 1)) &&  (!((k_last>>16) & 1)) ){
-				pp6_set_aux_button_released();
-			}
-
+			pp6_get_key_events();
 
 			if (pp6_mode_button_pressed()){
 				pp6_change_mode();
 			}
 
 			// SEQUENCER
-			seq_tick();
+			if (!pp6_midi_clock_present()){
+				seq_tick();
+			}
 
 			if (seq_get_status() == SEQ_STOPPED){
 
 				pp6_set_aux_led(BLACK);
 
 				// aux button gets pressed and held
-				if ( (!((k>>16) & 1)) ) {
+				if ( (!(( pp6_get_keys() >> 16) & 1)) ) {
 					aux_button_depress_time++;
 					if (aux_button_depress_time > 500){
 						aux_button_depress_time = 0;
@@ -249,7 +197,7 @@ int main(void)
 					}
 				}
 
-				if (pp6_aux_button_pressed()) {
+				if (pp6_aux_button_pressed() || pp6_get_midi_start()) {
 					if (seq_get_length()) {  // only play if positive length
 						seq_enable_knob_playback();
 						seq_set_status(SEQ_PLAYING);
@@ -270,6 +218,10 @@ int main(void)
 					seq_set_status(SEQ_RECORDING);
 					seq_log_first_note(pp6_get_note());
 				}
+				if (pp6_get_midi_start()) {
+					seq_set_status(SEQ_RECORDING);
+					seq_log_first_note_null();   // sequence doesn't start with a note
+				}
 			}
 			else if (seq_get_status() == SEQ_RECORDING){
 
@@ -285,12 +237,19 @@ int main(void)
 				}
 
 				// stop recording
-				if (pp6_aux_button_pressed() || seq_get_auto_stop() ) {
+				if (pp6_aux_button_pressed() || seq_get_auto_stop()) {
 					seq_stop_recording();
 					seq_set_status(SEQ_PLAYING);
 					aux_button_depress_time = 0;
 					seq_clear_auto_stop();
 				}
+				if (pp6_get_midi_stop()) {   // if a midi stop is received, stop recording, and dont play
+					seq_stop_recording();
+					seq_set_status(SEQ_STOPPED);
+					aux_button_depress_time = 0;
+					seq_clear_auto_stop();
+				}
+
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
 				seq_play_tick();  // run the sequencer
@@ -311,7 +270,7 @@ int main(void)
 				else pp6_set_aux_led(aux_led_color);
 
 				// aux button gets pressed and held
-				if ( (!((k>>16) & 1)) ) {
+				if ( (!(( pp6_get_keys() >>16) & 1)) ) {
 					aux_button_depress_time++;
 					if (aux_button_depress_time > 500){
 						aux_button_depress_time = 0;
@@ -320,7 +279,7 @@ int main(void)
 					}
 				}
 				// aux button swithes to stop
-				if (pp6_aux_button_pressed()) {
+				if (pp6_aux_button_pressed() || pp6_get_midi_stop()) {
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
 					pp6_set_note_stop();
@@ -329,26 +288,24 @@ int main(void)
 
 			// END SEQUENCER
 
-
-			// store keys for next time
-			k_last = k;
-
 			// smooth the knobs here in case they are playing back
 			pp6_smooth_knobs();
 
-			t1 =  timer_get_time();
-			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();   // rampi
-			if (pp6_get_mode() == 1)  mode_wave_adder_control_process ();   //
+			//t1 =  timer_get_time();
+
+			if (pp6_get_mode() == 0)  mode_simple_sin_control_process();
+			if (pp6_get_mode() == 1)  mode_wave_adder_control_process ();
 			if (pp6_get_mode() == 2)  mode_analog_style_control_process();
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
 			if (pp6_get_mode() == 5)  mode_bass_delay_control_process();
-			//if (pp6_get_mode() == 5)  mode_drum_control_process();
-			t2 = timer_get_time();
-			t = t2 - t1;
+			//if (pp6_get_mode() == 5)  mode_drum_control_process();   // SECRET MODE ??
 
+			//t2 = timer_get_time();
+			//t = t2 - t1;
+
+			// clear all the events
 			pp6_clear_flags();
-			//seq_time++;
 			led_counter++;
 
 		}
