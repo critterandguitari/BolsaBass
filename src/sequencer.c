@@ -80,13 +80,12 @@ void seq_stop_recording(void) {
 	// if a midi clock is present, quantize length to nearest quater note
 	if (pp6_midi_clock_present() ) {
 
-		// seq_time is 64 sample clocks, divided by number sample clocks per quater note
-		/*midi_quater_note_length = pp6_get_midi_whole_note_period() / 4;
-		seq_quater_note_length = (seq_time * 64) / midi_quater_note_length ;
+		// if over the halfway point to next quater note (12), round up, else round down
+		if ( (seq_time - (seq_time / 24) * 24) > 12)
+			seq_deltas[seq_index] = ((seq_time / 24) + 1) * 24;
+		else
+			seq_deltas[seq_index] = (seq_time / 24) * 24;
 
-		seq_deltas[seq_index] = seq_quater_note_length * midi_quater_note_length / 64;*/
-
-		seq_deltas[seq_index] = (seq_time / 24) * 24;
 	}
 	else {
 		seq_deltas[seq_index] = seq_time;
@@ -154,7 +153,11 @@ uint32_t seq_get_length(void) {
 void seq_log_knobs(float32_t * knob){
 	uint32_t knob_log_time;
 
-	knob_log_time = (seq_time >> 4) & 0xFFF;  // only recording every 1024 sample periods
+	// if midi clock is present, the sequencer will be using that, so we don't reduce resolution
+	if (pp6_midi_clock_present())
+		knob_log_time = seq_time & 0xFFF;
+	else
+		knob_log_time = (seq_time >> 4) & 0xFFF;  // otherwise reduce time resolution since we don't have that much memory
 
 	knob_log[knob_log_time][0] = knob[0];
 	knob_log[knob_log_time][1] = knob[1];
@@ -166,7 +169,11 @@ void seq_log_knobs(float32_t * knob){
 float32_t * seq_play_knobs(void) {
 	uint32_t knob_log_time;
 
-	knob_log_time = (seq_time >> 4) & 0xFFF;
+	// if midi clock is present, the sequencer will be using that, so we don't reduce resolution
+	if (pp6_midi_clock_present())
+		knob_log_time = seq_time & 0xFFF;
+	else
+		knob_log_time = (seq_time >> 4) & 0xFFF;  // otherwise reduce time resolution since we don't have that much memory
 
 	return &knob_log[knob_log_time][0];
 }

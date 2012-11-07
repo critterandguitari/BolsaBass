@@ -149,6 +149,8 @@ int main(void)
             recvByte(tmp8);
         }
 
+        //TODO :  send MIDI clock and commands through
+
         pp6_check_for_midi_clock();
 
         if (pp6_midi_clock_present()){
@@ -165,6 +167,8 @@ int main(void)
 			sample_clock_last = sample_clock;
 			pp6_keys_update();
 			pp6_knobs_update();
+
+			pp6_flash_update();
 
 			// every 128 times, check if knobs got moved
 			count++;
@@ -264,10 +268,11 @@ int main(void)
 				} else {
 					aux_led_color = GREEN;
 				}
+				pp6_set_aux_led(aux_led_color);
 
 				// flash white on rollover
-				if (seq_get_time() < 75) pp6_set_aux_led(7);
-				else pp6_set_aux_led(aux_led_color);
+				if (seq_get_time() == 0) pp6_flash_aux_led(75);
+
 
 				// aux button gets pressed and held
 				if ( (!(( pp6_get_keys() >>16) & 1)) ) {

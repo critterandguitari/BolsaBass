@@ -57,17 +57,16 @@ typedef struct {
 	uint8_t num_keys_down;
 	uint8_t mode_led;
 	uint8_t aux_led;
+	uint8_t aux_led_flash; 			// these count down to zero, then the flash is over
+	uint8_t mode_led_flash;
 	uint8_t physical_notes_on;
 	uint8_t midi_start_flag;        // midi start command
 	uint8_t midi_stop_flag;    		// midi stop command
 	uint32_t midi_in_clock_last;   // stores the system time of the last received midi clock
 	uint8_t midi_clock_present;  // if a midi clock is currently present
 	uint32_t midi_clock_period;  // time in between midi clock ticks
-	uint32_t midi_whole_note_period;
-	uint32_t midi_whole_note_period_last;
+	uint8_t midi_clock_tick_count;
 	uint8_t midi_clock_flag;
-
-
 
 } pocket_piano;
 
@@ -118,6 +117,10 @@ uint8_t pp6_get_aux_led(void);
 void pp6_set_mode_led(uint8_t mode_led);
 void pp6_set_aux_led(uint8_t bank_led);
 
+void pp6_flash_mode_led(uint8_t flash_time);
+void pp6_flash_aux_led(uint8_t flash_time);
+void pp6_flash_update(void);
+
 void  pp6_set_mode_button_pressed(void);
 void pp6_set_mode_button_released(void);
 uint8_t pp6_mode_button_pressed(void);
@@ -143,7 +146,6 @@ void pp6_midi_clock_tick(void);
 void pp6_check_for_midi_clock(void) ;
 uint8_t pp6_midi_clock_present(void);
 uint32_t pp6_get_midi_clock_period(void);
-uint32_t pp6_get_midi_whole_note_period(void);
 uint8_t pp6_get_midi_clock_tick(void);
 void pp6_clear_midi_clock_tick(void);
 

@@ -61,23 +61,25 @@ void pp6_init(void) {
 	pp6.midi_clock_period = 0;
 	pp6.midi_clock_present = 0;
 	pp6.midi_in_clock_last = 0;
+	pp6.midi_clock_tick_count = 0;
+
+	pp6.mode_led_flash = 0;
+	pp6.aux_led_flash = 0;
 }
 
 
 /// MIDI clock stuff
 void pp6_midi_clock_tick(void) {
-	static uint8_t count = 0;// whole note counter
 
 	pp6.midi_clock_flag = 1; // set the flag used elsewhere
 
 	pp6.midi_clock_period = sample_clock - pp6.midi_in_clock_last;
 	pp6.midi_in_clock_last = sample_clock;
 
-	count++;
-	if (count == 96){
-		count = 0;
-		pp6.midi_whole_note_period = sample_clock - pp6.midi_whole_note_period_last;
-		pp6.midi_whole_note_period_last = sample_clock;
+	pp6.midi_clock_tick_count++;
+	if (pp6.midi_clock_tick_count == 24){
+		pp6.midi_clock_tick_count = 0;
+		pp6_flash_mode_led(40);
 	}
 }
 
@@ -106,9 +108,6 @@ uint32_t pp6_get_midi_clock_period(void) {
 	return pp6.midi_clock_period;
 }
 
-uint32_t pp6_get_midi_whole_note_period(void) {
-	return pp6.midi_whole_note_period;
-}
 
 float32_t pp6_get_knob_1(void){
 	return pp6.knob[0];
@@ -176,13 +175,15 @@ uint32_t pp6_get_mode(void){
 // MODE LED
 void pp6_set_mode_led(uint8_t led) {
 	pp6.mode_led = led;
-	if (led == 0) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
-	if (led == 1) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
-	if (led == 2) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
-	if (led == 3) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
-	if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
-	if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
-	if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+	if (!pp6.mode_led_flash) {
+		if (led == 0) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
+		if (led == 1) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_OFF;}
+		if (led == 2) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+		if (led == 3) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_OFF;}
+		if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
+		if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+		if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+	}
 }
 
 uint8_t pp6_get_mode_led(void){
@@ -193,20 +194,50 @@ uint8_t pp6_get_mode_led(void){
 // AUX LED
 void pp6_set_aux_led(uint8_t led) {
 	pp6.aux_led = led;
-	if (led == 0) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
-	if (led == 1) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
-	if (led == 2) {AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
-	if (led == 3) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
-	if (led == 4) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;}
-	if (led == 5) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
-	if (led == 6) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
-	if (led == 7) {AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;}
-
+	if (!pp6.aux_led_flash) {
+		if (led == 0) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
+		if (led == 1) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_OFF;}
+		if (led == 2) {AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
+		if (led == 3) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_OFF;}
+		if (led == 4) {AUX_LED_RED_OFF;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;}
+		if (led == 5) {AUX_LED_RED_OFF;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
+		if (led == 6) {AUX_LED_RED_ON;AUX_LED_GREEN_OFF;AUX_LED_BLUE_ON;}
+		if (led == 7) {AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;}
+	}
 }
 
 uint8_t pp6_get_aux_led(void) {
 	return pp6.aux_led;
 }
+
+// LED flashing
+void pp6_flash_mode_led(uint8_t flash_time) {
+	pp6.mode_led_flash = flash_time;
+}
+
+void pp6_flash_aux_led(uint8_t flash_time) {
+	pp6.aux_led_flash = flash_time;
+}
+
+void pp6_flash_update(void) {
+
+	if (pp6.aux_led_flash) {
+		AUX_LED_RED_ON;AUX_LED_GREEN_ON;AUX_LED_BLUE_ON;
+		pp6.aux_led_flash--;
+		if (pp6.aux_led_flash == 0) {
+			pp6_set_aux_led(pp6.aux_led);
+		}
+	}
+
+	if (pp6.mode_led_flash) {
+		MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;
+		pp6.mode_led_flash--;
+		if (pp6.mode_led_flash == 0) {
+			pp6_set_mode_led(pp6.mode_led);
+		}
+	}
+}
+
 
 uint32_t pp6_get_keys(void) {
 		return pp6.keys;
@@ -271,6 +302,7 @@ uint8_t pp6_get_note(void) {
 //MIDI Events
 void pp6_set_midi_start(void) {
 	pp6.midi_start_flag = 1;
+	pp6.midi_clock_tick_count = 0;
 }
 uint8_t pp6_get_midi_start(void){
 	return pp6.midi_start_flag;
