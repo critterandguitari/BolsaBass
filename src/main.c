@@ -134,6 +134,7 @@ int main(void)
 			break;
 	}
 
+	// no key was pressed, defalut to ch 1
 	if (i == 16) i = 0;
 
 	// initialize midi library
@@ -143,7 +144,6 @@ int main(void)
 
 	// go!
 	while (1)	{
-
 
 	    /* Update WWDG counter */
 	    //WWDG_SetCounter(127);
@@ -198,6 +198,18 @@ int main(void)
 				pp6_change_mode();
 			}
 
+
+			// notes from midi TEST
+			if (pp6_note_on_flag()) {
+				pp6_set_synth_note_start();
+				pp6_set_synth_note(pp6_get_note_on() - 36);
+			}
+			if (pp6_note_off_flag()) {
+				if (pp6_get_note_off() == pp6_get_note_on())
+					pp6_set_synth_note_stop();
+			}
+
+			// TODO:  the sequencer will record the note on and off events, not the synth on and off events!!
 			// SEQUENCER
 			if (!pp6_midi_clock_present()){
 				seq_tick();
@@ -233,9 +245,9 @@ int main(void)
 				//	else
 						seq_set_status(SEQ_STOPPED);
 				}
-				if (pp6_get_note_start()){
+				if (pp6_get_synth_note_start()){
 					seq_set_status(SEQ_RECORDING);
-					seq_log_first_note(pp6_get_note());
+					seq_log_first_note(pp6_get_synth_note());
 				}
 				if (pp6_get_midi_start()) {
 					seq_set_status(SEQ_RECORDING);
@@ -248,11 +260,11 @@ int main(void)
 
 				seq_log_knobs(pp6_get_knob_array());
 
-				if (pp6_get_note_start()){
-					seq_log_note_start(pp6_get_note());
+				if (pp6_get_synth_note_start()){
+					seq_log_note_start(pp6_get_synth_note());
 				}
-				if (pp6_get_note_stop()) {
-					seq_log_note_stop(pp6_get_note());
+				if (pp6_get_synth_note_stop()) {
+					seq_log_note_stop(pp6_get_synth_note());
 				}
 
 				// stop recording
@@ -288,23 +300,25 @@ int main(void)
 				// flash white on rollover
 				if (seq_get_time() == 0) pp6_flash_aux_led(75);
 
-
 				// aux button gets pressed and held
 				if ( (!(( pp6_get_keys() >>16) & 1)) ) {
 					aux_button_depress_time++;
 					if (aux_button_depress_time > 500){
 						aux_button_depress_time = 0;
 						seq_set_status(SEQ_RECORD_ENABLE);
-						pp6_set_note_stop();
+						pp6_set_synth_note_stop();
 					}
 				}
 				// aux button swithes to stop
 				if (pp6_aux_button_pressed() || pp6_get_midi_stop()) {
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
-					pp6_set_note_stop();
+					pp6_set_synth_note_stop();
 				}
 			}
+
+
+
 
 			// END SEQUENCER
 

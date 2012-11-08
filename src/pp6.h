@@ -38,28 +38,46 @@
 
 
 typedef struct {
-	/*float32_t knob_1;
-	float32_t knob_2;
-	float32_t knob_3;*/
+
+	// knobs
 	uint8_t knob_touched[3]; 	// flag to see if knob is touched
 	float32_t knob[3];   		// stores knob values 0-1
-	uint8_t note_start;   		// flag to start note
-	uint8_t note_stop;   		// flag to stop note
-	uint8_t playing;
-	uint8_t note;
+
+	// the actual notes the synth is playing
+	uint8_t synth_note_start;   		// flag to start synth
+	uint8_t synth_note_stop;   		// flag to stop synth
+	uint8_t synth_playing;
+	uint8_t synth_note;
+
+
+	// both the built in keyboard and midi input generate these events
+	uint8_t note_on_flag;		// note on flag (MIDI or keyboard)
+	uint8_t note_off_flag; 		// note off flag
+	uint8_t note_on;			// used in conjunction with the on and off flags to store recieved event (from keyboard or MIDI)
+	uint8_t note_off;
+	uint8_t physical_notes_on;    // the number of non sequenced notes currently on
+
+	// keys
 	uint32_t keys;
 	uint32_t keys_last;
+	uint8_t num_keys_down;
+
+	// current mode
 	uint32_t mode;
+
+	// mode and aux button event flags
 	uint8_t mode_button_pressed;	// mode button event flags
 	uint8_t mode_button_released;
 	uint8_t aux_button_pressed;		// aux button event flags
 	uint8_t aux_button_released;
-	uint8_t num_keys_down;
+
+	// LEDs
 	uint8_t mode_led;
 	uint8_t aux_led;
 	uint8_t aux_led_flash; 			// these count down to zero, then the flash is over
 	uint8_t mode_led_flash;
-	uint8_t physical_notes_on;
+
+	// MIDI clock
 	uint8_t midi_start_flag;        // midi start command
 	uint8_t midi_stop_flag;    		// midi stop command
 	uint32_t midi_in_clock_last;   // stores the system time of the last received midi clock
@@ -81,17 +99,17 @@ float32_t pp6_get_knob_3(void);
 float32_t * pp6_get_knob_array(void);
 void pp6_set_knob_array(float32_t * knobs);
 
-uint8_t pp6_get_note_start(void);
-void pp6_set_note_start (void );
+uint8_t pp6_get_synth_note_start(void);
+void pp6_set_synth_note_start (void );
+uint8_t pp6_get_synth_note_stop(void);
+void pp6_set_synth_note_stop (void );
+uint8_t pp6_get_synth_note(void);
+void pp6_set_synth_note(uint8_t note);
 
-uint8_t pp6_get_note_stop(void);
-void pp6_set_note_stop (void );
+
 void pp6_clear_flags(void);
 
 uint8_t pp6_is_playing (void);
-
-uint8_t pp6_get_note(void);
-void pp6_set_note(uint8_t note);
 
 uint32_t pp6_get_keys(void);   // returns the current key status
 uint8_t pp6_get_num_keys_down(void);
@@ -148,6 +166,14 @@ uint8_t pp6_midi_clock_present(void);
 uint32_t pp6_get_midi_clock_period(void);
 uint8_t pp6_get_midi_clock_tick(void);
 void pp6_clear_midi_clock_tick(void);
+
+// the note interface for the piano
+uint8_t pp6_note_on_flag();
+uint8_t pp6_note_off_flag();
+uint8_t pp6_get_note_on();
+uint8_t pp6_get_note_off();
+void pp6_set_note_off(uint8_t note);
+void pp6_set_note_on(uint8_t note);
 
 
 #endif /* PP6_H_ */

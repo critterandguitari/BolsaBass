@@ -68,9 +68,9 @@ void mode_simple_fm_control_process (void) {
 
 	//f = miditof[pp6_get_note()] * ((pp6_get_knob_3()) + 1.f);
 
-	if (pp6_get_note_start() ){
+	if (pp6_get_synth_note_start() ){
 
-		target_f = (float32_t)pp6_get_note() * 100.f;
+		target_f = (float32_t)pp6_get_synth_note() * 100.f;
 		line_go(&framp, target_f, 20.f);
 
 		sadsr_set(&amp_env, .01f, .1f, 1.f, .6f);
@@ -83,7 +83,7 @@ void mode_simple_fm_control_process (void) {
 		new_note = 1;
 		note_dur = 0;
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		if (note_dur < 100)
 			sadsr_set(&amp_env, .01f, .1f, .1, .6f);
 		sadsr_release(&amp_env);

@@ -77,13 +77,13 @@ void mode_drum_control_process (void) {
 	static uint32_t last_hit;
 
 	//f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
-	f = c_to_f(((float32_t)pp6_get_note() * 100.f)) * (pp6_get_knob_3() +  1.f);
+	f = c_to_f(((float32_t)pp6_get_synth_note() * 100.f)) * (pp6_get_knob_3() +  1.f);
 
 
 
 	sadsr_set(&amp_env, .01f, .2f, .2f, 0.f);
 	sadsr_set(&filter_env, .001f, (pp6_get_knob_1() * 2.f) + .01f, 1.f, .1f);
-	if (pp6_get_note_start()){
+	if (pp6_get_synth_note_start()){
 	/*count++;
 	all_clock++;
 	aux = pp6_get_aux();
@@ -106,7 +106,7 @@ void mode_drum_control_process (void) {
 		sadsr_go(&sin_amp_env);
 
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		sadsr_release(&amp_env);
 		sadsr_release(&filter_env);
 		sadsr_release(&sin_amp_env);

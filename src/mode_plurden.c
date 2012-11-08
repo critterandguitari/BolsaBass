@@ -85,8 +85,8 @@ void mode_plurden_control_process (void) {
 	static uint32_t note_dur;
 	static uint8_t last_note = 60;
 
-	if (pp6_get_note_start() ){
-		cents = ((float32_t)pp6_get_note() * 100.f);
+	if (pp6_get_synth_note_start() ){
+		cents = ((float32_t)pp6_get_synth_note() * 100.f);
 		//f = c_to_f(cents);
 
 
@@ -99,9 +99,9 @@ void mode_plurden_control_process (void) {
 		//sin_reset(&sin1);
 		note_dur = 0;
 
-		last_note = pp6_get_note();
+		last_note = pp6_get_synth_note();
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		if (note_dur < 100)
 			sadsr_set(&amp_env, .01f, .1f, .15, .6f);
 		sadsr_release(&amp_env);

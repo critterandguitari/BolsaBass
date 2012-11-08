@@ -389,13 +389,16 @@ unsigned int getParam(unsigned int param)
 
 //  MIDI Callbacks
 void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
-	if (pp6_get_note() == (note - 36))
-		pp6_set_note_stop();
+	//if (pp6_get_note() == (note - 36))
+	//pp6_set_note(note - 36);
+	//pp6_set_note_stop();
+	pp6_set_note_off(note);
 }
 
 void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
-	 pp6_set_note(note - 36);
-	 pp6_set_note_start();
+	 //pp6_set_note(note - 36);
+	 //pp6_set_note_start();
+	pp6_set_note_on(note);
 }
 
 void handleSync(void) {

@@ -44,12 +44,12 @@ float32_t mode_mono_glider_sample_process (void) {
 
 void mode_mono_glider_control_process (void) {
 
-	if (pp6_get_note_start() ){
-		cents = ((float32_t)pp6_get_note() * 100.f);
+	if (pp6_get_synth_note_start() ){
+		cents = ((float32_t)pp6_get_synth_note() * 100.f);
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		sadsr_release(&amp_env);
 	}
 

@@ -60,17 +60,17 @@ float32_t mode_octave_mirror_sample_process (void) {
 
 void mode_octave_mirror_control_process (void) {
 
-	if (pp6_get_note_start()){
+	if (pp6_get_synth_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 1.f, .6f);
 		sadsr_go(&amp_env);
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		sadsr_release(&amp_env);
 	}
 	//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, pp6_get_knob_2() * 3.5f );
 
 
-		f = c_to_f(((float32_t)pp6_get_note() * 100.f));
+		f = c_to_f(((float32_t)pp6_get_synth_note() * 100.f));
 
 		f = f * (pp6_get_knob_3() +  1.f) * (octave_shift + 1);
 		f2 =  f * 1.01;//f2_ratio;

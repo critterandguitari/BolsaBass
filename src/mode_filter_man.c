@@ -70,9 +70,9 @@ void mode_filter_man_control_process (void) {
 	static uint32_t note_dur;
 
 
-	if (pp6_get_note_start()){
+	if (pp6_get_synth_note_start()){
 		note_dur=0;
-		target_f = (float32_t)pp6_get_note() * 100.f;
+		target_f = (float32_t)pp6_get_synth_note() * 100.f;
 		line_go(&framp, target_f, (pp6_get_knob_2() + .001f) * 5000.f);
 
 
@@ -85,7 +85,7 @@ void mode_filter_man_control_process (void) {
 		}
 
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 
 		//if (note_dur < 100)
 		//	sadsr_set(&amp_env, .01f, .1f, .15, .6f);

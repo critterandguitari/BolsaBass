@@ -239,6 +239,8 @@ void pp6_flash_update(void) {
 }
 
 
+// keys
+
 uint32_t pp6_get_keys(void) {
 		return pp6.keys;
 }
@@ -263,16 +265,14 @@ void pp6_get_key_events(void) {
 			pp6.num_keys_down++;
 		}
 		if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
-			pp6_set_note(i);
-			pp6_set_note_start();
-			pp6_inc_physical_notes_on();
+			pp6_set_synth_note(i);
+			pp6_set_synth_note_start();
 		}
 		if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
 			// release it if playing
-			if (i == pp6_get_note()){
-				pp6_set_note_stop();
+			if (i == pp6_get_synth_note()){
+				pp6_set_synth_note_stop();
 			}
-			pp6_dec_physical_notes_on();
 		}
 	}
 
@@ -291,12 +291,52 @@ void pp6_get_key_events(void) {
 	pp6.keys_last = pp6.keys;
 }
 
-// the key being held down
-void pp6_set_note(uint8_t note) {
-	pp6.note = note;
+// the note interface for the piano
+uint8_t pp6_note_on_flag() {
+	return pp6.note_on_flag;
 }
-uint8_t pp6_get_note(void) {
-	return pp6.note;
+uint8_t pp6_note_off_flag() {
+	return pp6.note_off_flag;
+}
+uint8_t pp6_get_note_on() {
+	return pp6.note_on;
+}
+uint8_t pp6_get_note_off() {
+	return pp6.note_off;
+}
+void pp6_set_note_off(uint8_t note){
+	pp6.note_off = note;
+	pp6.note_off_flag = 1;
+	pp6_dec_physical_notes_on();
+}
+void pp6_set_note_on(uint8_t note){
+	pp6.note_on = note;
+	pp6.note_on_flag = 1;
+	pp6_inc_physical_notes_on();
+}
+
+// The actual synth voice
+void pp6_set_synth_note(uint8_t note) {
+	pp6.synth_note = note;
+}
+uint8_t pp6_get_synth_note(void) {
+	return pp6.synth_note;
+
+}
+void pp6_set_synth_note_start (void ) {
+	pp6.synth_note_stop = 0;
+	pp6.synth_playing = 1;
+	pp6.synth_note_start = 1;
+}
+uint8_t pp6_get_synth_note_start(void) {
+	return pp6.synth_note_start;
+}
+void pp6_set_synth_note_stop(void){
+	pp6.synth_note_start = 0;
+	pp6.synth_note_stop = 1;
+}
+uint8_t pp6_get_synth_note_stop(void){
+	return pp6.synth_note_stop;
 }
 
 //MIDI Events
@@ -314,25 +354,9 @@ uint8_t pp6_get_midi_stop(void){
 	return pp6.midi_stop_flag;
 }
 
-// Events
-void pp6_set_note_start (void ) {
-	pp6.note_stop = 0;
-	pp6.playing = 1;
-	pp6.note_start = 1;
-}
-uint8_t pp6_get_note_start(void) {
-	return pp6.note_start;
-}
-void pp6_set_note_stop(void){
-	pp6.note_start = 0;
-	pp6.note_stop = 1;
-}
-uint8_t pp6_get_note_stop(void){
-	return pp6.note_stop;
-}
 void pp6_clear_flags(void){
-	pp6.note_stop = 0;
-	pp6.note_start = 0;
+	pp6.synth_note_stop = 0;
+	pp6.synth_note_start = 0;
 	pp6.aux_button_pressed = 0;
 	pp6.aux_button_released = 0;
 	pp6.mode_button_pressed = 0;
@@ -343,6 +367,9 @@ void pp6_clear_flags(void){
 	pp6.midi_start_flag = 0;
 	pp6.midi_stop_flag = 0;
 	pp6.midi_clock_flag = 0;
+
+	pp6.note_on_flag = 0;
+	pp6.note_off_flag = 0;
 }
 
 uint8_t pp6_get_num_keys_down(void){

@@ -110,8 +110,8 @@ void mode_nazareth_control_process (void) {
 	sin_set(&amp_sins[7], .8f, 1);
 
 
-	f = miditof[pp6_get_note()] * .6f;
-	if (pp6_get_note_start() ){
+	f = miditof[pp6_get_synth_note()] * .6f;
+	if (pp6_get_synth_note_start() ){
 		sadsr_set(&amp_env, .01f, 1.f, .2f, .6f);
 		sadsr_go(&amp_env);
 
@@ -135,7 +135,7 @@ void mode_nazareth_control_process (void) {
 
 		new_note = 1;
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		sadsr_release(&amp_env);
 	}
 

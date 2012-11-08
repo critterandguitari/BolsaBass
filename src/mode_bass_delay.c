@@ -94,8 +94,8 @@ void mode_bass_delay_control_process (void) {
 	//f = miditof[pp6_get_note()] * .6f;
 	//f = c_to_f(cents);
 
-	if (pp6_get_note_start() ){
-		cents = ((float32_t)pp6_get_note() * 100.f);
+	if (pp6_get_synth_note_start() ){
+		cents = ((float32_t)pp6_get_synth_note() * 100.f);
 		//f = c_to_f(cents);
 
 
@@ -108,7 +108,7 @@ void mode_bass_delay_control_process (void) {
 		//sin_reset(&sin1);
 		note_dur = 0;
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		//if (note_dur < 100)
 		//	sadsr_set(&amp_env, .001f, .01f, .015, .6f);
 		sadsr_release(&amp_env);

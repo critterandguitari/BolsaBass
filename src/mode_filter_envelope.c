@@ -71,11 +71,11 @@ void mode_filter_envelope_control_process (void) {
 
 
 
-	f = c_to_f((float32_t)pp6_get_note() * 100.f);
+	f = c_to_f((float32_t)pp6_get_synth_note() * 100.f);
 
 
 
-	if (pp6_get_note_start()){
+	if (pp6_get_synth_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 1.54f, .6f);
 		sadsr_set(&filter_env, .001f, ((pp6_get_knob_1() + .001f) * 4.f) + .01f, 10.f, 0);
 
@@ -90,7 +90,7 @@ void mode_filter_envelope_control_process (void) {
 		note_dur = 0;
 
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		if (note_dur < 100)
 			sadsr_set(&amp_env, .01f, .1f, .2, .6f);
 		sadsr_release(&amp_env);

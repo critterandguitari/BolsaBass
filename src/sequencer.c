@@ -8,9 +8,9 @@
 #include "pp6.h"
 #include "sequencer.h"
 
-static uint32_t seq_deltas[255];
-static uint32_t seq_notes[255];
-static uint32_t seq_events[255];
+static uint32_t seq_deltas[256];
+static uint32_t seq_notes[256];
+static uint32_t seq_events[256];
 static uint32_t seq_index = 0;
 static uint32_t seq_time = 0;
 static uint32_t seq_length = 0;
@@ -66,6 +66,7 @@ void seq_log_note_start(uint8_t note){
 	seq_last_note_start = seq_time;
 	seq_last_note_start_index = seq_index;
 	seq_index++;
+	if (seq_index == 0xFF) seq_set_auto_stop();
 }
 
 void seq_log_note_stop(uint8_t note){
@@ -73,6 +74,7 @@ void seq_log_note_stop(uint8_t note){
 	seq_notes[seq_index] = note;
 	seq_events[seq_index] = SEQ_NOTE_STOP ;
 	seq_index++;
+	if (seq_index == 0xFF) seq_set_auto_stop();
 }
 
 void seq_stop_recording(void) {
@@ -95,16 +97,13 @@ void seq_stop_recording(void) {
 	seq_notes[seq_index] = seq_notes[0];
 	seq_events[seq_index] = SEQ_SEQ_STOP;
 
-
-
-
 	seq_length = seq_index;
 
 
 	seq_index = 0; // go back to the begining
 	seq_time = 0;
 	seq_playback_knobs_enabled = 1;  // enable playback of knobs
-	pp6_set_note_stop();  // always stop the note
+	pp6_set_synth_note_stop();  // always stop the note
 }
 
 void seq_rewind(void) {
@@ -119,13 +118,13 @@ void seq_play_tick (void){
 		if (seq_events[seq_index] == SEQ_NOTE_START){
 			// a physical note down will mute sequence
 			if (!pp6_get_physical_notes_on()){
-				pp6_set_note(seq_notes[seq_index]);
-				pp6_set_note_start();
+				pp6_set_synth_note(seq_notes[seq_index]);
+				pp6_set_synth_note_start();
 			}
 		}
 		if (seq_events[seq_index] == SEQ_NOTE_STOP){
 			if (!pp6_get_physical_notes_on()){
-				pp6_set_note_stop();
+				pp6_set_synth_note_stop();
 			}
 		}
 		seq_index++;

@@ -49,12 +49,12 @@ float32_t mode_drum_synth_sample_process (void) {
 }
 
 void mode_drum_synth_control_process (void) {
-	f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
-	if (pp6_get_note_start()){
+	f = miditof[pp6_get_synth_note()] * .6f * (pp6_get_knob_3() +  1.f);
+	if (pp6_get_synth_note_start()){
 		sadsr_set(&amp_env, .01f, 1.f, 10.f, .6f);
 		sadsr_go(&amp_env);
 	}
-	if (pp6_get_note_stop()){
+	if (pp6_get_synth_note_stop()){
 		sadsr_release(&amp_env);
 	}
 	vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, pp6_get_knob_2() * 3.9f );
