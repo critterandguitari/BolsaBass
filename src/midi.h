@@ -32,7 +32,7 @@ uint8_t sendFullCommands_;
 
 /* Internal functions */
 
-void midi_init(void);
+void midi_init(uint8_t ch);
 // Handle decoding incoming MIDI traffic a byte at a time -- remembers
 //  what it needs to from one call to the next.
 void recvByte(int byte);

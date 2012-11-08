@@ -66,6 +66,7 @@ EQSTATE eq;
 
 int main(void)
 {
+	uint8_t i;
 
 	Delay(20000);
 	 // enable random number generator
@@ -78,9 +79,6 @@ int main(void)
 
 	// initialize piano
 	pp6_init();
-
-	// initialize midi library
-	midi_init();
 
 	// initialize modes
 	mode_simple_sin_init();
@@ -124,6 +122,23 @@ int main(void)
 
 	// the bass boost is hardcoded in eq.c
 	init_3band_state(&eq, 880, 5000, SR);
+
+
+	// get initial midi channel
+	// update keys has to be called > 8 times for key press to be debounced
+	for (i = 0; i < 9; i++)
+		pp6_keys_update();
+
+	for (i = 0; i < 16; i++) {
+		if (!((pp6_get_keys() >> i) & 1))
+			break;
+	}
+
+	if (i == 16) i = 0;
+
+	// initialize midi library
+	midi_init(i + 1);
+
 
 
 	// go!

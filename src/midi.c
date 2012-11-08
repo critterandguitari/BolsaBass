@@ -340,7 +340,7 @@ void sendReset(void)
 }
 
 
-void midi_init(void)
+void midi_init(uint8_t ch)
 {
     /* Not in proprietary stream */
     recvMode_ = 0;
@@ -358,7 +358,7 @@ void midi_init(void)
     sendFullCommands_ = 0;
 
     /* Listening to all channels (set to 0)*/
-    channelIn_ = 2;
+    channelIn_ = ch;
 }
 
 // Set (package-specific) parameters for the Midi instance
