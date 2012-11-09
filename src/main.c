@@ -53,8 +53,8 @@ static uint32_t led_counter = 0;  // for the above flash function
 static uint8_t aux_led_color = BLACK;
 
 // MIDI buffer
-volatile uint8_t  uart_recv_buf[32];
-volatile uint8_t  uart_recv_buf_write = 0;
+uint8_t  uart_recv_buf[32];
+uint8_t  uart_recv_buf_write = 0;
 uint8_t  uart_recv_buf_read = 0;
 uint8_t tmp8;
 
@@ -67,6 +67,7 @@ EQSTATE eq;
 int main(void)
 {
 	uint8_t i;
+
 
 	Delay(20000);
 	 // enable random number generator
@@ -140,8 +141,6 @@ int main(void)
 	// initialize midi library
 	midi_init(i + 1);
 
-
-
 	// go!
 	while (1)	{
 
@@ -164,7 +163,8 @@ int main(void)
             recvByte(tmp8);
         }
 
-        //TODO :  send MIDI clock and commands through
+        // empty the tx buffer
+        uart_service_tx_buf();
 
         pp6_check_for_midi_clock();
 
@@ -198,18 +198,6 @@ int main(void)
 				pp6_change_mode();
 			}
 
-
-			// notes from midi TEST
-			if (pp6_note_on_flag()) {
-				pp6_set_synth_note_start();
-				pp6_set_synth_note(pp6_get_note_on() - 36);
-			}
-			if (pp6_note_off_flag()) {
-				if (pp6_get_note_off() == pp6_get_note_on())
-					pp6_set_synth_note_stop();
-			}
-
-			// TODO:  the sequencer will record the note on and off events, not the synth on and off events!!
 			// SEQUENCER
 			if (!pp6_midi_clock_present()){
 				seq_tick();
@@ -241,13 +229,11 @@ int main(void)
 			else if (seq_get_status() == SEQ_RECORD_ENABLE){
 				flash_led_record_enable();
 				if (pp6_aux_button_pressed()) {
-				//	if (seq_get_length()) seq_set_status(SEQ_PLAYING);  // only play if positive length
-				//	else
-						seq_set_status(SEQ_STOPPED);
+					seq_set_status(SEQ_STOPPED);
 				}
-				if (pp6_get_synth_note_start()){
+				if (pp6_note_on_flag()){
 					seq_set_status(SEQ_RECORDING);
-					seq_log_first_note(pp6_get_synth_note());
+					seq_log_first_note(pp6_get_note_on());
 				}
 				if (pp6_get_midi_start()) {
 					seq_set_status(SEQ_RECORDING);
@@ -260,11 +246,11 @@ int main(void)
 
 				seq_log_knobs(pp6_get_knob_array());
 
-				if (pp6_get_synth_note_start()){
-					seq_log_note_start(pp6_get_synth_note());
+				if (pp6_note_on_flag()){
+					seq_log_note_start(pp6_get_note_on());
 				}
-				if (pp6_get_synth_note_stop()) {
-					seq_log_note_stop(pp6_get_synth_note());
+				if (pp6_note_off_flag()) {
+					seq_log_note_stop(pp6_get_note_off());
 				}
 
 				// stop recording
@@ -306,21 +292,35 @@ int main(void)
 					if (aux_button_depress_time > 500){
 						aux_button_depress_time = 0;
 						seq_set_status(SEQ_RECORD_ENABLE);
-						pp6_set_synth_note_stop();
+						pp6_set_synth_note_stop();  // stop the synth
 					}
 				}
 				// aux button swithes to stop
 				if (pp6_aux_button_pressed() || pp6_get_midi_stop()) {
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
-					pp6_set_synth_note_stop();
+					pp6_set_synth_note_stop();   // stop the synth
 				}
 			}
 
-
-
-
 			// END SEQUENCER
+
+
+			// at this point note on and offs will be set from sequencer, midi in, or keyboard, now use those events to control synth
+			if (pp6_note_on_flag()) {
+				pp6_set_synth_note_start();
+				pp6_set_synth_note(pp6_get_note_on() - 36);
+
+				// send note out MIDI
+				sendNoteOn(1, pp6_get_note_on(), 100);
+			}
+			if (pp6_note_off_flag()) {
+				if (pp6_get_note_off() == pp6_get_note_on())
+					pp6_set_synth_note_stop();
+
+				// send note out MIDI
+				sendNoteOff(1, pp6_get_note_off(), 0);
+			}
 
 			// smooth the knobs here in case they are playing back
 			pp6_smooth_knobs();

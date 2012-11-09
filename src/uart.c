@@ -7,6 +7,12 @@
 
 #include "uart.h"
 
+// UART  buffer
+static uint8_t  uart_tx_buf[32];
+static uint8_t  uart_tx_buf_write = 0;
+static uint8_t  uart_tx_buf_read = 0;
+
+
 
 void uart_init(void){
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -42,6 +48,18 @@ void uart_init(void){
 }
 
 void put_char (uint8_t data) {
-	while (USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET);
-	USART_SendData (USART1, data);
+	uart_tx_buf[uart_tx_buf_write] = data;
+	uart_tx_buf_write++;
+	uart_tx_buf_write &= 0x1f;  // 32 bytes
+}
+
+void uart_service_tx_buf (void) {
+    if (uart_tx_buf_read != uart_tx_buf_write){
+    	// if there is nothing in the register already
+    	if (!(USART_GetFlagStatus (USART1, USART_FLAG_TXE) == RESET))  {
+    		USART_SendData (USART1, uart_tx_buf[uart_tx_buf_read]);
+            uart_tx_buf_read++;
+            uart_tx_buf_read &= 0x1f;
+    	}
+    }
 }

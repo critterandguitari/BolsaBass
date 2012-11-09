@@ -393,24 +393,29 @@ void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocit
 	//pp6_set_note(note - 36);
 	//pp6_set_note_stop();
 	pp6_set_note_off(note);
+	pp6_dec_physical_notes_on();
 }
 
 void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
 	 //pp6_set_note(note - 36);
 	 //pp6_set_note_start();
 	pp6_set_note_on(note);
+	pp6_inc_physical_notes_on();
 }
 
 void handleSync(void) {
 	pp6_midi_clock_tick();
+	sendSync();  // send it through
 }
 
 void handleStart(void) {
 	pp6_set_midi_start();
+	sendStart();  // send it through
 }
 
 void handleStop(void) {
 	pp6_set_midi_stop();
+	sendStop();  // send it through
 }
 
 

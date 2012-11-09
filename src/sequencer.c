@@ -118,13 +118,12 @@ void seq_play_tick (void){
 		if (seq_events[seq_index] == SEQ_NOTE_START){
 			// a physical note down will mute sequence
 			if (!pp6_get_physical_notes_on()){
-				pp6_set_synth_note(seq_notes[seq_index]);
-				pp6_set_synth_note_start();
+				pp6_set_note_on(seq_notes[seq_index]);
 			}
 		}
 		if (seq_events[seq_index] == SEQ_NOTE_STOP){
 			if (!pp6_get_physical_notes_on()){
-				pp6_set_synth_note_stop();
+				pp6_set_note_off(seq_notes[seq_index]);
 			}
 		}
 		seq_index++;

@@ -265,14 +265,12 @@ void pp6_get_key_events(void) {
 			pp6.num_keys_down++;
 		}
 		if ( (!((k>>i) & 1)) &&  (((k_last>>i) & 1))  )  {  // new key down
-			pp6_set_synth_note(i);
-			pp6_set_synth_note_start();
+			pp6_set_note_on(i + 36);   // keyboard starts at midi note 36
+			pp6_inc_physical_notes_on();
 		}
 		if ( ((k>>i) & 1) &&  (!((k_last>>i) & 1))  )  {  // key up
-			// release it if playing
-			if (i == pp6_get_synth_note()){
-				pp6_set_synth_note_stop();
-			}
+			pp6_set_note_off(i + 36);   // keyboard starts at midi note 36
+			pp6_dec_physical_notes_on();
 		}
 	}
 
@@ -292,6 +290,7 @@ void pp6_get_key_events(void) {
 }
 
 // the note interface for the piano
+// TODO :  ahhh, what if more then one key is pressed at same time ??, set_note_on can only handle 1 note per 'tick'
 uint8_t pp6_note_on_flag() {
 	return pp6.note_on_flag;
 }
@@ -307,12 +306,10 @@ uint8_t pp6_get_note_off() {
 void pp6_set_note_off(uint8_t note){
 	pp6.note_off = note;
 	pp6.note_off_flag = 1;
-	pp6_dec_physical_notes_on();
 }
 void pp6_set_note_on(uint8_t note){
 	pp6.note_on = note;
 	pp6.note_on_flag = 1;
-	pp6_inc_physical_notes_on();
 }
 
 // The actual synth voice
