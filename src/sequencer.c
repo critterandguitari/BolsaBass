@@ -14,8 +14,6 @@ static uint32_t seq_events[256];
 static uint32_t seq_index = 0;
 static uint32_t seq_time = 0;
 static uint32_t seq_length = 0;
-static uint32_t seq_last_note_start = 0;
-static uint32_t seq_last_note_start_index = 0;
 static uint8_t seq_status = SEQ_STOPPED;
 static uint8_t seq_playback_knobs_enabled = 1;
 static uint8_t seq_auto_stop = 0;
@@ -38,24 +36,15 @@ uint8_t seq_get_status(void) {
 	return seq_status;
 }
 
-void seq_log_first_note(uint8_t note){
-	seq_deltas[0] = 0;
-	seq_notes[0] = note;
-	seq_events[0] = SEQ_NOTE_START;
+void seq_start_recording(void) {
 	seq_time = 0;
-	seq_length = 0;
 	seq_index = 0;
-	seq_index++;
 }
-
 
 void seq_log_first_note_null(void){  // this is when a sequence starts externally (say from midi)
 	seq_deltas[0] = 0;
 	seq_notes[0] = 0;
 	seq_events[0] = SEQ_NOTE_START_NULL;
-	seq_time = 0;
-	seq_length = 0;
-	seq_index = 0;
 	seq_index++;
 }
 
@@ -63,8 +52,6 @@ void seq_log_note_start(uint8_t note){
 	seq_deltas[seq_index] = seq_time;
 	seq_notes[seq_index] = note;
 	seq_events[seq_index] = SEQ_NOTE_START;
-	seq_last_note_start = seq_time;
-	seq_last_note_start_index = seq_index;
 	seq_index++;
 	if (seq_index == 0xFF) seq_set_auto_stop();
 }
@@ -75,6 +62,21 @@ void seq_log_note_stop(uint8_t note){
 	seq_events[seq_index] = SEQ_NOTE_STOP ;
 	seq_index++;
 	if (seq_index == 0xFF) seq_set_auto_stop();
+}
+
+// checks for current events and logs them
+void seq_log_events(void) {
+	uint8_t i;
+	for (i = 0; i < 128; i++) {
+		if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
+			if (pp6_get_note_state(i)) {
+				seq_log_note_start(i);
+			}
+			else {
+				seq_log_note_stop(i);
+			}
+		}
+	}
 }
 
 void seq_stop_recording(void) {
@@ -93,12 +95,10 @@ void seq_stop_recording(void) {
 		seq_deltas[seq_index] = seq_time;
 	}
 
-
 	seq_notes[seq_index] = seq_notes[0];
 	seq_events[seq_index] = SEQ_SEQ_STOP;
 
 	seq_length = seq_index;
-
 
 	seq_index = 0; // go back to the begining
 	seq_time = 0;
@@ -111,7 +111,7 @@ void seq_rewind(void) {
 	seq_time = 0;
 }
 
-
+// TODO:  this should be set all events for this delta time on this tick
 void seq_play_tick (void){
 
 	if (seq_time >= seq_deltas[seq_index]){
@@ -122,9 +122,9 @@ void seq_play_tick (void){
 			}
 		}
 		if (seq_events[seq_index] == SEQ_NOTE_STOP){
-			if (!pp6_get_physical_notes_on()){
-				pp6_set_note_off(seq_notes[seq_index]);
-			}
+			// stop it, but only if its sounding (its note on might have been muted)
+				if (pp6_get_note_state(seq_notes[seq_index]))
+					pp6_set_note_off(seq_notes[seq_index]);
 		}
 		seq_index++;
 		if (seq_index > seq_length){

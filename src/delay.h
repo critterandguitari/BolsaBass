@@ -12,7 +12,7 @@
 #include "arm_math.h"
 #include "audio.h"
 
-#define MAX_WG_DELAY 10000
+#define MAX_WG_DELAY 1
 
 
 float32_t delay_process(float32_t in);

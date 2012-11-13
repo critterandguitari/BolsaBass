@@ -233,10 +233,13 @@ int main(void)
 				}
 				if (pp6_note_on_flag()){
 					seq_set_status(SEQ_RECORDING);
-					seq_log_first_note(pp6_get_note_on());
+					seq_start_recording();
+					seq_log_events();
+					//seq_log_first_note(pp6_get_note_on());
 				}
 				if (pp6_get_midi_start()) {
 					seq_set_status(SEQ_RECORDING);
+					seq_start_recording();
 					seq_log_first_note_null();   // sequence doesn't start with a note
 				}
 			}
@@ -246,12 +249,7 @@ int main(void)
 
 				seq_log_knobs(pp6_get_knob_array());
 
-				if (pp6_note_on_flag()){
-					seq_log_note_start(pp6_get_note_on());
-				}
-				if (pp6_note_off_flag()) {
-					seq_log_note_stop(pp6_get_note_off());
-				}
+				seq_log_events();
 
 				// stop recording
 				if (pp6_aux_button_pressed() || seq_get_auto_stop()) {
@@ -293,6 +291,7 @@ int main(void)
 						aux_button_depress_time = 0;
 						seq_set_status(SEQ_RECORD_ENABLE);
 						pp6_set_synth_note_stop();  // stop the synth
+						pp6_turn_off_all_on_notes();
 					}
 				}
 				// aux button swithes to stop
@@ -300,27 +299,29 @@ int main(void)
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
 					pp6_set_synth_note_stop();   // stop the synth
+					pp6_turn_off_all_on_notes();
 				}
 			}
 
 			// END SEQUENCER
 
 
-			// at this point note on and offs will be set from sequencer, midi in, or keyboard, now use those events to control synth
-			if (pp6_note_on_flag()) {
-				pp6_set_synth_note_start();
-				pp6_set_synth_note(pp6_get_note_on() - 36);
-
-				// send note out MIDI
-				sendNoteOn(1, pp6_get_note_on(), 100);
+			// check for events
+			// TODO:  limit calls to sendNoteOn and Off to 8 so buffer isn't overrun  (or have it check room in buffer)
+			for (i = 0; i < 128; i++) {
+				if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
+					if (pp6_get_note_state(i)) {
+						sendNoteOn(1, i, 100);
+						pp6_set_synth_note_start();
+						pp6_set_synth_note(i - 36);
+					}
+					else {
+						sendNoteOff(1, i, 0);
+						if ((i - 36) ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // iuf it equals the currently playing note, shut it off
+					}
+				}
 			}
-			if (pp6_note_off_flag()) {
-				if (pp6_get_note_off() == pp6_get_note_on())
-					pp6_set_synth_note_stop();
-
-				// send note out MIDI
-				sendNoteOff(1, pp6_get_note_off(), 0);
-			}
+			pp6_set_current_note_state_to_last();
 
 			// smooth the knobs here in case they are playing back
 			pp6_smooth_knobs();

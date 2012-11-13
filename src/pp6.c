@@ -41,6 +41,7 @@ uint32_t keys_history[] = {
 };
 
 void pp6_init(void) {
+	uint8_t i;
 	pp6_leds_init();
 	pp6_knobs_init();
 	pp6_keys_init();
@@ -65,6 +66,12 @@ void pp6_init(void) {
 
 	pp6.mode_led_flash = 0;
 	pp6.aux_led_flash = 0;
+
+	// init the note on arrays
+	for (i = 0; i < 128; i++) {
+		pp6.note_state[i] = 0;
+		pp6.note_state_last[i] = 0;
+	}
 }
 
 
@@ -304,12 +311,34 @@ uint8_t pp6_get_note_off() {
 	return pp6.note_off;
 }
 void pp6_set_note_off(uint8_t note){
+	pp6.note_state[note & 0x7f] = 0;
 	pp6.note_off = note;
 	pp6.note_off_flag = 1;
 }
 void pp6_set_note_on(uint8_t note){
+	pp6.note_state[note & 0x7f] = 1;
 	pp6.note_on = note;
 	pp6.note_on_flag = 1;
+}
+uint8_t pp6_get_note_state(uint8_t note){
+	return pp6.note_state[note & 0x7f];
+}
+uint8_t pp6_get_note_state_last(uint8_t note){
+	return pp6.note_state_last[note & 0x7f];
+}
+void pp6_set_current_note_state_to_last(void){
+	uint8_t i;
+	for (i = 0; i < 128; i++){
+		pp6.note_state_last[i] = pp6.note_state[i];
+	}
+}
+void pp6_turn_off_all_on_notes(void) {
+	uint8_t i;
+	for (i = 0; i < 128; i++){
+		if (pp6.note_state[i]) {
+			pp6.note_state[i] = 0;
+		}
+	}
 }
 
 // The actual synth voice

@@ -56,6 +56,8 @@ typedef struct {
 	uint8_t note_on;			// used in conjunction with the on and off flags to store recieved event (from keyboard or MIDI)
 	uint8_t note_off;
 	uint8_t physical_notes_on;    // the number of non sequenced notes currently on
+	uint8_t note_state[128];	  // state of all the midi notes -- 0 for off, anything else for on
+	uint8_t note_state_last[128]; // the previos time thru the main loop that notes were updated.  compared with above to get note events
 
 	// keys
 	uint32_t keys;
@@ -174,6 +176,10 @@ uint8_t pp6_get_note_on();
 uint8_t pp6_get_note_off();
 void pp6_set_note_off(uint8_t note);
 void pp6_set_note_on(uint8_t note);
+uint8_t pp6_get_note_state(uint8_t note);
+uint8_t pp6_get_note_state_last(uint8_t);
+void pp6_set_current_note_state_to_last(void);
+void pp6_turn_off_all_on_notes(void);
 
 
 #endif /* PP6_H_ */

@@ -29,6 +29,8 @@ void seq_set_status(uint8_t stat) ;
 
 uint8_t seq_get_status(void);
 
+void seq_log_events(void);
+void seq_start_recording(void);
 void seq_log_first_note(uint8_t note);
 void seq_log_first_note_null(void);
 
