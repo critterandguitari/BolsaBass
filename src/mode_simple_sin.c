@@ -35,6 +35,9 @@ static bl_square square;
 
 static float32_t cents = 0.f;
 
+static vcf_filter filter;
+
+
 
 void mode_simple_sin_init(void){
 	f = 50.0;
@@ -59,7 +62,7 @@ float32_t mode_simple_sin_sample_process (void) {
 
 	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
-		sig = sin_process(&sin1) * .5f;
+		sig = sin_process(&sin1) * .75f;
 
 
 
@@ -67,7 +70,13 @@ float32_t mode_simple_sin_sample_process (void) {
 	//a = 75; //this is the cool tone
 	//sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
 
+
+
 	amp = sadsr_process(&amp_env);
+
+	// remove artifacts
+	vcf_filter_set(&filter, 2000.f,  1.f);
+	sig = vcf_filter_process(&filter, sig);
 
 	return sig * amp * amp;
 }

@@ -28,6 +28,7 @@ static sadsr amp_env, index_env;
 static FM_oscillator fm, fm2;
 
 
+static vcf_filter filter;
 
 
 
@@ -57,10 +58,14 @@ float32_t mode_simple_fm_sample_process (void) {
 	//a = b = 2;
 	//c = powf(a, b);
 
+	sig = sig * amp * amp * .5f;
 
+	// remove artifacts
+	vcf_filter_set(&filter, 4000.f,  1.f);
 
+	sig = vcf_filter_process(&filter, sig);
 
-	return sig * amp * amp * .5f;
+	return sig;
 }
 
 void mode_simple_fm_control_process (void) {
@@ -71,7 +76,7 @@ void mode_simple_fm_control_process (void) {
 	if (pp6_get_synth_note_start() ){
 
 		target_f = (float32_t)pp6_get_synth_note() * 100.f;
-		line_go(&framp, target_f, 20.f);
+		line_go(&framp, target_f, 10.f);
 
 		sadsr_set(&amp_env, .01f, .1f, 1.f, .6f);
 		sadsr_go(&amp_env);
