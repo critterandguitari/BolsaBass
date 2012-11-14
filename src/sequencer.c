@@ -16,6 +16,10 @@ static uint32_t seq_time = 0;
 static uint32_t seq_length = 0;
 static uint8_t seq_status = SEQ_STOPPED;
 static uint8_t seq_playback_knobs_enabled = 1;
+static uint8_t seq_knob_1_playback_enabled = 1;
+static uint8_t seq_knob_2_playback_enabled = 1;
+static uint8_t seq_knob_3_playback_enabled = 1;
+
 static uint8_t seq_auto_stop = 0;
 
 static float32_t knob_log [4096][3];   // 4096 logs of the pot at SR / 32 / 16
@@ -165,6 +169,7 @@ void seq_log_knobs(float32_t * knob){
 }
 
 float32_t * seq_play_knobs(void) {
+
 	uint32_t knob_log_time;
 
 	// if midi clock is present, the sequencer will be using that, so we don't reduce resolution
@@ -173,7 +178,29 @@ float32_t * seq_play_knobs(void) {
 	else
 		knob_log_time = (seq_time >> 4) & 0xFFF;  // otherwise reduce time resolution since we don't have that much memory
 
-	return &knob_log[knob_log_time][0];
+
+	// check and set knob playback for each knob
+	if (pp6_knob_1_touched()) {
+		seq_knob_1_playback_enabled = 0;
+	}
+	if (pp6_knob_2_touched()) {
+		seq_knob_2_playback_enabled = 0;
+	}
+	if (pp6_knob_3_touched()) {
+		seq_knob_3_playback_enabled = 0;
+	}
+
+	if (seq_knob_1_playback_enabled) {
+		pp6_set_knob_1(knob_log[knob_log_time][0]);
+	}
+	if (seq_knob_2_playback_enabled) {
+		pp6_set_knob_2(knob_log[knob_log_time][1]);
+	}
+	if (seq_knob_3_playback_enabled) {
+		pp6_set_knob_3(knob_log[knob_log_time][2]);
+	}
+
+	//return &knob_log[knob_log_time][0];
 }
 
 uint8_t seq_knob_playback_enabled(void){
@@ -186,6 +213,9 @@ void seq_disable_knob_playback(void){
 
 void seq_enable_knob_playback(void){
 	seq_playback_knobs_enabled = 1;
+	seq_knob_1_playback_enabled = 1;
+	seq_knob_2_playback_enabled = 1;
+	seq_knob_3_playback_enabled = 1;
 }
 
 void seq_set_auto_stop(void){

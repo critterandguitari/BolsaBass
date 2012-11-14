@@ -89,6 +89,18 @@ void Audio_I2S_IRQHandler(void) {
 
 	uint16_t s;
 
+	static uint8_t count;
+
+	// can be used to determine SR, blinking every 128 periods
+	/*count++;
+	count &= 0xff;
+
+	if (count > 128)
+		GPIO_WriteBit(GPIOB, GPIO_Pin_4, 0);
+	else
+		GPIO_WriteBit(GPIOB, GPIO_Pin_4, 1);*/
+
+
 	/* Check on the I2S TXE flag */
 	if (SPI_I2S_GetFlagStatus(SPI3, SPI_I2S_FLAG_TXE) != RESET) {
 		s = play_buf[hardware_index];

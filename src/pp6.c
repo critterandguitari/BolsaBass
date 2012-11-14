@@ -126,6 +126,16 @@ float32_t pp6_get_knob_3(void){
 	return pp6.knob[2];
 }
 
+void pp6_set_knob_1(float32_t v){
+	pp6.knob[0] = v;
+}
+void pp6_set_knob_2(float32_t v){
+	pp6.knob[1] = v;
+}
+void pp6_set_knob_3(float32_t v){
+	pp6.knob[2] = v;
+}
+
 float32_t * pp6_get_knob_array(void){
 	return pp6.knob;
 }
@@ -304,12 +314,7 @@ uint8_t pp6_note_on_flag() {
 uint8_t pp6_note_off_flag() {
 	return pp6.note_off_flag;
 }
-uint8_t pp6_get_note_on() {
-	return pp6.note_on;
-}
-uint8_t pp6_get_note_off() {
-	return pp6.note_off;
-}
+
 void pp6_set_note_off(uint8_t note){
 	pp6.note_state[note & 0x7f] = 0;
 	pp6.note_off = note;
@@ -510,6 +515,15 @@ uint8_t pp6_any_knobs_touched(void) {
 		return 1;
 	else
 		return 0;
+}
+uint8_t pp6_knob_1_touched(void){
+	return pp6.knob_touched[0];
+}
+uint8_t pp6_knob_2_touched(void){
+	return pp6.knob_touched[1];
+}
+uint8_t pp6_knob_3_touched(void){
+	return pp6.knob_touched[2];
 }
 
 void pp6_smooth_knobs(void){

@@ -179,6 +179,8 @@ void recvByte(int byte) {
 // Send Midi NOTE OFF message to a given channel, with note 0-127 and velocity 0-127
 void sendNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
+
+	channel = channelIn_;   // use the input channel
     int status = STATUS_EVENT_NOTE_OFF | ((channel - 1) & 0x0f);
 
 
@@ -194,6 +196,7 @@ void sendNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 // Send Midi NOTE ON message to a given channel, with note 0-127 and velocity 0-127
 void sendNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
 {
+	channel = channelIn_;  // use the input channel
     int status = STATUS_EVENT_NOTE_ON | ((channel - 1) & 0x0f);
 
     if (sendFullCommands_ || (lastStatusSent_ != status)) {

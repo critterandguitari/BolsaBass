@@ -268,17 +268,10 @@ int main(void)
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
 				seq_play_tick();  // run the sequencer
+				aux_led_color = GREEN;
 
-				if (pp6_any_knobs_touched()) {
-					seq_disable_knob_playback();
-				}
+				seq_play_knobs();
 
-				if (seq_knob_playback_enabled()) {
-					pp6_set_knob_array(seq_play_knobs());
-					aux_led_color = CYAN;
-				} else {
-					aux_led_color = GREEN;
-				}
 				pp6_set_aux_led(aux_led_color);
 
 				// flash white on rollover
@@ -305,7 +298,6 @@ int main(void)
 
 			// END SEQUENCER
 
-
 			// check for events
 			// TODO:  limit calls to sendNoteOn and Off to 8 so buffer isn't overrun  (or have it check room in buffer)
 			for (i = 0; i < 128; i++) {
@@ -313,11 +305,11 @@ int main(void)
 					if (pp6_get_note_state(i)) {
 						sendNoteOn(1, i, 100);
 						pp6_set_synth_note_start();
-						pp6_set_synth_note(i - 36);
+						pp6_set_synth_note(i);
 					}
 					else {
 						sendNoteOff(1, i, 0);
-						if ((i - 36) ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // iuf it equals the currently playing note, shut it off
+						if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // iuf it equals the currently playing note, shut it off
 					}
 				}
 			}

@@ -98,8 +98,16 @@ void pp6_init(void);
 float32_t pp6_get_knob_1(void);
 float32_t pp6_get_knob_2(void);
 float32_t pp6_get_knob_3(void);
+void pp6_set_knob_1(float32_t v);
+void pp6_set_knob_2(float32_t v);
+void pp6_set_knob_3(float32_t v);
 float32_t * pp6_get_knob_array(void);
 void pp6_set_knob_array(float32_t * knobs);
+void pp6_check_knobs_touched (void);
+uint8_t pp6_any_knobs_touched(void);
+uint8_t pp6_knob_1_touched(void);
+uint8_t pp6_knob_2_touched(void);
+uint8_t pp6_knob_3_touched(void);
 
 uint8_t pp6_get_synth_note_start(void);
 void pp6_set_synth_note_start (void );
@@ -129,8 +137,7 @@ void pp6_knobs_init(void);
 void pp6_knobs_update(void);
 void pp6_smooth_knobs(void);
 
-void pp6_check_knobs_touched (void) ;
-uint8_t pp6_any_knobs_touched(void);
+
 
 uint8_t pp6_get_mode_led(void);
 uint8_t pp6_get_aux_led(void);
@@ -172,8 +179,6 @@ void pp6_clear_midi_clock_tick(void);
 // the note interface for the piano
 uint8_t pp6_note_on_flag();
 uint8_t pp6_note_off_flag();
-uint8_t pp6_get_note_on();
-uint8_t pp6_get_note_off();
 void pp6_set_note_off(uint8_t note);
 void pp6_set_note_on(uint8_t note);
 uint8_t pp6_get_note_state(uint8_t note);

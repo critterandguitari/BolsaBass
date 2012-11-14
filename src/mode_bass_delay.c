@@ -78,9 +78,9 @@ float32_t mode_bass_delay_sample_process (void) {
 	sig = comb_process(sig);
 
 	// remove artifacts
-	//vcf_filter_set(&filter, 2000.f,  2.f);
+	vcf_filter_set(&filter, 4000.f,  1.f);
 
-	//sig = vcf_filter_process(&filter, sig);
+	sig = vcf_filter_process(&filter, sig);
 
 	return sig;
 }
