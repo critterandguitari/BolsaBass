@@ -48,8 +48,6 @@ void mode_simple_sin_init(void){
 
 float32_t mode_simple_sin_sample_process (void) {
 
-	float32_t a;
-
 	f = c_to_f(line_process(&framp));
 
 	sin_set(&sin1, f * ((pp6_get_knob_3()) + 1), .9f);
@@ -62,7 +60,7 @@ float32_t mode_simple_sin_sample_process (void) {
 
 	//sig = sin_process(&sin1) * .3f + bl_square_process(&square) *.3f + bl_saw_process(&saw) * .3f;
 
-		sig = sin_process(&sin1) * .75f;
+		sig = sin_process(&sin1) * .6f;
 
 
 

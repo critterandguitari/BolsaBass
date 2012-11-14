@@ -52,10 +52,10 @@ float32_t mode_filter_envelope_sample_process (void) {
 	if (cutoff > NYQUIST) {
 		cutoff = NYQUIST;
 	}
-	vcf_filter_set(&filter, cutoff, pp6_get_knob_2() * 3.f );
+	vcf_filter_set(&filter, cutoff, pp6_get_knob_2() * 2.75f );
 
 
-	sig = bl_saw_process(&saw) * .75;
+	sig = bl_saw_process(&saw) * .6;
 
 	amp = sadsr_process(&amp_env);
 
