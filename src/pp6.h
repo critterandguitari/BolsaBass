@@ -43,6 +43,9 @@ typedef struct {
 	uint8_t knob_touched[3]; 	// flag to see if knob is touched
 	float32_t knob[3];   		// stores knob values 0-1
 
+	// secret mode
+	uint8_t secret_mode_enabled;
+
 	// the actual notes the synth is playing
 	uint8_t synth_note_start;   		// flag to start synth
 	uint8_t synth_note_stop;   		// flag to stop synth
@@ -93,7 +96,7 @@ typedef struct {
 void pp6_init(void);
 
 
-
+void pp6_enable_secret_mode(void);
 
 float32_t pp6_get_knob_1(void);
 float32_t pp6_get_knob_2(void);
@@ -124,6 +127,7 @@ uint8_t pp6_is_playing (void);
 uint32_t pp6_get_keys(void);   // returns the current key status
 uint8_t pp6_get_num_keys_down(void);
 void pp6_get_key_events(void);  // checks keys for new events
+
 
 void pp6_change_mode(void);
 uint32_t pp6_get_mode(void);

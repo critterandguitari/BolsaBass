@@ -35,6 +35,9 @@
 #include "mode_simple_fm.h"
 #include "mode_bass_delay.h"
 
+// Secret mode
+#include "mode_plurden.h"
+
 
 // from the DAC driver CS4344.c
 extern unsigned int software_index;
@@ -89,6 +92,9 @@ int main(void)
 	mode_simple_fm_init();
 	mode_bass_delay_init();
 
+	// secret mode
+	mode_plurden_init();
+
 	// setup codec
 	CS4344_init();
 
@@ -134,6 +140,15 @@ int main(void)
 		if (!((pp6_get_keys() >> i) & 1))
 			break;
 	}
+
+	// check if secret mode is enabled
+	if (!((pp6_get_keys() >> 17) & 1)) {
+		pp6_enable_secret_mode();
+		pp6_flash_aux_led(200);
+		pp6_flash_mode_led(200);
+	}
+
+
 
 	// no key was pressed, defalut to ch 1
 	if (i == 16) i = 0;
@@ -235,6 +250,7 @@ int main(void)
 					seq_set_status(SEQ_RECORDING);
 					seq_start_recording();
 					seq_log_events();
+					seq_log_knobs(pp6_get_knob_array());
 					//seq_log_first_note(pp6_get_note_on());
 				}
 				if (pp6_get_midi_start()) {
@@ -247,7 +263,6 @@ int main(void)
 
 				pp6_set_aux_led(RED);
 
-				seq_log_knobs(pp6_get_knob_array());
 
 				seq_log_events();
 
@@ -255,6 +270,7 @@ int main(void)
 				if (pp6_aux_button_pressed() || seq_get_auto_stop()) {
 					seq_stop_recording();
 					seq_set_status(SEQ_PLAYING);
+					seq_enable_knob_playback();
 					aux_button_depress_time = 0;
 					seq_clear_auto_stop();
 				}
@@ -267,10 +283,10 @@ int main(void)
 
 			}
 			else if (seq_get_status() == SEQ_PLAYING) {
-				seq_play_tick();  // run the sequencer
-				aux_led_color = GREEN;
 
-				seq_play_knobs();
+				seq_play_knobs();  	// play knobs
+				seq_play_tick();  	// play notes
+				aux_led_color = GREEN;
 
 				pp6_set_aux_led(aux_led_color);
 
@@ -309,7 +325,7 @@ int main(void)
 					}
 					else {
 						sendNoteOff(1, i, 0);
-						if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // iuf it equals the currently playing note, shut it off
+						if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // if it equals the currently playing note, shut it off
 					}
 				}
 			}
@@ -326,7 +342,7 @@ int main(void)
 			if (pp6_get_mode() == 3)  mode_filter_envelope_control_process();
 			if (pp6_get_mode() == 4)  mode_simple_fm_control_process();
 			if (pp6_get_mode() == 5)  mode_bass_delay_control_process();
-			//if (pp6_get_mode() == 5)  mode_drum_control_process();   // SECRET MODE ??
+			if (pp6_get_mode() == 6)  mode_plurden_control_process();   // SECRET MODE ??
 
 			//t2 = timer_get_time();
 			//t = t2 - t1;
@@ -351,6 +367,7 @@ int main(void)
 				if (pp6_get_mode() == 3) sig = mode_filter_envelope_sample_process();
 				if (pp6_get_mode() == 4) sig = mode_simple_fm_sample_process();
 				if (pp6_get_mode() == 5) sig = mode_bass_delay_sample_process();
+				if (pp6_get_mode() == 6) sig = mode_plurden_sample_process();
 
 				//if ( (!((k>>16) & 1)) )
 				// eq it

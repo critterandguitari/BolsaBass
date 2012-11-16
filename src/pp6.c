@@ -50,6 +50,8 @@ void pp6_init(void) {
 
 	pp6_set_mode(0);
 
+	pp6.secret_mode_enabled = 0;
+
 	pp6.knob_touched[0] = 0;
 	pp6.knob_touched[1] = 0;
 	pp6.knob_touched[2] = 0;
@@ -72,6 +74,10 @@ void pp6_init(void) {
 		pp6.note_state[i] = 0;
 		pp6.note_state_last[i] = 0;
 	}
+}
+
+void pp6_enable_secret_mode(void) {
+	pp6.secret_mode_enabled = 1;
 }
 
 
@@ -176,8 +182,13 @@ uint8_t pp6_aux_button_released(void){
 // MODE
 void pp6_change_mode(void){
 	pp6.mode++;
-	if (pp6.mode == 6) pp6.mode = 0;
-	pp6_set_mode_led(pp6.mode + 1);
+	if (pp6.secret_mode_enabled){
+		if (pp6.mode == 7) pp6.mode = 0;
+	}
+	else {
+		if (pp6.mode == 6) pp6.mode = 0;
+	}
+		pp6_set_mode_led(pp6.mode + 1);
 }
 
 void pp6_set_mode(uint32_t mode){
@@ -200,6 +211,7 @@ void pp6_set_mode_led(uint8_t led) {
 		if (led == 4) {MODE_LED_RED_OFF;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
 		if (led == 5) {MODE_LED_RED_OFF;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
 		if (led == 6) {MODE_LED_RED_ON;MODE_LED_GREEN_OFF;MODE_LED_BLUE_ON;}
+		if (led == 7) {MODE_LED_RED_ON;MODE_LED_GREEN_ON;MODE_LED_BLUE_ON;}
 	}
 }
 

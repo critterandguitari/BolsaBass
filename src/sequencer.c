@@ -50,6 +50,7 @@ void seq_log_first_note_null(void){  // this is when a sequence starts externall
 	seq_notes[0] = 0;
 	seq_events[0] = SEQ_NOTE_START_NULL;
 	seq_index++;
+	seq_log_knobs(pp6_get_knob_array());   // also start the knob logger TODO : is this tested ??
 }
 
 void seq_log_note_start(uint8_t note){
@@ -81,6 +82,7 @@ void seq_log_events(void) {
 			}
 		}
 	}
+	seq_log_knobs(pp6_get_knob_array());
 }
 
 void seq_stop_recording(void) {
@@ -115,7 +117,7 @@ void seq_rewind(void) {
 	seq_time = 0;
 }
 
-// TODO:  this should be set all events for this delta time on this tick
+// TODO:  this should be set all events for this delta time on this tick  -- don't think this really matters
 void seq_play_tick (void){
 
 	if (seq_time >= seq_deltas[seq_index]){
@@ -168,7 +170,7 @@ void seq_log_knobs(float32_t * knob){
 	if (knob_log_time == 0xFFF) seq_set_auto_stop();    // auto stop after 4096 logs
 }
 
-float32_t * seq_play_knobs(void) {
+void seq_play_knobs(void) {
 
 	uint32_t knob_log_time;
 

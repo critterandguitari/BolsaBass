@@ -52,8 +52,8 @@ float32_t mode_plurden_sample_process (void) {
 
 	f = c_to_f(line_process(&framp));
 
-	sin_set(&sin3, 10.f * pp6_get_knob_2() + 1.5f, 0.5f);
-	bl_saw_set(&saw, 10.f * pp6_get_knob_2() + 1.5f);
+	//sin_set(&sin3, 10.f * pp6_get_knob_2() + 1.5f, 0.5f);
+	bl_saw_set(&saw, 100.f * pp6_get_knob_2());
 
 
 
@@ -61,7 +61,7 @@ float32_t mode_plurden_sample_process (void) {
 	//lfo = sin_process(&sin3);
 	lfo = bl_saw_process(&saw) * .5f;
 
-	f = f + (lfo*10.f);
+	f = f + (lfo*1000.f * pp6_get_knob_1() );
 
 	sin_set(&sin1, f * ((pp6_get_knob_3()) + 1), .9f);
 	sin_set(&sin2, f*2 * ((pp6_get_knob_3()) + 1), .5f);
@@ -77,7 +77,7 @@ float32_t mode_plurden_sample_process (void) {
 	a = 0.15f * 500.f; //this is the cool tone
 	sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
 
-	return sig * amp * amp;
+	return sig * amp * amp * .3f;
 }
 
 void mode_plurden_control_process (void) {
@@ -92,7 +92,9 @@ void mode_plurden_control_process (void) {
 
 		//line_set(&framp, f * pp6_get_knob_2()  * 10.f );
 		line_set(&framp, last_note * 100.f);   // 2400 cents sharp
-		line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 1500.f);
+		//line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 1500.f);  //glide
+		line_go(&framp, cents, 10);  //glide
+
 		sadsr_set(&amp_env, .01f, .2f, 1.54f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;

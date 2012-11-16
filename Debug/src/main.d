@@ -39,7 +39,7 @@ src/main.d src/main.o: ../src/main.c \
  ../src/midi.h ../src/timer.h ../src/sequencer.h ../src/eq.h \
  ../src/audio.h ../src/mode_simple_sin.h ../src/mode_wave_adder.h \
  ../src/mode_analog_style.h ../src/mode_filter_envelope.h \
- ../src/mode_simple_fm.h ../src/mode_bass_delay.h
+ ../src/mode_simple_fm.h ../src/mode_bass_delay.h ../src/mode_plurden.h
 
 /home/owen/workspace-redsuite/CMSISv2p10_STM32F4xx/inc/stm32f4xx.h:
 
@@ -142,3 +142,5 @@ src/main.d src/main.o: ../src/main.c \
 ../src/mode_simple_fm.h:
 
 ../src/mode_bass_delay.h:
+
+../src/mode_plurden.h:
