@@ -21,7 +21,6 @@ static float32_t sig, f;
 
 static sin_oscillator sin1;
 static sin_oscillator sin2;
-static sin_oscillator sin3;
 
 static uint32_t new_note;
 
@@ -32,7 +31,6 @@ static line framp;
 static sadsr amp_env;
 
 static bl_saw saw;
-static bl_square square;
 
 static float32_t cents = 0.f;
 
@@ -77,7 +75,7 @@ float32_t mode_plurden_sample_process (void) {
 	a = 0.15f * 500.f; //this is the cool tone
 	sig = sig*(ABS(sig) + a)/((sig * sig) + (a-1)*ABS(sig) + 1);
 
-	return sig * amp * amp * .3f;
+	return sig * amp * amp * .15f;
 }
 
 void mode_plurden_control_process (void) {
@@ -95,7 +93,7 @@ void mode_plurden_control_process (void) {
 		//line_go(&framp, cents, (pp6_get_knob_1() + .001f) * 1500.f);  //glide
 		line_go(&framp, cents, 10);  //glide
 
-		sadsr_set(&amp_env, .01f, .2f, 1.54f, .6f);
+		sadsr_set(&amp_env, .01f, .2f, 2.f, .6f);
 		sadsr_go(&amp_env);
 		new_note = 1;
 		//sin_reset(&sin1);

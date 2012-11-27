@@ -89,8 +89,11 @@ void mode_simple_fm_control_process (void) {
 		note_dur = 0;
 	}
 	if (pp6_get_synth_note_stop()){
-		if (note_dur < 100)
+		/*if (note_dur < 100)
 			sadsr_set(&amp_env, .01f, .1f, .1, .6f);
+		sadsr_release(&amp_env);*/
+
+		sadsr_set(&amp_env, .01f, .1f, (note_dur * 128) / SR, .6f);
 		sadsr_release(&amp_env);
 	}
 	note_dur++;

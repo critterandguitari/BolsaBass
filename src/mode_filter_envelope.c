@@ -76,7 +76,7 @@ void mode_filter_envelope_control_process (void) {
 
 
 	if (pp6_get_synth_note_start()){
-		sadsr_set(&amp_env, .01f, 1.f, 1.54f, .6f);
+		sadsr_set(&amp_env, .01f, 1.f, 2.f, .6f);
 		sadsr_set(&filter_env, .001f, ((pp6_get_knob_1() + .001f) * 4.f) + .01f, 10.f, 0);
 
 		//vcf_filter_init(&filter);

@@ -58,4 +58,5 @@ void seq_set_auto_stop(void);
 uint8_t seq_get_auto_stop(void);
 void seq_clear_auto_stop(void) ;
 
+
 #endif /* SEQUENCER_H_ */

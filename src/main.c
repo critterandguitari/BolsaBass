@@ -141,20 +141,20 @@ int main(void)
 			break;
 	}
 
+	// no key was pressed, defalut to ch 1
+	if (i == 16) i = 0;
+
+	// initialize midi library with channel from above
+	midi_init(i + 1);
+
 	// check if secret mode is enabled
 	if (!((pp6_get_keys() >> 17) & 1)) {
 		pp6_enable_secret_mode();
 		pp6_flash_aux_led(200);
 		pp6_flash_mode_led(200);
+		// the synth will go to the next mode since this key is down, so start on 1 mode previous
+		pp6_set_mode(5);
 	}
-
-
-
-	// no key was pressed, defalut to ch 1
-	if (i == 16) i = 0;
-
-	// initialize midi library
-	midi_init(i + 1);
 
 	// go!
 	while (1)	{
@@ -171,14 +171,16 @@ int main(void)
 	    }
 
         // empty the tx buffer
+	    // TODO :  increase this buffer size ?
         uart_service_tx_buf();
 
-
-
 		/*
-		 * Control Rate
+		 * Control Rate, 64 sample periods
 		 */
 		if ((!(sample_clock & 0x3F)) && (sample_clock != sample_clock_last)){
+
+			// make sure this only happens once every 64 sample periods
+			sample_clock_last = sample_clock;
 
 	        // process MIDI, pp6 will be updated from midi.c handlers if there are any relevant midi events
 	        if (uart_recv_buf_read != uart_recv_buf_write){
@@ -187,19 +189,22 @@ int main(void)
 	            uart_recv_buf_read &= 0x1f;
 	            recvByte(tmp8);
 	        }
-	        pp6_check_for_midi_clock();
-	        // tick the sequencer with midi clock if it is present
-	        if (pp6_midi_clock_present()){
-	        	if (pp6_get_midi_clock_tick()){
-	        		seq_tick();
-	        		pp6_clear_midi_clock_tick();
-	        	}
-	        }
 
-			sample_clock_last = sample_clock;
+	        // midi clock auto detection
+	        pp6_check_for_midi_clock();
+
+	        // update keys knobs
 			pp6_keys_update();
 			pp6_knobs_update();
 
+			// check for new key events
+			pp6_get_key_events();
+
+			if (pp6_mode_button_pressed()){
+				pp6_change_mode();
+			}
+
+			// maintain LED flasher
 			pp6_flash_update();
 
 			// every 128 times, check if knobs got moved
@@ -209,17 +214,20 @@ int main(void)
 				pp6_check_knobs_touched();   // this sets the knobs touched flags
 			}
 
-			pp6_get_key_events();
 
-			if (pp6_mode_button_pressed()){
-				pp6_change_mode();
-			}
-
-			// SEQUENCER
+			// BEGIN SEQUENCER
+	        // tick the sequencer with midi clock if it is present, otherwise use internal
+	        if (pp6_midi_clock_present()){
+	        	if (pp6_get_midi_clock_tick()){
+	        		seq_tick();
+	        		pp6_clear_midi_clock_tick();
+	        	}
+	        }
 			if (!pp6_midi_clock_present()){
 				seq_tick();
 			}
 
+			// sequencer states
 			if (seq_get_status() == SEQ_STOPPED){
 
 				pp6_set_aux_led(BLACK);
@@ -253,7 +261,6 @@ int main(void)
 					seq_start_recording();
 					seq_log_events();
 					seq_log_knobs(pp6_get_knob_array());
-					//seq_log_first_note(pp6_get_note_on());
 				}
 				if (pp6_get_midi_start()) {
 					seq_set_status(SEQ_RECORDING);
@@ -319,20 +326,20 @@ int main(void)
 
 			// check for events, and send midi and play synth
 			// TODO:  limit calls to sendNoteOn and Off to 8 so buffer isn't overrun  (or have it check room in buffer)
-			  for (i = 0; i < 128; i++) {
-					if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
-						if (pp6_get_note_state(i)) {
-							sendNoteOn(1, i, 100);
-							pp6_set_synth_note_start();
-							pp6_set_synth_note(i);
-						}
-						else {
-							sendNoteOff(1, i, 0);
-							if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // if it equals the currently playing note, shut it off
-						}
+			for (i = 0; i < 128; i++) {
+				if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
+					if (pp6_get_note_state(i)) {
+						sendNoteOn(1, i, 100);
+						pp6_set_synth_note_start();
+						pp6_set_synth_note(i);
+					}
+					else {
+						sendNoteOff(1, i, 0);
+						if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // if it equals the currently playing note, shut it off
 					}
 				}
-				pp6_set_current_note_state_to_last();
+			}
+			pp6_set_current_note_state_to_last();
 
 
 			// smooth the knobs here in case they are playing back
@@ -354,7 +361,6 @@ int main(void)
 			// clear all the events
 			pp6_clear_flags();
 			led_counter++;
-
 		}
 
 
@@ -363,9 +369,6 @@ int main(void)
 		 * Sample Rate
 		 */
 		if (software_index != hardware_index){
-
-
-
 
 			if (software_index & 1){   // channel
 
@@ -390,7 +393,6 @@ int main(void)
 				software_index++;
 				software_index &= 0xf;
 
-				//pp6_set_aux_led(0);
 			}
 			else {   // channel 2, do the same thing
 				// put the l

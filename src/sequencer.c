@@ -109,7 +109,7 @@ void seq_stop_recording(void) {
 	seq_index = 0; // go back to the begining
 	seq_time = 0;
 	seq_playback_knobs_enabled = 1;  // enable playback of knobs
-	pp6_set_synth_note_stop();  // always stop the note
+	pp6_turn_off_all_on_notes();
 }
 
 void seq_rewind(void) {
@@ -136,9 +136,9 @@ void seq_play_tick (void){
 		if (seq_index > seq_length){
 			seq_index = 0;
 			seq_time = 0;
+			pp6_turn_off_all_on_notes();// end all notes still playing at end of loop
 		}
 	}
-
 }
 
 void seq_tick(void){
