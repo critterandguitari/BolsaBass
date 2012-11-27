@@ -170,30 +170,32 @@ int main(void)
 	        uart_recv_buf_write &= 0x1f;  // 32 bytes
 	    }
 
-        // process MIDI, pp6 will be updated from midi.c handlers if there are any relevant midi events
-        if (uart_recv_buf_read != uart_recv_buf_write){
-            tmp8 = uart_recv_buf[uart_recv_buf_read];
-            uart_recv_buf_read++;
-            uart_recv_buf_read &= 0x1f;
-            recvByte(tmp8);
-        }
-
         // empty the tx buffer
         uart_service_tx_buf();
 
-        pp6_check_for_midi_clock();
 
-        if (pp6_midi_clock_present()){
-        	if (pp6_get_midi_clock_tick()){
-        		seq_tick();
-        		pp6_clear_midi_clock_tick();
-        	}
-        }
 
 		/*
 		 * Control Rate
 		 */
 		if ((!(sample_clock & 0x3F)) && (sample_clock != sample_clock_last)){
+
+	        // process MIDI, pp6 will be updated from midi.c handlers if there are any relevant midi events
+	        if (uart_recv_buf_read != uart_recv_buf_write){
+	            tmp8 = uart_recv_buf[uart_recv_buf_read];
+	            uart_recv_buf_read++;
+	            uart_recv_buf_read &= 0x1f;
+	            recvByte(tmp8);
+	        }
+	        pp6_check_for_midi_clock();
+	        // tick the sequencer with midi clock if it is present
+	        if (pp6_midi_clock_present()){
+	        	if (pp6_get_midi_clock_tick()){
+	        		seq_tick();
+	        		pp6_clear_midi_clock_tick();
+	        	}
+	        }
+
 			sample_clock_last = sample_clock;
 			pp6_keys_update();
 			pp6_knobs_update();
@@ -314,22 +316,24 @@ int main(void)
 
 			// END SEQUENCER
 
-			// check for events
+
+			// check for events, and send midi and play synth
 			// TODO:  limit calls to sendNoteOn and Off to 8 so buffer isn't overrun  (or have it check room in buffer)
-			for (i = 0; i < 128; i++) {
-				if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
-					if (pp6_get_note_state(i)) {
-						sendNoteOn(1, i, 100);
-						pp6_set_synth_note_start();
-						pp6_set_synth_note(i);
-					}
-					else {
-						sendNoteOff(1, i, 0);
-						if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // if it equals the currently playing note, shut it off
+			  for (i = 0; i < 128; i++) {
+					if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
+						if (pp6_get_note_state(i)) {
+							sendNoteOn(1, i, 100);
+							pp6_set_synth_note_start();
+							pp6_set_synth_note(i);
+						}
+						else {
+							sendNoteOff(1, i, 0);
+							if (i ==  pp6_get_synth_note()) pp6_set_synth_note_stop();  // if it equals the currently playing note, shut it off
+						}
 					}
 				}
-			}
-			pp6_set_current_note_state_to_last();
+				pp6_set_current_note_state_to_last();
+
 
 			// smooth the knobs here in case they are playing back
 			pp6_smooth_knobs();
@@ -353,10 +357,16 @@ int main(void)
 
 		}
 
+
+
 		/*
 		 * Sample Rate
 		 */
 		if (software_index != hardware_index){
+
+
+
+
 			if (software_index & 1){   // channel
 
 				//pp6_set_aux_led(RED);

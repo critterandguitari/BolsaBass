@@ -74,7 +74,7 @@ void mode_analog_style_control_process (void) {
 	if (pp6_get_synth_note_start()){
 		note_dur=0;
 		target_f = (float32_t)pp6_get_synth_note() * 100.f;
-		line_go(&framp, target_f, 10.f);
+		line_go(&framp, target_f, 2.f);
 
 
 		// only if there is one note down (staccato)

@@ -76,7 +76,7 @@ void mode_simple_fm_control_process (void) {
 	if (pp6_get_synth_note_start() ){
 
 		target_f = (float32_t)pp6_get_synth_note() * 100.f;
-		line_go(&framp, target_f, 10.f);
+		line_go(&framp, target_f, 2.f);
 
 		sadsr_set(&amp_env, .01f, .1f, 1.f, .6f);
 		sadsr_go(&amp_env);
