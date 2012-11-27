@@ -19,7 +19,6 @@ extern float miditof[];
 
 
 static float32_t sig, f, cutoff;
-static bl_saw saw;
 static vcf_filter filter;
 static float32_t amp = 0.f;
 static sadsr amp_env, filter_env, sin_amp_env;
@@ -70,11 +69,6 @@ float32_t mode_drum_sample_process (void) {
 
 void mode_drum_control_process (void) {
 
-	static uint32_t count = 0;
-	static uint32_t all_clock = 0;
-	static uint32_t machine_gun_period = 100;
-	static uint32_t aux_last, aux = 0;
-	static uint32_t last_hit;
 
 	//f = miditof[pp6_get_note()] * .6f * (pp6_get_knob_3() +  1.f);
 	f = c_to_f(((float32_t)pp6_get_synth_note() * 100.f)) * (pp6_get_knob_3() +  1.f);

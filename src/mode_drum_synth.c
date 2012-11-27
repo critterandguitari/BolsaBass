@@ -19,7 +19,6 @@ extern float miditof[];
 
 
 static float32_t sig, f;
-static bl_saw saw;
 static vcf_filter filter;
 static float32_t amp = 0.f;
 static sadsr amp_env;

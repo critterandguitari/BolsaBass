@@ -19,7 +19,7 @@
 extern float miditof[];
 
 
-static float32_t sig, f, f2, f2_ratio, filter_cutoff;
+static float32_t sig, f, f2, filter_cutoff;
 static bl_saw saw, saw2;
 static vcf_filter filter;
 static float32_t amp = 0.f;
@@ -74,7 +74,7 @@ void mode_octave_mirror_control_process (void) {
 
 		f = f * (pp6_get_knob_3() +  1.f) * (octave_shift + 1);
 		f2 =  f * 1.01;//f2_ratio;
-		vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
+		//vcf_filter_set(&filter, (pp6_get_knob_1() * 6000.f) + 100.f, (pp6_get_aux() / 5.f) * 3.5f );
 
 
 

@@ -26,7 +26,7 @@ static line framp;
 
 static sadsr amp_env, index_env;
 
-static FM_oscillator fm, fm2;
+static FM_oscillator fm;
 
 
 
@@ -40,8 +40,6 @@ void mode_fm_ramp_init(void){
 
 float32_t mode_fm_ramp_sample_process (void) {
 
-	uint32_t t, t1, t2;
-	float32_t a, b, c;
 
 	f = c_to_f(line_process(&framp)) * (pp6_get_knob_3() +  1.f);
 

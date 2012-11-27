@@ -8,7 +8,9 @@
 #ifndef EQ_H_
 #define EQ_H_
 
+#ifndef PI
 #define PI 3.14159265359f;
+#endif
 
 #include "arm_math.h"
 

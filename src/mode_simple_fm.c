@@ -40,9 +40,6 @@ void mode_simple_fm_init(void){
 
 float32_t mode_simple_fm_sample_process (void) {
 
-	uint32_t t, t1, t2;
-	float32_t b, c;
-
 	f = c_to_f(line_process(&framp)) * (pp6_get_knob_3() +  1.f);
 
 

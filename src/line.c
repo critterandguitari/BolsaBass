@@ -41,5 +41,5 @@ float32_t line_process(line * line){
 
 
 uint32_t line_is_processing(line * line){
-
+	return 0;
 }

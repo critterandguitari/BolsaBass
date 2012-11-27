@@ -117,6 +117,7 @@ int main(void)
 
 	}*/
 
+	// timer test
 	/*while (1){
 		t = TIM_GetCounter(TIM2);
 		TIM_SetCounter(TIM1,0);
@@ -129,7 +130,6 @@ int main(void)
 
 	// the bass boost is hardcoded in eq.c
 	init_3band_state(&eq, 880, 5000, SR);
-
 
 	// get initial midi channel
 	// update keys has to be called > 8 times for key press to be debounced
@@ -153,7 +153,7 @@ int main(void)
 		pp6_flash_aux_led(200);
 		pp6_flash_mode_led(200);
 		// the synth will go to the next mode since this key is down, so start on 1 mode previous
-		pp6_set_mode(5);
+		pp6_set_mode(5);  // this will cause it to start on secret mode 7
 	}
 
 	// go!
@@ -177,7 +177,6 @@ int main(void)
 	    }
 
         // empty the tx buffer
-	    // TODO :  increase this buffer size ?
         uart_service_tx_buf();
 
 		/*
@@ -337,7 +336,6 @@ int main(void)
 
 
 			// check for events, and send midi and play synth
-			// TODO:  limit calls to sendNoteOn and Off to 8 so buffer isn't overrun  (or have it check room in buffer)
 			for (i = 0; i < 128; i++) {
 				if (pp6_get_note_state(i) != pp6_get_note_state_last(i)) {
 					if (pp6_get_note_state(i)) {

@@ -89,8 +89,6 @@ void Audio_I2S_IRQHandler(void) {
 
 	uint16_t s;
 
-	static uint8_t count;
-
 	// can be used to determine SR, blinking every 128 periods
 	/*count++;
 	count &= 0xff;

@@ -14,7 +14,7 @@ static uint32_t delay_time = 3000;
 static float32_t delay_time_frac;
 
 static float32_t delay_fb = .9f;
-static uint32_t delay_read_index = 0;
+//static uint32_t delay_read_index = 0;
 static uint32_t delay_write_index = 0;
 
 //static vcf_filter filter;

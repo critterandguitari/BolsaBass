@@ -32,9 +32,6 @@ static line framp;
 
 static sadsr amp_env;
 
-static bl_saw saw;
-static bl_square square;
-
 static float32_t cents = 0.f;
 
 
@@ -50,7 +47,6 @@ void mode_bass_delay_init(void){
 }
 
 float32_t mode_bass_delay_sample_process (void) {
-	float32_t a;
 
 	f = c_to_f(line_process(&framp));
 	f = f * ((pp6_get_knob_3()) + 1);
