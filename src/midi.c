@@ -408,17 +408,14 @@ void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity
 
 void handleSync(void) {
 	pp6_midi_clock_tick();
-	sendSync();  // send it through
 }
 
 void handleStart(void) {
 	pp6_set_midi_start();
-	sendStart();  // send it through
 }
 
 void handleStop(void) {
 	pp6_set_midi_stop();
-	sendStop();  // send it through
 }
 
 

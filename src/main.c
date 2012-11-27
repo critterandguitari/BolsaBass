@@ -166,6 +166,12 @@ int main(void)
 	    // buffer midi reception
 	    if (!(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)){
 	    	uart_recv_buf[uart_recv_buf_write] = USART_ReceiveData(USART1);
+
+	    	// if its a sync, send it thru immediately  to avoid jitter
+	    	if (uart_recv_buf[uart_recv_buf_write] == STATUS_SYNC) {
+		    	sendSync();
+	    	}
+
 	        uart_recv_buf_write++;
 	        uart_recv_buf_write &= 0x1f;  // 32 bytes
 	    }
@@ -245,6 +251,7 @@ int main(void)
 					if (seq_get_length()) {  // only play if positive length
 						seq_enable_knob_playback();
 						seq_set_status(SEQ_PLAYING);
+						sendStart();  // send out a midi start
 					}
 					else seq_set_status(SEQ_STOPPED);
 					seq_rewind();
@@ -261,11 +268,13 @@ int main(void)
 					seq_start_recording();
 					seq_log_events();
 					seq_log_knobs(pp6_get_knob_array());
+					sendStart();  // send out a midi start
 				}
 				if (pp6_get_midi_start()) {
 					seq_set_status(SEQ_RECORDING);
 					seq_start_recording();
 					seq_log_first_note_null();   // sequence doesn't start with a note
+					sendStart();  // send out a midi start
 				}
 			}
 			else if (seq_get_status() == SEQ_RECORDING){
@@ -282,12 +291,14 @@ int main(void)
 					seq_enable_knob_playback();
 					aux_button_depress_time = 0;
 					seq_clear_auto_stop();
+					sendStop();  // send MIDI stop
 				}
 				if (pp6_get_midi_stop()) {   // if a midi stop is received, stop recording, and dont play
 					seq_stop_recording();
 					seq_set_status(SEQ_STOPPED);
 					aux_button_depress_time = 0;
 					seq_clear_auto_stop();
+					sendStop();  // send MIDI stop
 				}
 
 			}
@@ -318,6 +329,7 @@ int main(void)
 					aux_button_depress_time = 0;
 					pp6_set_synth_note_stop();   // stop the synth
 					pp6_turn_off_all_on_notes();
+					sendStop();  // send MIDI stop
 				}
 			}
 
